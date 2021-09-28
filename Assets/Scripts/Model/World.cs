@@ -1,18 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class World : MonoBehaviour
+public class World
 {
-    // Start is called before the first frame update
-    void Start()
+    public int Width { get; protected set; }
+    public int Height { get; protected set; }
+
+    private Tile[,] tiles;
+
+    public World(int w, int h)
     {
-        
+        Width = w;
+        Height = h;
+        tiles = new Tile[Width, Height];
+        for (int x = 0; x < w; x++)
+        {
+            for (int y = 0; y < h; y++)
+            {
+                Debug.Log($"Creating tile at {x}, {y}");
+                tiles[x, y] = new Tile(x, y, this);
+            }
+        }
+        Debug.Log(GetTileAt(0, 0));
+        Debug.Log(GetTileAt(new Vector3(0, 0, 0)));
+        Debug.Log(GetTileAt(new Vector2(0, 0)));
     }
 
-    // Update is called once per frame
-    void Update()
+    public Tile GetTileAt(int x, int y)
     {
-        
+        if (x < 0 || x >= Width || y < 0 || y >= Height)
+        {
+            return null;
+        }
+
+        return tiles[x, y];
+    }
+
+    public Tile GetTileAt(Vector3 coord)
+    {
+        return GetTileAt(Mathf.FloorToInt(coord.x), Mathf.FloorToInt(coord.y));
     }
 }
