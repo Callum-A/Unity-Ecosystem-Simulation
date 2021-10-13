@@ -67,7 +67,7 @@ public abstract class SpriteController<T> : MonoBehaviour
     /// </summary>
     /// <param name="instance">The instance we are trying to get the game object for</param>
     /// <returns>The gameobject for that instance or null if it does not exist</returns>
-   public GameObject GetGameObjectByInstance(T instance)
+   protected GameObject GetGameObjectByInstance(T instance)
     {
         if (!gameObjectMap.ContainsKey(instance))
         {

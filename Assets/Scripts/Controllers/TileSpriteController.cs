@@ -8,7 +8,7 @@ public class TileSpriteController : SpriteController<Tile>
     public Sprite FoodSprite;
     public Sprite WaterSprite;
     public Sprite SandSprite;
-    private World world => WorldController.Instance.World;
+
     // Start is called before the first frame update
 
     public void OnTileTypeChanged(Tile t)
@@ -53,31 +53,33 @@ public class TileSpriteController : SpriteController<Tile>
         tileGameObject.transform.SetParent(transform, true);
         SpriteRenderer sr = tileGameObject.AddComponent<SpriteRenderer>();
 
-        switch (t.Type)
-        {
-            case TileType.Water:
-                sr.sprite = WaterSprite;
-                break;
+        // is this needed?
 
-            case TileType.Sand:
-                sr.sprite = SandSprite;
-                break;
+        //switch (t.Type)
+        //{
+        //    case TileType.Water:
+        //        sr.sprite = WaterSprite;
+        //        break;
 
-            case TileType.Ground:
-                sr.sprite = GroundSprite;
-                break;
+        //    case TileType.Sand:
+        //        sr.sprite = SandSprite;
+        //        break;
 
-            case TileType.Plant:
-                sr.sprite = FoodSprite;
-                break;
+        //    case TileType.Ground:
+        //        sr.sprite = GroundSprite;
+        //        break;
 
-            case TileType.Empty:
-                break;
+        //    case TileType.Plant:
+        //        sr.sprite = FoodSprite;
+        //        break;
 
-            default:
-                Debug.LogError("Unreachable unrecognised type " + t.Type);
-                break;
-        }
+        //    case TileType.Empty:
+        //        break;
+
+        //    default:
+        //        Debug.LogError("Unreachable unrecognised type " + t.Type);
+        //        break;
+        //}
 
         AddGameObject(t, tileGameObject);
     }

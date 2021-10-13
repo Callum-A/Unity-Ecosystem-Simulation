@@ -18,9 +18,9 @@ public class World
         Height = h;
         tiles = new Tile[Width, Height];
         terrainGenerator = new TerrainGenerator();
-        for (int x = 0; x < w; x++)
+        for (int x = 0; x < Width; x++)
         {
-            for (int y = 0; y < h; y++)
+            for (int y = 0; y < Height; y++)
             {
                 Debug.Log($"Creating tile at {x}, {y}");
                 tiles[x, y] = new Tile(x, y, this);
@@ -34,7 +34,7 @@ public class World
 
     public void GenerateTerrain() 
     {
-        terrainGenerator.GenerateTerrain(tiles, Width, Height);
+        terrainGenerator.GenerateTerrain(tiles);
     }
 
     public Tile GetTileAt(int x, int y)

@@ -36,7 +36,6 @@ public class Tile
 
     private Action<Tile> OnTileTypeChangedCallback;
 
-    //private Action<Tile> OnTileCreated;
 
     public Tile(int x, int y, World world)
     {
@@ -84,14 +83,4 @@ public class Tile
     {
         OnTileTypeChangedCallback -= cb;
     }
-
-    //public void RegisterOnTileTypeCreatedCallback(Action<Tile> cb)
-    //{
-    //    OnTileCreated += cb;
-    //}
-
-    //public void UnregisterOnTileCreatedCallback(Action<Tile> cb)
-    //{
-    //    OnTileCreated -= cb;
-    //}
 }
