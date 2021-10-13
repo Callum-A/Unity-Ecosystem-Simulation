@@ -5,8 +5,10 @@ using System;
 
 public enum TileType
 {
+    Empty,
     Ground,
     Water,
+    Sand,
     Plant
 }
 
@@ -33,6 +35,7 @@ public class Tile
     }
 
     private Action<Tile> OnTileTypeChangedCallback;
+
 
     public Tile(int x, int y, World world)
     {

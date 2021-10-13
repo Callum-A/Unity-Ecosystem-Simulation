@@ -6,6 +6,8 @@ public class WorldController : MonoBehaviour
 {
     public int Width;
     public int Height;
+
+    public TileSpriteController TileSpriteController;
     public static WorldController Instance { get; protected set; }
     public World World { get; protected set; }
     private void OnEnable()
@@ -15,12 +17,32 @@ public class WorldController : MonoBehaviour
             Debug.LogError("This shouldnt be reachable");
         }
         Instance = this;
-        World = new World(Width, Height);
+
+        InitialiseTiles();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void InitialiseTiles() 
+    {
+        World = new World(Width, Height);
+
+        for (int x = 0; x < World.Width; x++)
+        {
+            for (int y = 0; y < World.Height; y++)
+            {
+                Tile t = World.GetTileAt(x, y);
+
+                TileSpriteController.OnTileCreated(t);
+                t.RegisterOnTileTypeChangedCallback(TileSpriteController.OnTileTypeChanged);
+
+            }
+        }
+
+        World.GenerateTerrain();
     }
 }
