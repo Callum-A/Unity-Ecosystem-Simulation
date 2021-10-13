@@ -166,9 +166,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89fad5b6a5cb8b34e95f61ab48c8c1fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GroundSprite: {fileID: 21300000, guid: 5483b530fd534e441b4218c47797f8c2, type: 3}
+  GroundSprite: {fileID: 21300000, guid: 420c0b5bf07aaa745bb1bdad2dae0976, type: 3}
   FoodSprite: {fileID: 21300000, guid: 885f1f47f5f86c648a9a94f318734515, type: 3}
-  WaterSprite: {fileID: 21300000, guid: 88d7ce36a06cdb74684cb9456a737cf1, type: 3}
+  WaterSprite: {fileID: 21300000, guid: a0b26929bd1184348b9ecd3e1d63e022, type: 3}
+  SandSprite: {fileID: 21300000, guid: 157a098f72d1dbb40bf3d1d8fb77744c, type: 3}
 --- !u!1 &329184959
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,6 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Width: 100
   Height: 100
+  TileSpriteController: {fileID: 7362690}
 --- !u!1 &1196514365
 GameObject:
   m_ObjectHideFlags: 0
