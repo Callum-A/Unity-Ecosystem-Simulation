@@ -10,11 +10,14 @@ public class World
 
     private Tile[,] tiles;
 
+    private TerrainGenerator terrainGenerator;
+
     public World(int w, int h)
     {
         Width = w;
         Height = h;
         tiles = new Tile[Width, Height];
+        terrainGenerator = new TerrainGenerator();
         for (int x = 0; x < w; x++)
         {
             for (int y = 0; y < h; y++)
@@ -26,6 +29,12 @@ public class World
         Debug.Log(GetTileAt(0, 0));
         Debug.Log(GetTileAt(new Vector3(0, 0, 0)));
         Debug.Log(GetTileAt(new Vector2(0, 0)));
+
+    }
+
+    public void GenerateTerrain() 
+    {
+        terrainGenerator.GenerateTerrain(tiles, Width, Height);
     }
 
     public Tile GetTileAt(int x, int y)
