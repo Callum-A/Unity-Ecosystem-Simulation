@@ -37,7 +37,7 @@ public class WorldController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        
     }
 
     private void InitialiseTiles()
@@ -64,6 +64,7 @@ public class WorldController : MonoBehaviour
 
     /// <summary>
     /// Method purely used for initial testing of the food, once pray is in this will later become redundant and can be removed.
+    /// Put this method in update to test
     /// </summary>
     private void PlantGrowthSimulationTest() 
     {
