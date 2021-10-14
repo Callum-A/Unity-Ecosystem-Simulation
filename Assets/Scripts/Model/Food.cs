@@ -26,12 +26,12 @@ public class Food
     /// <summary>
     /// This is used to determine the Initial sprout rate of the food, 1 in x where x is the initial sprout rate.
     /// </summary>
-    public int InitialSproutRate { get; protected set; }
+    public static int InitialSproutRate { get; protected set; } = 100;
 
     /// <summary>
     /// This is used to determine the Initial sprout rate of the food, 1 in x where x is the spread rate.
     /// </summary>
-    public int SpreadRate { get; protected set; }
+    public static int SpreadRate { get; protected set; } = 25;
 
     /// <summary>
     /// Action to perform to deal with sprites when the food is exhasted.
@@ -46,8 +46,6 @@ public class Food
     {
         this.tile = tile;
         nutrition = 6;
-        InitialSproutRate = 100;
-        SpreadRate = 25;
     }
 
     /// <summary>

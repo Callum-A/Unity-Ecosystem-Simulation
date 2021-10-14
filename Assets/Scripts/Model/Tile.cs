@@ -125,7 +125,7 @@ public class Tile
     {
         if (this.Type == TileType.Ground && !HasFood())
         {
-            if (UnityEngine.Random.Range(0, food.SpreadRate) == 0)
+            if (UnityEngine.Random.Range(0, Food.SpreadRate) == 0)
             {
                 food = new Food(this);
                 food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
@@ -141,7 +141,7 @@ public class Tile
     {
         if (this.Type == TileType.Ground && !HasFood())
         {
-            if (UnityEngine.Random.Range(0, food.InitialSproutRate) == 0)
+            if (UnityEngine.Random.Range(0, Food.InitialSproutRate) == 0)
             {
                 food = new Food(this);
                 food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
