@@ -8,7 +8,7 @@ public class World
     public int Width { get; protected set; }
     public int Height { get; protected set; }
 
-    private Tile[,] tiles;
+    public Tile[,] tiles { get; protected set; }
 
     private TerrainGenerator terrainGenerator;
 
@@ -22,19 +22,25 @@ public class World
         {
             for (int y = 0; y < Height; y++)
             {
-                Debug.Log($"Creating tile at {x}, {y}");
+                //Debug.Log($"Creating tile at {x}, {y}");
                 tiles[x, y] = new Tile(x, y, this);
             }
         }
-        Debug.Log(GetTileAt(0, 0));
-        Debug.Log(GetTileAt(new Vector3(0, 0, 0)));
-        Debug.Log(GetTileAt(new Vector2(0, 0)));
+
+        //Debug.Log(GetTileAt(0, 0));
+        //Debug.Log(GetTileAt(new Vector3(0, 0, 0)));
+        //Debug.Log(GetTileAt(new Vector2(0, 0)));
 
     }
 
     public void GenerateTerrain() 
     {
         terrainGenerator.GenerateTerrain(tiles);
+
+        foreach (Tile tile in tiles)
+        {
+            tile.InitialSprout();
+        }
     }
 
     public Tile GetTileAt(int x, int y)

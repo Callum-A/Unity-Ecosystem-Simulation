@@ -17,6 +17,7 @@ public class Tile
     public World World { get; protected set; }
     public int X { get; protected set; }
     public int Y { get; protected set; }
+    public Food food { get; protected set; }
 
     private TileType _type;
 
@@ -35,7 +36,8 @@ public class Tile
     }
 
     private Action<Tile> OnTileTypeChangedCallback;
-
+    private Action<Food> OnFoodSproutedCallback;
+    private Action<Food> OnFoodExhaustedCallback;
 
     public Tile(int x, int y, World world)
     {
@@ -49,6 +51,16 @@ public class Tile
         return World.GetTileAt(X, Y + 1);
     }
 
+    public Tile NorthEast() 
+    {
+        return World.GetTileAt(X + 1, Y + 1);
+    }
+
+    public Tile NorthWest() 
+    {
+        return World.GetTileAt(X - 1, Y + 1);
+    }
+
     public Tile East()
     {
         return World.GetTileAt(X + 1, Y);
@@ -57,6 +69,16 @@ public class Tile
     public Tile South()
     {
         return World.GetTileAt(X, Y - 1);
+    }
+
+    public Tile SouthEast() 
+    {
+        return World.GetTileAt(X - 1, Y + 1);
+    }
+
+    public Tile SouthWest() 
+    {
+        return World.GetTileAt(X - 1, Y - 1);
     }
 
     public Tile West()
@@ -74,6 +96,77 @@ public class Tile
         return ns;
     }
 
+    /// <summary>
+    /// Find all of the tiles surrounding a given center tile. The array returned is the clockwise
+    /// direction of the surrounding tiles.
+    /// </summary>
+    /// <returns>An array of surrounding tiles</returns>
+    public Tile[] GetNeighboursIncludingDiagonal() 
+    {
+        Tile[] ns = new Tile[8];
+
+        ns[0] = North();
+        ns[1] = NorthEast();
+        ns[2] = East();
+        ns[3] = SouthEast();
+        ns[4] = South();
+        ns[5] = SouthWest();
+        ns[6] = West();
+        ns[7] = NorthWest();
+
+
+        return ns;
+    }
+
+    public void Sprout() 
+    {
+        if (this.Type == TileType.Ground && !HasFood())
+        {
+            if (UnityEngine.Random.Range(0, 25) == 0)
+            {
+                food = new Food(this);
+                food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+                OnFoodSproutedCallback(food);
+            }
+        }
+    }
+
+    public void InitialSprout()
+    {
+        if (this.Type == TileType.Ground && !HasFood())
+        {
+            if (UnityEngine.Random.Range(0, 100) == 0)
+            {
+                food = new Food(this);
+                food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+                OnFoodSproutedCallback(food);
+            }
+        }
+    }
+
+    public bool HasFood()
+    {
+        if (food != null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void CosumeFood() 
+    {
+        if (HasFood()) 
+        {
+            food.Consume();
+        }
+    }
+
+    public void RemoveFood() 
+    {
+        this.food = null;
+    }
+
     public void RegisterOnTileTypeChangedCallback(Action<Tile> cb)
     {
         OnTileTypeChangedCallback += cb;
@@ -83,4 +176,25 @@ public class Tile
     {
         OnTileTypeChangedCallback -= cb;
     }
+
+    public void RegisterOnFoodSproutedCallbackCallback(Action<Food> cb)
+    {
+        OnFoodSproutedCallback += cb;
+    }
+
+    public void UnregisterOnFoodSproutedCallbackCallback(Action<Food> cb)
+    {
+        OnFoodSproutedCallback -= cb;
+    }
+
+    public void RegisterOnFoodExhaustedCallbackCallback(Action<Food> cb)
+    {
+        OnFoodExhaustedCallback += cb;
+    }
+
+    public void UnregisterOnFoodExhaustedCallbackCallback(Action<Food> cb)
+    {
+        OnFoodExhaustedCallback -= cb;
+    }
+
 }
