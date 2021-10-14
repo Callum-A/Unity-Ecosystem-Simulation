@@ -10,10 +10,15 @@ public class WorldController : MonoBehaviour
     public TileSpriteController TileSpriteController;
     public FoodController FoodController;
 
+    /// <summary>
+    /// Helper variables for initial food simulation will be removed later on after prey is fully implemented.
+    /// </summary>
     public float time = 5;
     public float Days = 0;
     public float breedingRate = 1.1f;
     public float nutritionNeeded = 40f;
+    //---------------------------------------//
+
 
     public static WorldController Instance { get; protected set; }
     public World World { get; protected set; }
@@ -49,7 +54,6 @@ public class WorldController : MonoBehaviour
                 t.RegisterOnTileTypeChangedCallback(TileSpriteController.OnTileTypeChanged);
                 t.RegisterOnFoodSproutedCallbackCallback(FoodController.OnFoodSpawned);
                 t.RegisterOnFoodExhaustedCallbackCallback(FoodController.OnFoodExhausted);
-
             }
         }
 
@@ -58,6 +62,9 @@ public class WorldController : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Method purely used for initial testing of the food, once pray is in this will later become redundant and can be removed.
+    /// </summary>
     private void PlantGrowthSimulationTest() 
     {
         if (FoodController.FoodCount > 0)

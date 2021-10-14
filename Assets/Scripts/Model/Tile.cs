@@ -118,11 +118,14 @@ public class Tile
         return ns;
     }
 
+    /// <summary>
+    /// Rolls to determine whether food will sprout on this tile, called by spread.
+    /// </summary>
     public void Sprout() 
     {
         if (this.Type == TileType.Ground && !HasFood())
         {
-            if (UnityEngine.Random.Range(0, 25) == 0)
+            if (UnityEngine.Random.Range(0, food.SpreadRate) == 0)
             {
                 food = new Food(this);
                 food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
@@ -131,11 +134,14 @@ public class Tile
         }
     }
 
+    /// <summary>
+    /// Rolls to determine whether food will sprout on this tile, used only once on instantiation.
+    /// </summary>
     public void InitialSprout()
     {
         if (this.Type == TileType.Ground && !HasFood())
         {
-            if (UnityEngine.Random.Range(0, 100) == 0)
+            if (UnityEngine.Random.Range(0, food.InitialSproutRate) == 0)
             {
                 food = new Food(this);
                 food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
@@ -144,6 +150,10 @@ public class Tile
         }
     }
 
+    /// <summary>
+    /// Checks to see if there is food present on the tile.
+    /// </summary>
+    /// <returns>True if food is present</returns>
     public bool HasFood()
     {
         if (food != null)
@@ -154,6 +164,9 @@ public class Tile
         return false;
     }
 
+    /// <summary>
+    /// Consumes food on the tile if there is any.
+    /// </summary>
     public void CosumeFood() 
     {
         if (HasFood()) 
@@ -162,6 +175,9 @@ public class Tile
         }
     }
 
+    /// <summary>
+    /// Removes food from a tile, sets the food on the tile to null.
+    /// </summary>
     public void RemoveFood() 
     {
         this.food = null;

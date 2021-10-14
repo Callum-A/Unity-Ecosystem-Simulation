@@ -5,8 +5,16 @@ using UnityEngine;
 public class FoodController : SpriteController<Food>
 {
     public Sprite FoodSprite;
+    
+    /// <summary>
+    /// Keeps track of the number of food sprites for testing.
+    /// </summary>
     public int FoodCount { get; protected set; }
 
+    /// <summary>
+    /// Called when food has been spawned, creates and sets up initial Sprite for them.
+    /// </summary>
+    /// <param name="food">Food object to handle</param>
     public void OnFoodSpawned(Food food) 
     {
         if (food != null) 
@@ -27,6 +35,10 @@ public class FoodController : SpriteController<Food>
         }
     }
 
+    /// <summary>
+    /// Called when food has been exhasted, destroys the game object and removes it from the tile.
+    /// </summary>
+    /// <param name="food">Food object to handle</param>
     public void OnFoodExhausted(Food food) 
     {
         //Destroy Game Object
