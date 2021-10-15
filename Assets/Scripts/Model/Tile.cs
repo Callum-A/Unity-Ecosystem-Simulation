@@ -73,7 +73,7 @@ public class Tile
 
     public Tile SouthEast() 
     {
-        return World.GetTileAt(X - 1, Y + 1);
+        return World.GetTileAt(X + 1, Y - 1);
     }
 
     public Tile SouthWest() 
