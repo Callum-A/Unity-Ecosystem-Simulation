@@ -59,7 +59,6 @@ public class WorldController : MonoBehaviour
 
         World.GenerateTerrain();
         World.SproutInitialFood();
-
     }
 
     /// <summary>

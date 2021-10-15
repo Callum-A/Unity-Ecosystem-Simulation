@@ -27,6 +27,16 @@ public class World
         }
     }
 
+    public void Update(float deltaTime)
+    {
+
+    }
+    
+    public static int ManhattenDistance(int x1, int y1, int x2, int y2)
+    {
+        return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
+    }
+
     public void GenerateTerrain() 
     {
         terrainGenerator.GenerateTerrain(tiles);
