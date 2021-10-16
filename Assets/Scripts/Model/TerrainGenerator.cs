@@ -15,6 +15,11 @@ public class TerrainGenerator
     public float lacunarity = 3;
     public Vector2 offset = new Vector2(0, 0);
 
+    //Tile heights
+    private float waterHeight = 0.3f;
+    private float sandHeight = 0.35f;
+    private float grassHeight = 1f;
+
     /// <summary>
     /// Updates a 2D array of floats of normalised values, used as a heightmap. Uses varibles within terrain generation class to generate said noise (e.g. seed).
     /// </summary>
@@ -114,7 +119,6 @@ public class TerrainGenerator
         return data;
     }
 
-    //TODO: parameterise the numbers.
     /// <summary>
     /// Updates a tile's type based on the value of noise.
     /// </summary>
@@ -123,18 +127,20 @@ public class TerrainGenerator
     /// <param name="data">A terrain data struct, used to pass terrain generation data to the World class</param>param>
     private void setUpTile(Tile tile, float noise, TerrainData data)
     {
-        if (noise <= 0.3)
+        if (noise <= waterHeight)
         {
             tile.Type = TileType.Water;
             data.waterTiles.Add(tile);
         }
-        else if (noise <= 0.35)
+        else if (noise <= sandHeight)
         {
             tile.Type = TileType.Sand;
+            data.sandTiles.Add(tile);
         }
-        else if (noise <= 1)
+        else if (noise <= grassHeight)
         {
             tile.Type = TileType.Ground;
+            data.grassTiles.Add(tile);
         }
     }
 

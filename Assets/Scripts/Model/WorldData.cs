@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class WorldData
 {
+    #region TerrainData
+
     private TerrainData terrainData;
     public TerrainData TerrainData
     {
@@ -55,6 +57,8 @@ public class WorldData
         protected set { }
     }
 
+    #endregion
+
 
     public WorldData()
     {
@@ -62,6 +66,7 @@ public class WorldData
     }
 }
 
+// The TerrainData struct is used to easily return multiple objects back to world after each GenerateTerrain call.
 public struct TerrainData
 {
     public int numTiles;
