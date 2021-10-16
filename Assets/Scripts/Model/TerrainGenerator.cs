@@ -93,9 +93,11 @@ public class TerrainGenerator
     /// <param name="Tiles">A 2D array of tiles you want to generate terrain for.</param>
     /// <param name="width">Width of </param>
     /// <param name="height"></param>
-    public void GenerateTerrain(Tile[,] Tiles)
+    public TerrainData GenerateTerrain(Tile[,] Tiles)
     {
         UpdateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1));
+
+        TerrainData data = new TerrainData(Tiles.Length);
 
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
@@ -104,10 +106,12 @@ public class TerrainGenerator
                 Tile t = Tiles[x, y];
                 float noise = noiseMap[x, y];
 
-                setUpTile(t, noise);
+                setUpTile(t, noise, data);
 
             }
         }
+
+        return data;
     }
 
     //TODO: parameterise the numbers.
@@ -116,11 +120,13 @@ public class TerrainGenerator
     /// </summary>
     /// <param name="tile">The tile you want to update.</param>
     /// <param name="noise">A normalised value to decide what type to change the tile to.</param>
-    private void setUpTile(Tile tile, float noise)
+    /// <param name="data">A terrain data struct, used to pass terrain generation data to the World class</param>param>
+    private void setUpTile(Tile tile, float noise, TerrainData data)
     {
         if (noise <= 0.3)
         {
             tile.Type = TileType.Water;
+            data.waterTiles.Add(tile);
         }
         else if (noise <= 0.35)
         {

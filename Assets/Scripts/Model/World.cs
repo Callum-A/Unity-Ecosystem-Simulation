@@ -11,6 +11,7 @@ public class World
     public Tile[,] tiles { get; protected set; }
 
     private TerrainGenerator terrainGenerator;
+    private WorldData worldData;
 
     public World(int w, int h)
     {
@@ -18,6 +19,7 @@ public class World
         Height = h;
         tiles = new Tile[Width, Height];
         terrainGenerator = new TerrainGenerator();
+        worldData = new WorldData();
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -29,7 +31,8 @@ public class World
 
     public void GenerateTerrain() 
     {
-        terrainGenerator.GenerateTerrain(tiles);
+       worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
+       Debug.Log(worldData.WaterTiles.Count);
     }
 
     public void SproutInitialFood() 
