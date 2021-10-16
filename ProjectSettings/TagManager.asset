@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Tiles
+    uniqueID: 3890034043
+    locked: 0
+  - name: Prey
+    uniqueID: 3369157147
+    locked: 0
+  - name: Animals
+    uniqueID: 3997817037
+    locked: 0
+  - name: Predators
+    uniqueID: 2621537499
+    locked: 0

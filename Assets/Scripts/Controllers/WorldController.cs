@@ -37,7 +37,7 @@ public class WorldController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        World.Update(Time.deltaTime);
     }
 
     private void InitialiseTiles()
@@ -59,6 +59,7 @@ public class WorldController : MonoBehaviour
 
         World.GenerateTerrain();
         World.SproutInitialFood();
+        World.SpawnAnimals(1, 1);
     }
 
     /// <summary>

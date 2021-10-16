@@ -59,6 +59,7 @@ public class Food
         {
             if (OnFoodExhausted != null)
             {
+                WorldController.Instance.World.FoodTiles.Remove(tile);
                 OnFoodExhausted(this);
             }
         }

@@ -19,6 +19,21 @@ public class Tile
     public int Y { get; protected set; }
     public Food food { get; protected set; }
 
+    public float MovementCost
+    {
+        get 
+        {
+            if (_type == TileType.Water)
+            {
+                return 5f;
+            } 
+            else
+            {
+                return 1f;
+            }
+        }
+    }
+
     private TileType _type;
 
     public TileType Type
@@ -84,6 +99,24 @@ public class Tile
     public Tile West()
     {
         return World.GetTileAt(X - 1, Y);
+    }
+
+    public List<Tile> GetTilesInRadius(int r)
+    {
+        r = Math.Abs(r);
+        int startX = X - r;
+        int startY = Y - r;
+        int endX = X + r;
+        int endY = Y + r;
+        List<Tile> tiles = new List<Tile>();
+        for (int x = startX; x <= endX; x++)
+        {
+            for (int y = startY; y <= endY; y++)
+            {
+                tiles.Add(World.GetTileAt(x, y));
+            }
+        }
+        return tiles;
     }
 
     public Tile[] GetNeighbours()
