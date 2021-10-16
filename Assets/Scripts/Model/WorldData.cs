@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// World data stores useful data about the world to be easily accessed, such as lists of each tile and total tile percentages. 
+/// </summary>
 public class WorldData
 {
     private TerrainData terrainData;
@@ -10,12 +13,21 @@ public class WorldData
         get { return terrainData; }
         set { terrainData = value; }
     }
-
-    float waterPercent;
+    public int numTiles
+    {
+        get { return terrainData.numTiles; }
+        protected set { }
+    }
 
     public List<Tile> WaterTiles
     {
         get { return terrainData.waterTiles; }
+        protected set { }
+    }
+
+    public float WaterPercent
+    {
+        get { return ((float)terrainData.waterTiles.Count / (float)terrainData.numTiles) * 100 ; }
         protected set { }
     }
 
@@ -25,17 +37,24 @@ public class WorldData
         protected set { }
     }
 
+    public float SandPercent
+    {
+        get { return ((float)terrainData.sandTiles.Count / (float)terrainData.numTiles) * 100; }
+        protected set { }
+    }
+
     public List<Tile> GrassTiles
     {
         get { return terrainData.grassTiles; }
         protected set { }
     }
 
-    public int numTiles
+    public float GrassPercent
     {
-        get { return terrainData.numTiles; }
+        get { return ((float)terrainData.grassTiles.Count / (float)terrainData.numTiles) * 100; }
         protected set { }
     }
+
 
     public WorldData()
     {

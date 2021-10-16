@@ -32,7 +32,6 @@ public class World
     public void GenerateTerrain() 
     {
        worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
-       Debug.Log(worldData.WaterTiles.Count);
     }
 
     public void SproutInitialFood() 
