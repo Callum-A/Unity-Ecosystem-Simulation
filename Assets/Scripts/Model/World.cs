@@ -29,9 +29,9 @@ public class World
         }
     }
 
-    public void GenerateTerrain() 
+    public void GenerateTerrain()
     {
-       worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
+        worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
     }
 
     public void SproutInitialFood() 
