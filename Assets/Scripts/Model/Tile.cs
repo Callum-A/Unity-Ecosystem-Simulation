@@ -151,10 +151,41 @@ public class Tile
         return ns;
     }
 
+    //TODO: can be optimised further (currently a neighbourhood search n^2), also could use Euclidean distance over Manhattan for a 'smoother' radius.
+    /// <summary>
+    /// A simple radius check around a given tile.
+    /// </summary>
+    /// <param name="radius">The number of tiles in the radius, not including the root tile</param>
+    /// <returns> A List of tiles within the given radius</returns>
+    public List<Tile> GetRadius(int radius)
+    {
+
+        List<Tile> radiusList = new List<Tile>();
+
+        //check OOB
+        int rowCeiling = Math.Min(this.Y + radius + 1, World.Height);
+        int rowFloor = Math.Max(this.Y - radius, 0);
+        int columnCeiling = Math.Min(this.X + radius + 1, World.Width);
+        int columnFloor = Math.Max(this.X - radius, 0);
+
+        for (int y = rowFloor; y < rowCeiling; y++)
+        {
+            for (int x = columnFloor; x < columnCeiling; x++)
+            {
+                if (Math.Abs(this.X - x) + Math.Abs(this.Y - y) <= radius)  
+                {
+                    radiusList.Add(World.GetTileAt(x, y));
+                }
+            }
+        }
+
+        return radiusList;
+    }
+
     /// <summary>
     /// Rolls to determine whether food will sprout on this tile, called by spread.
     /// </summary>
-    public void Sprout() 
+    public void Sprout()  
     {
         if (this.Type == TileType.Ground && !HasFood())
         {

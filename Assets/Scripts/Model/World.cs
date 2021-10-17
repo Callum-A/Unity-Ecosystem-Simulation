@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class World
 {
@@ -13,6 +12,7 @@ public class World
 
     private TerrainGenerator terrainGenerator;
     public AnimalManager AnimalManager { get; protected set; }
+    private WorldData worldData;
 
     // TODO: Move this to the struct that Dylan will add
     public List<Tile> FoodTiles { get; protected set; }
@@ -25,6 +25,7 @@ public class World
         FoodTiles = new List<Tile>();
         terrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
+        worldData = new WorldData();
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -39,14 +40,14 @@ public class World
         AnimalManager.Update(deltaTime);
     }
     
-    public static int ManhattenDistance(int x1, int y1, int x2, int y2)
+    public static int ManhattanDistance(int x1, int y1, int x2, int y2)
     {
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
     }
 
-    public void GenerateTerrain() 
+    public void GenerateTerrain()
     {
-        terrainGenerator.GenerateTerrain(tiles);
+        worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
     }
 
     public void SpawnAnimals(int preyAmount, int predatorAmount)
@@ -104,7 +105,7 @@ public class World
         int closestDistance = Int32.MaxValue;
         foreach (Tile t in FoodTiles)
         {
-            int currentDist = ManhattenDistance(tile.X, tile.Y, t.X, t.Y);
+            int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
             if (currentDist < closestDistance)
             {
                 closestDistance = currentDist;
