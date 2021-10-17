@@ -155,7 +155,7 @@ public class Tile
     /// <summary>
     /// A simple radius check around a given tile.
     /// </summary>
-    /// <param name="radius">The number of tiles in the radius, not including the root tile </param>
+    /// <param name="radius">The number of tiles in the radius, not including the root tile</param>
     /// <returns> A List of tiles within the given radius</returns>
     public List<Tile> GetRadius(int radius)
     {
@@ -167,8 +167,6 @@ public class Tile
         int rowFloor = Math.Max(this.Y - radius, 0);
         int columnCeiling = Math.Min(this.X + radius + 1, World.Width);
         int columnFloor = Math.Max(this.X - radius, 0);
-
-        Debug.Log("Row: " + rowFloor + ", " + rowCeiling + " Column: " + columnFloor + ", " + columnCeiling);
 
         for (int y = rowFloor; y < rowCeiling; y++)
         {

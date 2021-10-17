@@ -46,7 +46,7 @@ public class World
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
     }
 
-    public void GenerateTerrain() 
+    public void GenerateTerrain()
     {
         worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
     }
