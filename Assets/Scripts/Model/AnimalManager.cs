@@ -82,7 +82,7 @@ public class AnimalManager
         int closestDistance = Int32.MaxValue;
         foreach (Prey p in inRadius)
         {
-            int currentDist = World.ManhattenDistance(x, y, p.CurrentTile.X, p.CurrentTile.Y);
+            int currentDist = World.ManhattanDistance(x, y, p.CurrentTile.X, p.CurrentTile.Y);
             if (currentDist < closestDistance)
             {
                 closestDistance = currentDist;
@@ -99,7 +99,7 @@ public class AnimalManager
         int closestDistance = Int32.MaxValue;
         foreach (Prey a in Prey)
         {
-            int currentDist = World.ManhattenDistance(x, y, a.CurrentTile.X, a.CurrentTile.Y);
+            int currentDist = World.ManhattanDistance(x, y, a.CurrentTile.X, a.CurrentTile.Y);
             if (currentDist < closestDistance)
             {
                 closestDistance = currentDist;

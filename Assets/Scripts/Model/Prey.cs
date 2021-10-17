@@ -171,7 +171,7 @@ public class Prey : Animal
                     continue; // can't breed with self
                 }
 
-                if (World.ManhattenDistance(CurrentTile.X, CurrentTile.Y, a.CurrentTile.X, a.CurrentTile.Y) < 3f) // TODO: Change to breed radius variable
+                if (World.ManhattanDistance(CurrentTile.X, CurrentTile.Y, a.CurrentTile.X, a.CurrentTile.Y) < 3f) // TODO: Change to breed radius variable
                 {
                     partner = a;
                     break;

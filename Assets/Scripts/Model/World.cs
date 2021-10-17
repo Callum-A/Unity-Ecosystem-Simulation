@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class World
 {
@@ -41,7 +40,7 @@ public class World
         AnimalManager.Update(deltaTime);
     }
     
-    public static int ManhattenDistance(int x1, int y1, int x2, int y2)
+    public static int ManhattanDistance(int x1, int y1, int x2, int y2)
     {
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
     }
@@ -106,7 +105,7 @@ public class World
         int closestDistance = Int32.MaxValue;
         foreach (Tile t in FoodTiles)
         {
-            int currentDist = ManhattenDistance(tile.X, tile.Y, t.X, t.Y);
+            int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
             if (currentDist < closestDistance)
             {
                 closestDistance = currentDist;
