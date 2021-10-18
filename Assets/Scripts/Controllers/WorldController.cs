@@ -9,6 +9,7 @@ public class WorldController : MonoBehaviour
 
     public TileSpriteController TileSpriteController;
     public FoodController FoodController;
+    public AnimalSpriteController AnimalSpriteController;
 
     /// <summary>
     /// Helper variables for initial food simulation will be removed later on after prey is fully implemented.
@@ -44,6 +45,8 @@ public class WorldController : MonoBehaviour
     {
         World = new World(Width, Height);
 
+        World.AnimalManager.RegisterOnAnimalCreatedCallback(AnimalSpriteController.OnAnimalCreated);
+        World.AnimalManager.RegisterOnAnimalDestroyedCallback(AnimalSpriteController.OnAnimalDestroyed);
         for (int x = 0; x < World.Width; x++)
         {
             for (int y = 0; y < World.Height; y++)

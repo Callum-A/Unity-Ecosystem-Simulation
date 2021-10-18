@@ -423,6 +423,7 @@ MonoBehaviour:
   Height: 100
   TileSpriteController: {fileID: 7362690}
   FoodController: {fileID: 1518788882}
+  AnimalSpriteController: {fileID: 2083426261}
   time: 5
   Days: 0
   breedingRate: 1.1
