@@ -101,24 +101,6 @@ public class Tile
         return World.GetTileAt(X - 1, Y);
     }
 
-    public List<Tile> GetTilesInRadius(int r)
-    {
-        r = Math.Abs(r);
-        int startX = X - r;
-        int startY = Y - r;
-        int endX = X + r;
-        int endY = Y + r;
-        List<Tile> tiles = new List<Tile>();
-        for (int x = startX; x <= endX; x++)
-        {
-            for (int y = startY; y <= endY; y++)
-            {
-                tiles.Add(World.GetTileAt(x, y));
-            }
-        }
-        return tiles;
-    }
-
     public Tile[] GetNeighbours()
     {
         Tile[] ns = new Tile[4];

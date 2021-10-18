@@ -84,7 +84,7 @@ public class World
 
     public Tile GetRandomNonWaterTileInRadius(Tile tile, int r)
     {
-        List<Tile> tiles = tile.GetTilesInRadius(r);
+        List<Tile> tiles = tile.GetRadius(r);
         List<Tile> nonWater = new List<Tile>(); // memory inefficient but idc
         foreach (Tile t in tiles)
         {

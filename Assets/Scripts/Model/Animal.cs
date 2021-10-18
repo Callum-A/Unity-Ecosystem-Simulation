@@ -183,7 +183,7 @@ public abstract class Animal
         // Stop movement
         StopMovement();
         // Check for food tiles in our sight radius
-        List<Tile> tilesICanSee = CurrentTile.GetTilesInRadius(SightRange);
+        List<Tile> tilesICanSee = CurrentTile.GetRadius(SightRange);
         Tile waterTile = null;
         foreach (Tile t in tilesICanSee)
         {
