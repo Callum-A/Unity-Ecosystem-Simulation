@@ -112,7 +112,7 @@ public class Prey : Animal
         // Stop movement
         StopMovement();
         // Check for food tiles in our sight radius
-        List<Tile> tilesICanSee = CurrentTile.GetTilesInRadius(SightRange);
+        List<Tile> tilesICanSee = CurrentTile.GetRadius(SightRange);
         Tile foodTile = null;
         foreach (Tile t in tilesICanSee)
         {
