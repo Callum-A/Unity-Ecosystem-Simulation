@@ -11,6 +11,8 @@ public class AnimalManager
     private World world;
     private Stack<Animal> animalsToSpawn;
     private Stack<Animal> animalsToDespawn;
+    private int currentPreyID;
+    private int currentPredatorID;
 
     private Action<Animal> OnAnimalCreatedCallback;
     private Action<Animal> OnAnimalDestroyedCallback;
@@ -23,6 +25,8 @@ public class AnimalManager
         AllAnimals = new List<Animal>();
         animalsToSpawn = new Stack<Animal>();
         animalsToDespawn = new Stack<Animal>();
+        currentPreyID = 0;
+        currentPredatorID = 0;
     }
 
     /// <summary>
@@ -150,9 +154,10 @@ public class AnimalManager
     /// <returns>The predator spawned.</returns>
     public Predator SpawnPredator(Tile tile)
     {
-        Predator p = new Predator(tile, this);
+        Predator p = new Predator(tile, this, currentPredatorID);
         Predators.Add(p);
         Spawn(p);
+        currentPredatorID++;
         return p;
     }
 
@@ -163,9 +168,10 @@ public class AnimalManager
     /// <returns>The prey spawned.</returns>
     public Prey SpawnPrey(Tile tile)
     {
-        Prey p = new Prey(tile, this);
+        Prey p = new Prey(tile, this, currentPreyID);
         Prey.Add(p);
         Spawn(p);
+        currentPreyID++;
         return p;
     }
 
@@ -183,24 +189,20 @@ public class AnimalManager
         animalsToDespawn.Push(a);
     }
 
-    /// <summary>
-    /// Despawn a predator. Removes from predators list.
-    /// </summary>
-    /// <param name="p">Predator to despawn.</param>
-    public void DespawnPredator(Predator p)
-    {
-        Predators.Remove(p);
-        Despawn(p);
-    }
 
-    /// <summary>
-    /// Despawn a prey. Removes from prey list.
-    /// </summary>
-    /// <param name="p">Prey to despawn.</param>
-    public void DespawnPrey(Prey p)
+    public void DespawnAnimal(Animal a) 
     {
-        Prey.Remove(p);
-        Despawn(p);
+        if (a.AnimalType == AnimalType.Prey)
+        {
+            Prey.Remove(a as Prey);
+        }
+
+        else 
+        {
+            Predators.Remove(a as Predator);
+        }
+
+        Despawn(a);
     }
 
     public void RegisterOnAnimalCreatedCallback(Action<Animal> cb)
