@@ -8,13 +8,6 @@ public class AnimalSpriteController : SpriteController<Animal>
     public Sprite PreySprite;
     public Sprite PredatorSprite;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        world.AnimalManager.RegisterOnAnimalCreatedCallback(OnAnimalCreated);
-        world.AnimalManager.RegisterOnAnimalDestroyedCallback(OnAnimalDestroyed);
-    }
-
     public void OnAnimalDestroyed(Animal a)
     {
         GameObject go = GetGameObjectByInstance(a);
