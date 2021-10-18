@@ -61,31 +61,53 @@ public abstract class Animal
         CurrentState = AnimalState.Idle;
     }
 
+    /// <summary>
+    /// Set the destination tile.
+    /// </summary>
+    /// <param name="t">Tile to set the destination to.</param>
     public void SetDestination(Tile t)
     {
         DestinationTile = t;
     }
 
+    /// <summary>
+    /// Stops the movement.
+    /// </summary>
     public void StopMovement()
     {
         DestinationTile = NextTile;
     }
 
+    /// <summary>
+    /// Checks if both needs are above 50%.
+    /// </summary>
+    /// <returns>True if both needs are above 50%, false otherwise.</returns>
     public bool NeedsMet()
     {
         return Hunger >= 0.5f && Thirst >= 0.5f;
     }
 
+    /// <summary>
+    /// Checks if the animal is hungry. Hungry is defined when hunger is less than 0.3.
+    /// </summary>
+    /// <returns>True if hunger is less than 0.3.</returns>
     public bool IsHungry()
     {
         return Hunger <= 0.3f;
     }
 
+    /// <summary>
+    /// Checks if the animal is thirsty. Thirsty is defined when thirst is less than 0.3.
+    /// </summary>
+    /// <returns>True if thirst is less than 0.3.</returns>
     public bool IsThirsty()
     {
         return Thirst <= 0.3f;
     }
 
+    /// <summary>
+    /// Method that checks death and if they should die calls the die method.
+    /// </summary>
     public void CheckDeath()
     {
         if (ShouldDie())
@@ -94,12 +116,27 @@ public abstract class Animal
         }
     }
 
+    /// <summary>
+    /// Abstract method to check if an animal should die.
+    /// </summary>
+    /// <returns>True if it should die, false otherwise.</returns>
     public abstract bool ShouldDie();
 
+    /// <summary>
+    /// Abstract method called when the animal dies.
+    /// </summary>
     public abstract void Die();
 
+    /// <summary>
+    /// Abstract main update function.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public abstract void Update(float deltaTime);
 
+    /// <summary>
+    /// Movement function, handles pathfinding and move percentage.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoMovement(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
@@ -144,6 +181,10 @@ public abstract class Animal
         }
     }
 
+    /// <summary>
+    /// I am thirsty but I do not see water, I am heading to try and find some.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoSeekWater(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
@@ -157,6 +198,10 @@ public abstract class Animal
     private float timeSinceStartedDrinking;
     private float drinkingTimeInSeconds = 0.5f;
 
+    /// <summary>
+    /// I am drinking.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoDrinking(float deltaTime)
     {
         timeSinceStartedDrinking += deltaTime;
@@ -168,6 +213,10 @@ public abstract class Animal
         }
     }
 
+    /// <summary>
+    /// I see water and I am heading to it.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoFoundWater(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
@@ -178,6 +227,10 @@ public abstract class Animal
         }
     }
 
+    /// <summary>
+    /// I am thirsty and I need to check if I can see water, or I need to look for it.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoThirsty(float deltaTime)
     {
         // Stop movement

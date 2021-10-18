@@ -213,12 +213,15 @@ public class Tile
     /// <summary>
     /// Consumes food on the tile if there is any.
     /// </summary>
-    public void CosumeFood() 
+    public bool ConsumeFood() 
     {
-        if (HasFood()) 
+        if (HasFood())
         {
             food.Consume();
+            return true;
         }
+
+        return false;
     }
 
     /// <summary>

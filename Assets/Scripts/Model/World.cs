@@ -62,6 +62,7 @@ public class World
             tile.InitialSprout();
             if (tile.food != null)
             {
+                // TODO: Also add to food tiles on natural growth
                 FoodTiles.Add(tile);
             }
         }

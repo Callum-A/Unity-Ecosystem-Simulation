@@ -9,17 +9,28 @@ public class Predator : Animal
     public Predator(Tile tile, AnimalManager animalManager) : base(tile, 2f, 5, AnimalType.Predator, animalManager) { }
 
     // TODO: Implement death here and start testing population levels etc.
+    /// <summary>
+    /// Returns true if the predator should die.
+    /// </summary>
+    /// <returns>Boolean if the predator should die.</returns>
     public override bool ShouldDie()
     {
         return false;
     }
 
+    /// <summary>
+    /// Method called when should die is True.
+    /// </summary>
     public override void Die()
     {
         Debug.Log("Now dying!");
         AnimalManager.DespawnPredator(this);
     }
 
+    /// <summary>
+    /// Main update function decrements values and handles the statemachine.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public override void Update(float deltaTime)
     {
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
@@ -73,6 +84,10 @@ public class Predator : Animal
     //       - Another predator kills the prey (idk how to do this, might need some flag to be set on prey a bool BeingChased?)
     //       - They prey dies of natural causes (hunger thirst etc.)
 
+    /// <summary>
+    /// I cannot see a prey to eat, I am heading to a tile to then look for one.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoSeekFood(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
@@ -82,6 +97,10 @@ public class Predator : Animal
         }
     }
 
+    /// <summary>
+    /// I am eating a prey.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoEating(float deltaTime)
     {
         // TODO: add some kind of timer? chance to fail?
@@ -92,6 +111,10 @@ public class Predator : Animal
         Debug.Log("Done eating - Predator");
     }
 
+    /// <summary>
+    /// I can see prey and I am heading towards them.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoFoundFood(float deltaTime)
     {
         if (DestinationTile != CurrentTarget.CurrentTile)
@@ -107,6 +130,10 @@ public class Predator : Animal
         }
     }
 
+    /// <summary>
+    /// I am hungry I need to check if I can see prey or I need to look for one.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoHungry(float deltaTime)
     {
         // Stop movement
@@ -131,6 +158,10 @@ public class Predator : Animal
         }
     }
 
+    /// <summary>
+    /// Idle function, checks if hungry or thirsty. Also wanders to a random tile.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoIdle(float deltaTime)
     {
         World world = WorldController.Instance.World;
@@ -150,6 +181,10 @@ public class Predator : Animal
         }
     }
 
+    /// <summary>
+    /// I am walking to a random tile.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoWandering(float deltaTime)
     {
         if (IsThirsty())
