@@ -35,6 +35,7 @@ public abstract class Animal
     public AnimalManager AnimalManager { get; protected set; }
     public AnimalState CurrentState { get; protected set; }
 
+    public int ID { get; protected set; }
     public float Hunger { get; protected set; }
     public float Thirst { get; protected set; }
     public AnimalType AnimalType { get; protected set; }
@@ -46,7 +47,7 @@ public abstract class Animal
 
     protected Action<Animal> OnAnimalChangedCallback;
 
-    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager)
+    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id)
     {
         CurrentTile = tile;
         NextTile = tile;
@@ -59,6 +60,7 @@ public abstract class Animal
         AnimalType = animalType;
         AnimalManager = animalManager;
         CurrentState = AnimalState.Idle;
+        ID = id;
     }
 
     /// <summary>

@@ -26,7 +26,7 @@ public class AnimalSpriteController : SpriteController<Animal>
         // Create a game object linked to this data
         GameObject objGameObject = new GameObject();
         AddGameObject(a, objGameObject);
-        objGameObject.name = a.AnimalType == AnimalType.Prey ? "Prey" : "Predator"; // TODO: make this determined by character class
+        objGameObject.name = a.AnimalType == AnimalType.Prey ? "Prey_" + a.ID : "Predator_" + +a.ID; // TODO: make this determined by character class
         objGameObject.transform.position = new Vector3(a.X, a.Y, 0);
         objGameObject.transform.SetParent(transform, true);
         SpriteRenderer sr = objGameObject.AddComponent<SpriteRenderer>();

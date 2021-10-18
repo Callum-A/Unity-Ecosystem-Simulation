@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Prey : Animal
 {
-    public Prey(Tile tile, AnimalManager animalManager) : base(tile, 1f, 5, AnimalType.Prey, animalManager) { }
+    public Prey(Tile tile, AnimalManager animalManager, int id) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id) { }
 
     /// <summary>
     /// Prey should die function, returns true when it should die. Should die if hunger
@@ -26,7 +26,7 @@ public class Prey : Animal
     public override void Die()
     {
         Debug.Log("Now dying!");
-        AnimalManager.DespawnPrey(this);
+        AnimalManager.DespawnAnimal(this);
     }
 
     /// <summary>
