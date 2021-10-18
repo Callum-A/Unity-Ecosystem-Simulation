@@ -9,8 +9,6 @@ public class AnimalManager
     public List<Predator> Predators { get; protected set; }
     public List<Animal> AllAnimals { get; protected set; }
     private World world;
-    private Stack<Animal> animalsToSpawn;
-    private Stack<Animal> animalsToDespawn;
     private int currentPreyID;
     private int currentPredatorID;
 
@@ -23,8 +21,6 @@ public class AnimalManager
         Prey = new List<Prey>();
         Predators = new List<Predator>();
         AllAnimals = new List<Animal>();
-        animalsToSpawn = new Stack<Animal>();
-        animalsToDespawn = new Stack<Animal>();
         currentPreyID = 0;
         currentPredatorID = 0;
     }
@@ -55,25 +51,22 @@ public class AnimalManager
     /// <param name="deltaTime">Time between last frame.</param>
     public void Update(float deltaTime)
     {
-        foreach (Animal a in AllAnimals)
+        int i = 0;
+        while (i < AllAnimals.Count)
         {
-            a.Update(deltaTime);
-        }
+            Animal a = AllAnimals[i];
 
-        while (animalsToDespawn.Count != 0)
-        {
-            Animal toDespawn = animalsToDespawn.Pop();
-            AllAnimals.Remove(toDespawn);
-        }
-
-        while (animalsToSpawn.Count != 0)
-        {
-            Animal toSpawn = animalsToSpawn.Pop();
-            AllAnimals.Add(toSpawn);
-            if (OnAnimalCreatedCallback != null)
+            if (a.ShouldDie())
             {
-                OnAnimalCreatedCallback(toSpawn);
+                // Calls AnimalManager.DespawnAnimal from die func
+                a.Die();
             }
+            else
+            {
+                i++;
+            }
+
+            a.Update(deltaTime);
         }
     }
 
@@ -143,7 +136,11 @@ public class AnimalManager
     /// <returns>The spawned animal.</returns>
     private Animal Spawn(Animal a)
     {
-        animalsToSpawn.Push(a);
+        AllAnimals.Add(a);
+        if (OnAnimalCreatedCallback != null)
+        {
+            OnAnimalCreatedCallback(a);
+        }
         return a;
     }
 
@@ -186,7 +183,7 @@ public class AnimalManager
             OnAnimalDestroyedCallback(a);
         }
 
-        animalsToDespawn.Push(a);
+        AllAnimals.Remove(a);
     }
 
 

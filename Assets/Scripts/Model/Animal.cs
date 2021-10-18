@@ -108,17 +108,6 @@ public abstract class Animal
     }
 
     /// <summary>
-    /// Method that checks death and if they should die calls the die method.
-    /// </summary>
-    public void CheckDeath()
-    {
-        if (ShouldDie())
-        {
-            Die();
-        }
-    }
-
-    /// <summary>
     /// Abstract method to check if an animal should die.
     /// </summary>
     /// <returns>True if it should die, false otherwise.</returns>

@@ -35,7 +35,6 @@ public class Predator : Animal
     {
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
         Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(2f));
-        CheckDeath();
         UpdateDoMovement(deltaTime);
         switch (CurrentState)
         {

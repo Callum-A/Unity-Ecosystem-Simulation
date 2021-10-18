@@ -38,7 +38,6 @@ public class Prey : Animal
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
         Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(2f));
         timeSinceLastBreeded += deltaTime;
-        CheckDeath();
         UpdateDoMovement(deltaTime);
         switch (CurrentState)
         {
@@ -172,7 +171,8 @@ public class Prey : Animal
         }
     }
 
-    private float timeSinceLastBreeded = 0f;
+    // TODO: Randomise this on start
+    private float timeSinceLastBreeded = 0;
     private float breedingCooldown = 2 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 2 days
 
     /// <summary>
