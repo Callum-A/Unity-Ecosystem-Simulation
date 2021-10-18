@@ -6,6 +6,11 @@ public class Prey : Animal
 {
     public Prey(Tile tile, AnimalManager animalManager) : base(tile, 1f, 5, AnimalType.Prey, animalManager) { }
 
+    /// <summary>
+    /// Prey should die function, returns true when it should die. Should die if hunger
+    /// or thirst drops below 0 and it is not eating or drinking.
+    /// </summary>
+    /// <returns>Boolean if it should die.</returns>
     public override bool ShouldDie()
     {
         if (Hunger < 0f && CurrentState != AnimalState.Eating || Thirst < 0f && CurrentState != AnimalState.Drinking)
@@ -15,12 +20,19 @@ public class Prey : Animal
         return false;
     }
 
+    /// <summary>
+    /// Method called when the prey dies.
+    /// </summary>
     public override void Die()
     {
         Debug.Log("Now dying!");
         AnimalManager.DespawnPrey(this);
     }
 
+    /// <summary>
+    /// Main update function and statemachine decrements hunger and thirst.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame</param>
     public override void Update(float deltaTime)
     {
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
@@ -71,6 +83,10 @@ public class Prey : Animal
         }
     }
 
+    /// <summary>
+    /// I am hungry however I do not see food, I am moving to a tile to seek food,
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoSeekFood(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
@@ -83,20 +99,29 @@ public class Prey : Animal
     private float timeSinceStartedEating;
     private float eatingTimeInSeconds = 0.5f;
 
-    // TODO: In all food states check if food has ran out.
+    // TODO: In all food states check if food has ran out. Use tile.HasFood()
 
+    /// <summary>
+    /// I am on a food tile and I am eating it.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoEating(float deltaTime)
     {
         timeSinceStartedEating += deltaTime;
         if (timeSinceStartedEating >= eatingTimeInSeconds)
         {
-            CurrentTile.food.Consume();
+            bool hasEaten = CurrentTile.ConsumeFood();
+            // TODO: Check this to see if we've actually eaten
             Hunger = 1f;
             Debug.Log("Eating done!");
             CurrentState = AnimalState.Idle;
         }
     }
 
+    /// <summary>
+    /// I see food and I am walking to it.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoFoundFood(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
@@ -107,6 +132,11 @@ public class Prey : Animal
         }
     }
 
+    /// <summary>
+    /// I am now hungry I need to see if I can see a food tile,
+    /// or I need to go looking for food.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoHungry(float deltaTime)
     {
         // Stop movement
@@ -145,6 +175,13 @@ public class Prey : Animal
     private float timeSinceLastBreeded = 0f;
     private float breedingCooldown = 2 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 2 days
 
+    private float timeSinceLastWandered = 0f;
+    private float wanderedCooldown = 1f;
+
+    /// <summary>
+    /// Idle state, either moves to hungry, thirsty or wanders.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoIdle(float deltaTime)
     {
         World world = WorldController.Instance.World;
@@ -187,27 +224,38 @@ public class Prey : Animal
         }
         else
         {
-            CurrentState = AnimalState.Wandering;
-            DestinationTile = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
+            timeSinceLastWandered += deltaTime;
+            if (timeSinceLastWandered >= wanderedCooldown)
+            {
+                CurrentState = AnimalState.Wandering;
+                DestinationTile = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
+            }
         }
     }
 
+    /// <summary>
+    /// I am wandering to a random tile.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoWandering(float deltaTime)
     {
         if (IsThirsty())
         {
             StopMovement();
+            timeSinceLastWandered = 0f;
             CurrentState = AnimalState.Thirsty;
         }
         else if (IsHungry())
         {
             StopMovement();
+            timeSinceLastWandered = 0f;
             CurrentState = AnimalState.Hungry;
         }
 
         if (CurrentTile == DestinationTile)
         {
             StopMovement();
+            timeSinceLastWandered = 0f;
             CurrentState = AnimalState.Idle;
         }
     }

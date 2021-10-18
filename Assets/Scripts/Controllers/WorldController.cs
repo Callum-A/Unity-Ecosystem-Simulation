@@ -106,7 +106,7 @@ public class WorldController : MonoBehaviour
 
                         else if (tile.HasFood())
                         {
-                            tile.CosumeFood();
+                            tile.ConsumeFood();
                             eaten++;
                         }
                     }

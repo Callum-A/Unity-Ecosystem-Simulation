@@ -26,14 +26,14 @@ public class TimeController : MonoBehaviour
         NumberOfDays = 0;
     }
 
-    public float GetTimesADayMultiplier(float days)
+    public float GetTimesADayMultiplier(float times)
     {
-        if (days == 0f)
+        if (times == 0f)
         {
             return 0f;
         }
 
-        return (days / SECONDS_IN_A_DAY);
+        return (times / SECONDS_IN_A_DAY);
     }
 
     public void RegisterOnNewDayCallback(Action<World> cb)

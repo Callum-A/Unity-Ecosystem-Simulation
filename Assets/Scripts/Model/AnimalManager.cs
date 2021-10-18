@@ -25,6 +25,11 @@ public class AnimalManager
         animalsToDespawn = new Stack<Animal>();
     }
 
+    /// <summary>
+    /// Called on the start of the world to spawn initial animals.
+    /// </summary>
+    /// <param name="preyAmount">Number of prey.</param>
+    /// <param name="predatorAmount">Number of predators.</param>
     public void SpawnAnimals(int preyAmount, int predatorAmount)
     {
         // TODO: choose spawn locations
@@ -39,6 +44,11 @@ public class AnimalManager
         }
     }
 
+    /// <summary>
+    /// Main update function, calls update on every animal. Handles despawning
+    /// and respawning via stacks.
+    /// </summary>
+    /// <param name="deltaTime">Time between last frame.</param>
     public void Update(float deltaTime)
     {
         foreach (Animal a in AllAnimals)
@@ -63,6 +73,13 @@ public class AnimalManager
         }
     }
 
+    /// <summary>
+    /// Helper method to find closest prey within a radius.
+    /// </summary>
+    /// <param name="x">X position.</param>
+    /// <param name="y">Y position.</param>
+    /// <param name="r">Radius.</param>
+    /// <returns>The closest prey in radius or null if none found.</returns>
     public Prey FindClosestPreyInRadius(int x, int y, int r)
     {
         Prey closest = null;
@@ -93,6 +110,12 @@ public class AnimalManager
         return closest;
     }
 
+    /// <summary>
+    /// Helper method to find the closest prey to a given position.
+    /// </summary>
+    /// <param name="x">X position.</param>
+    /// <param name="y">Y position.</param>
+    /// <returns>Closest prey or null if none found.</returns>
     public Prey FindClosestPrey(int x, int y)
     {
         Prey closest = null;
@@ -109,12 +132,22 @@ public class AnimalManager
         return closest;
     }
 
+    /// <summary>
+    /// Spawn an animal and add to the spawn stack.
+    /// </summary>
+    /// <param name="a">Animal to spawn.</param>
+    /// <returns>The spawned animal.</returns>
     private Animal Spawn(Animal a)
     {
         animalsToSpawn.Push(a);
         return a;
     }
 
+    /// <summary>
+    /// Spawn a predator on a given tile. Adds to predator list.
+    /// </summary>
+    /// <param name="tile">Tile to spawn it on.</param>
+    /// <returns>The predator spawned.</returns>
     public Predator SpawnPredator(Tile tile)
     {
         Predator p = new Predator(tile, this);
@@ -123,6 +156,11 @@ public class AnimalManager
         return p;
     }
 
+    /// <summary>
+    /// Spawn a prey on a given tile. Adds to prey list.
+    /// </summary>
+    /// <param name="tile">Tile to spawn it on.</param>
+    /// <returns>The prey spawned.</returns>
     public Prey SpawnPrey(Tile tile)
     {
         Prey p = new Prey(tile, this);
@@ -131,6 +169,10 @@ public class AnimalManager
         return p;
     }
 
+    /// <summary>
+    /// Despawn an animal, calling the callback and adding to the stack.
+    /// </summary>
+    /// <param name="a">Animal to despawn.</param>
     private void Despawn(Animal a)
     {
         if (OnAnimalDestroyedCallback != null)
@@ -141,12 +183,20 @@ public class AnimalManager
         animalsToDespawn.Push(a);
     }
 
+    /// <summary>
+    /// Despawn a predator. Removes from predators list.
+    /// </summary>
+    /// <param name="p">Predator to despawn.</param>
     public void DespawnPredator(Predator p)
     {
         Predators.Remove(p);
         Despawn(p);
     }
 
+    /// <summary>
+    /// Despawn a prey. Removes from prey list.
+    /// </summary>
+    /// <param name="p">Prey to despawn.</param>
     public void DespawnPrey(Prey p)
     {
         Prey.Remove(p);
