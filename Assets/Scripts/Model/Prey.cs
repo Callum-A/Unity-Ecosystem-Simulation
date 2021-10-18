@@ -175,9 +175,6 @@ public class Prey : Animal
     private float timeSinceLastBreeded = 0f;
     private float breedingCooldown = 2 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 2 days
 
-    private float timeSinceLastWandered = 0f;
-    private float wanderedCooldown = 1f;
-
     /// <summary>
     /// Idle state, either moves to hungry, thirsty or wanders.
     /// </summary>
@@ -224,12 +221,10 @@ public class Prey : Animal
         }
         else
         {
-            timeSinceLastWandered += deltaTime;
-            if (timeSinceLastWandered >= wanderedCooldown)
-            {
-                CurrentState = AnimalState.Wandering;
-                DestinationTile = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
-            }
+
+            CurrentState = AnimalState.Wandering;
+            DestinationTile = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
+
         }
     }
 
@@ -242,20 +237,17 @@ public class Prey : Animal
         if (IsThirsty())
         {
             StopMovement();
-            timeSinceLastWandered = 0f;
             CurrentState = AnimalState.Thirsty;
         }
         else if (IsHungry())
         {
             StopMovement();
-            timeSinceLastWandered = 0f;
             CurrentState = AnimalState.Hungry;
         }
 
         if (CurrentTile == DestinationTile)
         {
             StopMovement();
-            timeSinceLastWandered = 0f;
             CurrentState = AnimalState.Idle;
         }
     }
