@@ -8,7 +8,7 @@ public class WorldController : MonoBehaviour
     public int Height;
 
     public TileSpriteController TileSpriteController;
-    public FoodController FoodController;
+    public FoodSpriteController FoodSpriteController;
     public AnimalSpriteController AnimalSpriteController;
 
     /// <summary>
@@ -55,8 +55,8 @@ public class WorldController : MonoBehaviour
 
                 TileSpriteController.OnTileCreated(t);
                 t.RegisterOnTileTypeChangedCallback(TileSpriteController.OnTileTypeChanged);
-                t.RegisterOnFoodSproutedCallbackCallback(FoodController.OnFoodSpawned);
-                t.RegisterOnFoodExhaustedCallbackCallback(FoodController.OnFoodExhausted);
+                t.RegisterOnFoodSproutedCallbackCallback(FoodSpriteController.OnFoodSpawned);
+                t.RegisterOnFoodExhaustedCallbackCallback(FoodSpriteController.OnFoodExhausted);
             }
         }
 
@@ -71,7 +71,7 @@ public class WorldController : MonoBehaviour
     /// </summary>
     private void PlantGrowthSimulationTest() 
     {
-        if (FoodController.FoodCount > 0)
+        if (FoodSpriteController.FoodCount > 0)
         {
             time -= Time.deltaTime;
 
@@ -91,12 +91,12 @@ public class WorldController : MonoBehaviour
 
                 int eaten = 0;
 
-                while (eaten < nutritionNeeded && FoodController.FoodCount > 0)
+                while (eaten < nutritionNeeded && FoodSpriteController.FoodCount > 0)
                 {
 
                     foreach (Tile tile in World.tiles)
                     {
-                        if (FoodController.FoodCount <= 0)
+                        if (FoodSpriteController.FoodCount <= 0)
                         {
                             Debug.Log("NO FOOD LEFT!");
                             break;
@@ -116,7 +116,7 @@ public class WorldController : MonoBehaviour
 
                 }
 
-                Debug.Log("Food Count: " + FoodController.FoodCount + "Nutrition Eaten - " + nutritionNeeded);
+                Debug.Log("Food Count: " + FoodSpriteController.FoodCount + "Nutrition Eaten - " + nutritionNeeded);
 
                 nutritionNeeded = (nutritionNeeded * breedingRate);
                 time = 5;

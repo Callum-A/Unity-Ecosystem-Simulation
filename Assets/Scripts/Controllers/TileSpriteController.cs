@@ -9,7 +9,7 @@ public class TileSpriteController : SpriteController<Tile>
     public Sprite WaterSprite;
     public Sprite SandSprite;
 
-    FoodController FoodController;
+    FoodSpriteController FoodController;
 
     public void OnTileTypeChanged(Tile t)
     {

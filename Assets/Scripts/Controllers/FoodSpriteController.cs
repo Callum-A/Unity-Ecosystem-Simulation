@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodController : SpriteController<Food>
+public class FoodSpriteController : SpriteController<Food>
 {
     public Sprite FoodSprite;
     
