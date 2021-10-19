@@ -154,7 +154,31 @@ public class Tile
         {
             for (int x = columnFloor; x < columnCeiling; x++)
             {
-                if (Math.Abs(this.X - x) + Math.Abs(this.Y - y) <= radius)  
+                if (World.ManhattanDistance(this.X, this.Y, x, y) <= radius)  
+                {
+                    radiusList.Add(World.GetTileAt(x, y));
+                }
+            }
+        }
+
+        return radiusList;
+    }
+
+    public List<Tile> GetRadius(float radius)
+    {
+        List<Tile> radiusList = new List<Tile>();
+
+        //check OOB
+        int rowCeiling = Math.Min(this.Y + (int)Math.Ceiling(radius) + 1, World.Height);
+        int rowFloor = Math.Max(this.Y - (int)Math.Floor(radius), 0);
+        int columnCeiling = Math.Min(this.X + (int)Math.Ceiling(radius) + 1, World.Width);
+        int columnFloor = Math.Max(this.X - (int)Math.Floor(radius), 0);
+
+        for (int y = rowFloor; y < rowCeiling; y++)
+        {
+            for (int x = columnFloor; x < columnCeiling; x++)
+            {
+                if (World.EuclideanDistance(this.X, this.Y, x, y) <= radius)
                 {
                     radiusList.Add(World.GetTileAt(x, y));
                 }
