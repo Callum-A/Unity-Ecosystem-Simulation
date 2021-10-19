@@ -135,10 +135,10 @@ public class Tile
 
     //TODO: can be optimised further (currently a neighbourhood search n^2), also could use Euclidean distance over Manhattan for a 'smoother' radius.
     /// <summary>
-    /// A simple radius check around a given tile.
+    /// A simple radius check around a given tile, using Manhattan distance. Parse a float for a smoother radius with
     /// </summary>
     /// <param name="radius">The number of tiles in the radius, not including the root tile</param>
-    /// <returns> A List of tiles within the given radius</returns>
+    /// <returns>A List of tiles within the given radius</returns>
     public List<Tile> GetRadius(int radius)
     {
 
@@ -164,6 +164,11 @@ public class Tile
         return radiusList;
     }
 
+    /// <summary>
+    /// A simple radius check around a given tile, using Euclidean distance.
+    /// </summary>
+    /// <param name="radius">The number of tiles in the radius, not including the root tile</param>
+    /// <returns>A List of tiles within the given radius</returns>
     public List<Tile> GetRadius(float radius)
     {
         List<Tile> radiusList = new List<Tile>();
