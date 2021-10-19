@@ -12,7 +12,7 @@ public class World
 
     private TerrainGenerator terrainGenerator;
     public AnimalManager AnimalManager { get; protected set; }
-    private WorldData worldData;
+    public WorldData Data { get; protected set;}
 
     // TODO: Move this to the struct that Dylan will add
     public List<Tile> FoodTiles { get; protected set; }
@@ -25,7 +25,7 @@ public class World
         FoodTiles = new List<Tile>();
         terrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
-        worldData = new WorldData();
+        Data = new WorldData();
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -45,9 +45,14 @@ public class World
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
     }
 
+    public static double EuclideanDistance(float x1, float y1, float x2, float y2)
+    {
+        return (Math.Sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)));
+    }
+
     public void GenerateTerrain()
     {
-        worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
+        Data.TerrainData = terrainGenerator.GenerateTerrain(tiles);
     }
 
     public void SpawnAnimals(int preyAmount, int predatorAmount)

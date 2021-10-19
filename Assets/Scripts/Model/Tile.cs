@@ -135,10 +135,10 @@ public class Tile
 
     //TODO: can be optimised further (currently a neighbourhood search n^2), also could use Euclidean distance over Manhattan for a 'smoother' radius.
     /// <summary>
-    /// A simple radius check around a given tile.
+    /// A simple radius check around a given tile, using Manhattan distance. Parse a float for a smoother radius with
     /// </summary>
     /// <param name="radius">The number of tiles in the radius, not including the root tile</param>
-    /// <returns> A List of tiles within the given radius</returns>
+    /// <returns>A List of tiles within the given radius</returns>
     public List<Tile> GetRadius(int radius)
     {
 
@@ -154,7 +154,36 @@ public class Tile
         {
             for (int x = columnFloor; x < columnCeiling; x++)
             {
-                if (Math.Abs(this.X - x) + Math.Abs(this.Y - y) <= radius)  
+                if (World.ManhattanDistance(this.X, this.Y, x, y) <= radius)  
+                {
+                    radiusList.Add(World.GetTileAt(x, y));
+                }
+            }
+        }
+
+        return radiusList;
+    }
+
+    /// <summary>
+    /// A simple radius check around a given tile, using Euclidean distance.
+    /// </summary>
+    /// <param name="radius">The number of tiles in the radius, not including the root tile</param>
+    /// <returns>A List of tiles within the given radius</returns>
+    public List<Tile> GetRadius(float radius)
+    {
+        List<Tile> radiusList = new List<Tile>();
+
+        //check OOB
+        int rowCeiling = Math.Min(this.Y + (int)Math.Ceiling(radius) + 1, World.Height);
+        int rowFloor = Math.Max(this.Y - (int)Math.Floor(radius), 0);
+        int columnCeiling = Math.Min(this.X + (int)Math.Ceiling(radius) + 1, World.Width);
+        int columnFloor = Math.Max(this.X - (int)Math.Floor(radius), 0);
+
+        for (int y = rowFloor; y < rowCeiling; y++)
+        {
+            for (int x = columnFloor; x < columnCeiling; x++)
+            {
+                if (World.EuclideanDistance(this.X, this.Y, x, y) <= radius)
                 {
                     radiusList.Add(World.GetTileAt(x, y));
                 }
