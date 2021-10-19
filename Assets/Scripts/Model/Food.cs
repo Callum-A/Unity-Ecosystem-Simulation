@@ -23,6 +23,15 @@ public class Food
         set { tile = value; }
     }
 
+    private bool isOccupied;
+
+    public bool IsOccupied
+    {
+        get { return isOccupied; }
+        set { isOccupied = value; }
+    }
+
+
     /// <summary>
     /// This is used to determine the Initial sprout rate of the food, 1 in x where x is the initial sprout rate.
     /// </summary>
@@ -59,26 +68,10 @@ public class Food
         {
             if (OnFoodExhausted != null)
             {
-                WorldController.Instance.World.FoodTiles.Remove(tile);
                 OnFoodExhausted(this);
             }
         }
     }
-
-    /// <summary>
-    /// Each cardinal dirction from this tile has a chance to sprout food, in otehr words spreads food.
-    /// </summary>
-    //public void Spread() 
-    //{
-
-    //    foreach (Tile t in tile.GetNeighbours()) 
-    //    {
-    //        if (t != null)
-    //        {
-    //           t.Sprout();
-    //        }
-    //    }
-    //}
 
     /// <summary>
     /// Register the callback for when a food supply is Exhasted.

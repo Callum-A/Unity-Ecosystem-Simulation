@@ -16,15 +16,11 @@ public class World
 
     private WorldData worldData;
 
-    // TODO: Move this to the struct that Dylan will add
-    public List<Tile> FoodTiles { get; protected set; }
-
     public World(int w, int h)
     {
         Width = w;
         Height = h;
         tiles = new Tile[Width, Height];
-        FoodTiles = new List<Tile>();
         terrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
         FoodManager = new FoodManager();
@@ -61,18 +57,7 @@ public class World
 
     public void SproutInitialFood()
     {
-
         FoodManager.SproutInitialFood(tiles);
-
-        //foreach (Tile tile in tiles)
-        //{
-        //    tile.InitialSprout();
-        //    if (tile.food != null)
-        //    {
-        //        // TODO: Also add to food tiles on natural growth
-        //        FoodTiles.Add(tile);
-        //    }
-        //}
     }
 
     public Tile GetTileAt(int x, int y)
@@ -94,6 +79,7 @@ public class World
     {
         List<Tile> tiles = tile.GetRadius(r);
         List<Tile> nonWater = new List<Tile>(); // memory inefficient but idc
+        
         foreach (Tile t in tiles)
         {
             if (t != null)
@@ -104,6 +90,7 @@ public class World
                 }
             }
         }
+
         return nonWater[UnityEngine.Random.Range(0, nonWater.Count)];
     }
 
@@ -111,7 +98,8 @@ public class World
     {
         Tile closest = null;
         int closestDistance = Int32.MaxValue;
-        foreach (Tile t in FoodTiles)
+        
+        foreach (Tile t in FoodManager.FoodTiles)
         {
             int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
             if (currentDist < closestDistance)
@@ -120,6 +108,7 @@ public class World
                 closest = t;
             }
         }
+
         return closest;
     }
 }

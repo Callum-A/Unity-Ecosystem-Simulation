@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 
 public class FoodManager
 {
     public List<Tile> FoodTiles { get; protected set; }
+    private List<Tile> newFoodTiles;
 
     private Action<Food> OnFoodSproutedCallback;
     private Action<Food> OnFoodExhaustedCallback;
@@ -16,7 +17,9 @@ public class FoodManager
     public FoodManager()
     {
         FoodTiles = new List<Tile>();
+        newFoodTiles = new List<Tile>();
         SpreadCooldown = TimeController.Instance.SECONDS_IN_A_DAY;
+        RegisterOnFoodExhaustedCallback(FoodExhausted);
     }
 
     public void Update(float deltatime)
@@ -25,17 +28,24 @@ public class FoodManager
         
         if (SpreadCooldown <= 0)
         {
-            SpreadFood();
+            SpreadFoodAcrossMap();
             SpreadCooldown = TimeController.Instance.SECONDS_IN_A_DAY;
         } 
     }
 
-    private void SpreadFood()
+    private void SpreadFoodAcrossMap()
     {
+        int oldCount = FoodTiles.Count;
+
         foreach (Tile tile in FoodTiles)
         {
-            Sprout(tile);
+            Spread(tile); 
         }
+
+        FoodTiles.AddRange(newFoodTiles);
+        newFoodTiles.Clear();
+
+        Debug.Log("Spread Occured, Previous Count = " + oldCount + ", Current Count = " + FoodTiles.Count);
     }
 
     public void SproutInitialFood(Tile[,] tiles)
@@ -47,6 +57,14 @@ public class FoodManager
                 FoodTiles.Add(tile);
             }
         }
+    }
+
+    public void FoodExhausted(Food food) 
+    {
+        FoodTiles.Remove(food.Tile);
+        food.Tile.RemoveFood();
+
+        Debug.Log("FOOD MANAGER - FOOD REMOVED");
     }
 
     /// <summary>
@@ -83,8 +101,8 @@ public class FoodManager
                 Food newFood = new Food(tile);
                 newFood.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
                 tile.addFood(newFood);
-
                 OnFoodSproutedCallback(tile.food);
+                newFoodTiles.Add(tile);
 
                 return true;
             }
@@ -94,6 +112,17 @@ public class FoodManager
         }
 
         return false;
+    }
+
+    private void Spread(Tile tile) 
+    {
+        foreach (Tile t in tile.GetNeighbours())
+        {
+            if (t != null)
+            {
+                Sprout(t);
+            }
+        }
     }
 
     public void RegisterOnFoodSproutedCallback(Action<Food> cb)

@@ -169,42 +169,20 @@ public class Tile
         this.food = foodToAdd;
     }
 
-    /// <summary>
-    /// Rolls to determine whether food will sprout on this tile, called by spread.
-    /// </summary>
-    //public bool Sprout()  
-    //{
-    //    if (this.Type == TileType.Ground && !HasFood())
-    //    {
-    //        if (UnityEngine.Random.Range(0, Food.SpreadRate) == 0)
-    //        {
-    //            food = new Food(this);
-    //            food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
-    //            OnFoodSproutedCallback(food);
-    //            return true;
-    //        }
+    public bool isFoodOccupied() 
+    {
+        return food.IsOccupied;
+    }
 
-    //        return false;
-    //    }
+    public void setFoodOccupied() 
+    {
+        food.IsOccupied = true;
+    }
 
-    //    return false;
-    //}
-
-    ///// <summary>
-    ///// Rolls to determine whether food will sprout on this tile, used only once on instantiation.
-    ///// </summary>
-    //public void InitialSprout()
-    //{
-    //    if (this.Type == TileType.Ground && !HasFood())
-    //    {
-    //        if (UnityEngine.Random.Range(0, Food.InitialSproutRate) == 0)
-    //        {
-    //            food = new Food(this);
-    //            food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
-    //            OnFoodSproutedCallback(food);
-    //        }
-    //    }
-    //}
+    public void setFoodUnoccpied() 
+    {
+        food.IsOccupied = false;
+    }
 
     /// <summary>
     /// Checks to see if there is food present on the tile.
