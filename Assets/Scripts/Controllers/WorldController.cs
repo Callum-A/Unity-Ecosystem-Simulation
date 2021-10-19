@@ -47,6 +47,9 @@ public class WorldController : MonoBehaviour
 
         World.AnimalManager.RegisterOnAnimalCreatedCallback(AnimalSpriteController.OnAnimalCreated);
         World.AnimalManager.RegisterOnAnimalDestroyedCallback(AnimalSpriteController.OnAnimalDestroyed);
+        World.FoodManager.RegisterOnFoodSproutedCallback(FoodSpriteController.OnFoodSpawned);
+        World.FoodManager.RegisterOnFoodExhaustedCallback(FoodSpriteController.OnFoodExhausted);
+
         for (int x = 0; x < World.Width; x++)
         {
             for (int y = 0; y < World.Height; y++)
@@ -55,8 +58,6 @@ public class WorldController : MonoBehaviour
 
                 TileSpriteController.OnTileCreated(t);
                 t.RegisterOnTileTypeChangedCallback(TileSpriteController.OnTileTypeChanged);
-                t.RegisterOnFoodSproutedCallbackCallback(FoodSpriteController.OnFoodSpawned);
-                t.RegisterOnFoodExhaustedCallbackCallback(FoodSpriteController.OnFoodExhausted);
             }
         }
 
@@ -69,66 +70,66 @@ public class WorldController : MonoBehaviour
     /// Method purely used for initial testing of the food, once pray is in this will later become redundant and can be removed.
     /// Put this method in update to test
     /// </summary>
-    private void PlantGrowthSimulationTest() 
-    {
-        if (FoodSpriteController.FoodCount > 0)
-        {
-            time -= Time.deltaTime;
+    //private void PlantGrowthSimulationTest() 
+    //{
+    //    if (FoodSpriteController.FoodCount > 0)
+    //    {
+    //        time -= Time.deltaTime;
 
-            if (time <= 0)
-            {
-                Debug.Log("Day -" + Days);
-                Days++;
+    //        if (time <= 0)
+    //        {
+    //            Debug.Log("Day -" + Days);
+    //            Days++;
 
 
-                foreach (Tile tile in World.tiles)
-                {
-                    if (tile.HasFood())
-                    {
-                        tile.food.Spread();
-                    }
-                }
+    //            foreach (Tile tile in World.tiles)
+    //            {
+    //                if (tile.HasFood())
+    //                {
+    //                    tile.food.Spread();
+    //                }
+    //            }
 
-                int eaten = 0;
+    //            int eaten = 0;
 
-                while (eaten < nutritionNeeded && FoodSpriteController.FoodCount > 0)
-                {
+    //            while (eaten < nutritionNeeded && FoodSpriteController.FoodCount > 0)
+    //            {
 
-                    foreach (Tile tile in World.tiles)
-                    {
-                        if (FoodSpriteController.FoodCount <= 0)
-                        {
-                            Debug.Log("NO FOOD LEFT!");
-                            break;
-                        }
+    //                foreach (Tile tile in World.tiles)
+    //                {
+    //                    if (FoodSpriteController.FoodCount <= 0)
+    //                    {
+    //                        Debug.Log("NO FOOD LEFT!");
+    //                        break;
+    //                    }
 
-                        else if (eaten >= nutritionNeeded)
-                        {
-                            break;
-                        }
+    //                    else if (eaten >= nutritionNeeded)
+    //                    {
+    //                        break;
+    //                    }
 
-                        else if (tile.HasFood())
-                        {
-                            tile.ConsumeFood();
-                            eaten++;
-                        }
-                    }
+    //                    else if (tile.HasFood())
+    //                    {
+    //                        tile.ConsumeFood();
+    //                        eaten++;
+    //                    }
+    //                }
 
-                }
+    //            }
 
-                Debug.Log("Food Count: " + FoodSpriteController.FoodCount + "Nutrition Eaten - " + nutritionNeeded);
+    //            Debug.Log("Food Count: " + FoodSpriteController.FoodCount + "Nutrition Eaten - " + nutritionNeeded);
 
-                nutritionNeeded = (nutritionNeeded * breedingRate);
-                time = 5;
+    //            nutritionNeeded = (nutritionNeeded * breedingRate);
+    //            time = 5;
 
-            }
+    //        }
 
-        }
+    //    }
 
-        else
-        {
-            Debug.LogError("NO FOOD!");
-            Debug.Break();
-        }
-    }
+    //    else
+    //    {
+    //        Debug.LogError("NO FOOD!");
+    //        Debug.Break();
+    //    }
+    //}
 }

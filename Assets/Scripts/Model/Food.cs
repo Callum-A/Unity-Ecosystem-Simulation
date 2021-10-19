@@ -68,16 +68,17 @@ public class Food
     /// <summary>
     /// Each cardinal dirction from this tile has a chance to sprout food, in otehr words spreads food.
     /// </summary>
-    public void Spread() 
-    {
-        foreach (Tile t in tile.GetNeighbours()) 
-        {
-            if (t != null)
-            {
-                t.Sprout();
-            }
-        }
-    }
+    //public void Spread() 
+    //{
+
+    //    foreach (Tile t in tile.GetNeighbours()) 
+    //    {
+    //        if (t != null)
+    //        {
+    //           t.Sprout();
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// Register the callback for when a food supply is Exhasted.

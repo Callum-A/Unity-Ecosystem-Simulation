@@ -12,6 +12,8 @@ public class World
 
     private TerrainGenerator terrainGenerator;
     public AnimalManager AnimalManager { get; protected set; }
+    public FoodManager FoodManager { get; protected set; }
+
     private WorldData worldData;
 
     // TODO: Move this to the struct that Dylan will add
@@ -25,6 +27,7 @@ public class World
         FoodTiles = new List<Tile>();
         terrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
+        FoodManager = new FoodManager();
         worldData = new WorldData();
         for (int x = 0; x < Width; x++)
         {
@@ -38,6 +41,7 @@ public class World
     public void Update(float deltaTime)
     {
         AnimalManager.Update(deltaTime);
+        FoodManager.Update(deltaTime);
     }
     
     public static int ManhattanDistance(int x1, int y1, int x2, int y2)
@@ -55,17 +59,20 @@ public class World
         AnimalManager.SpawnAnimals(preyAmount, predatorAmount);
     }
 
-    public void SproutInitialFood() 
+    public void SproutInitialFood()
     {
-        foreach (Tile tile in tiles)
-        {
-            tile.InitialSprout();
-            if (tile.food != null)
-            {
-                // TODO: Also add to food tiles on natural growth
-                FoodTiles.Add(tile);
-            }
-        }
+
+        FoodManager.SproutInitialFood(tiles);
+
+        //foreach (Tile tile in tiles)
+        //{
+        //    tile.InitialSprout();
+        //    if (tile.food != null)
+        //    {
+        //        // TODO: Also add to food tiles on natural growth
+        //        FoodTiles.Add(tile);
+        //    }
+        //}
     }
 
     public Tile GetTileAt(int x, int y)

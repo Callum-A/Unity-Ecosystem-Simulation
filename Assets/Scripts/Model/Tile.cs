@@ -164,37 +164,47 @@ public class Tile
         return radiusList;
     }
 
-    /// <summary>
-    /// Rolls to determine whether food will sprout on this tile, called by spread.
-    /// </summary>
-    public void Sprout()  
+    public void addFood(Food foodToAdd) 
     {
-        if (this.Type == TileType.Ground && !HasFood())
-        {
-            if (UnityEngine.Random.Range(0, Food.SpreadRate) == 0)
-            {
-                food = new Food(this);
-                food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
-                OnFoodSproutedCallback(food);
-            }
-        }
+        this.food = foodToAdd;
     }
 
     /// <summary>
-    /// Rolls to determine whether food will sprout on this tile, used only once on instantiation.
+    /// Rolls to determine whether food will sprout on this tile, called by spread.
     /// </summary>
-    public void InitialSprout()
-    {
-        if (this.Type == TileType.Ground && !HasFood())
-        {
-            if (UnityEngine.Random.Range(0, Food.InitialSproutRate) == 0)
-            {
-                food = new Food(this);
-                food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
-                OnFoodSproutedCallback(food);
-            }
-        }
-    }
+    //public bool Sprout()  
+    //{
+    //    if (this.Type == TileType.Ground && !HasFood())
+    //    {
+    //        if (UnityEngine.Random.Range(0, Food.SpreadRate) == 0)
+    //        {
+    //            food = new Food(this);
+    //            food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+    //            OnFoodSproutedCallback(food);
+    //            return true;
+    //        }
+
+    //        return false;
+    //    }
+
+    //    return false;
+    //}
+
+    ///// <summary>
+    ///// Rolls to determine whether food will sprout on this tile, used only once on instantiation.
+    ///// </summary>
+    //public void InitialSprout()
+    //{
+    //    if (this.Type == TileType.Ground && !HasFood())
+    //    {
+    //        if (UnityEngine.Random.Range(0, Food.InitialSproutRate) == 0)
+    //        {
+    //            food = new Food(this);
+    //            food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+    //            OnFoodSproutedCallback(food);
+    //        }
+    //    }
+    //}
 
     /// <summary>
     /// Checks to see if there is food present on the tile.
@@ -240,26 +250,6 @@ public class Tile
     public void UnregisterOnTileTypeChangedCallback(Action<Tile> cb)
     {
         OnTileTypeChangedCallback -= cb;
-    }
-
-    public void RegisterOnFoodSproutedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodSproutedCallback += cb;
-    }
-
-    public void UnregisterOnFoodSproutedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodSproutedCallback -= cb;
-    }
-
-    public void RegisterOnFoodExhaustedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodExhaustedCallback += cb;
-    }
-
-    public void UnregisterOnFoodExhaustedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodExhaustedCallback -= cb;
     }
 
 }
