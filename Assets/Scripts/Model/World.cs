@@ -45,6 +45,11 @@ public class World
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
     }
 
+    public static double EuclideanDistance(float x1, float y1, float x2, float y2)
+    {
+        return (Math.Sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)));
+    }
+
     public void GenerateTerrain()
     {
         worldData.TerrainData = terrainGenerator.GenerateTerrain(tiles);
