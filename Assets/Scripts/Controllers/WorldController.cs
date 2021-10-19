@@ -62,7 +62,7 @@ public class WorldController : MonoBehaviour
 
         World.GenerateTerrain();
         World.SproutInitialFood();
-        World.SpawnAnimals(10, 5);
+        World.SpawnAnimals(10, 0);
     }
 
     /// <summary>
