@@ -66,4 +66,9 @@ public class WorldController : MonoBehaviour
         World.SpawnAnimals(10, 0);
     }
 
+    private void Start()
+    {
+        TimeController.Instance.RegisterOnNewDayCallback(World.FoodManager.OnNewDay);
+    }
+
 }

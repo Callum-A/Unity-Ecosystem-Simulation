@@ -51,8 +51,6 @@ public class Tile
     }
 
     private Action<Tile> OnTileTypeChangedCallback;
-    private Action<Food> OnFoodSproutedCallback;
-    private Action<Food> OnFoodExhaustedCallback;
 
     public Tile(int x, int y, World world)
     {

@@ -12,27 +12,26 @@ public class FoodManager
 
     private Action<Food> OnFoodSproutedCallback;
     private Action<Food> OnFoodExhaustedCallback;
-    private float SpreadCooldown;
 
     public FoodManager()
     {
         FoodTiles = new List<Tile>();
         newFoodTiles = new List<Tile>();
-        SpreadCooldown = TimeController.Instance.SECONDS_IN_A_DAY;
         RegisterOnFoodExhaustedCallback(FoodExhausted);
     }
 
-    public void Update(float deltatime)
+    /// <summary>
+    /// Registered in Time controller within the world controller.
+    /// </summary>
+    /// <param name="world"></param>
+    public void OnNewDay(World world) 
     {
-        SpreadCooldown -= deltatime;
-        
-        if (SpreadCooldown <= 0)
-        {
-            SpreadFoodAcrossMap();
-            SpreadCooldown = TimeController.Instance.SECONDS_IN_A_DAY;
-        } 
+        SpreadFoodAcrossMap();
     }
 
+    /// <summary>
+    /// Spreads Food across the map, should only be called once per day.
+    /// </summary>
     private void SpreadFoodAcrossMap()
     {
         int oldCount = FoodTiles.Count;
@@ -48,6 +47,10 @@ public class FoodManager
         Debug.Log("Spread Occured, Previous Count = " + oldCount + ", Current Count = " + FoodTiles.Count);
     }
 
+    /// <summary>
+    /// Sprouts the initial food onto the tiles, should only be called at the start and not again.
+    /// </summary>
+    /// <param name="tiles">The tiles that make up the world.</param>
     public void SproutInitialFood(Tile[,] tiles)
     {
         foreach (Tile tile in tiles)
@@ -59,6 +62,10 @@ public class FoodManager
         }
     }
 
+    /// <summary>
+    /// Occurs when food is exhausted, all nutrition consumed.
+    /// </summary>
+    /// <param name="food">The food that is exhausted</param>
     public void FoodExhausted(Food food) 
     {
         FoodTiles.Remove(food.Tile);
@@ -70,6 +77,8 @@ public class FoodManager
     /// <summary>
     /// Rolls to determine whether food will sprout on this tile, used only once on instantiation.
     /// </summary>
+    /// <param name="tile">The tile to try and sprout food on</param>
+    /// <returns></returns>
     private bool InitialSprout(Tile tile)
     {
         if (tile.Type == TileType.Ground && !tile.HasFood())
@@ -92,6 +101,11 @@ public class FoodManager
         return false;
     }
 
+    /// <summary>
+    /// Rolls to determine whether food will sprout on this tile, used during spread.
+    /// </summary>
+    /// <param name="tile">The tile to try and sprout food on</param>
+    /// <returns></returns>
     private bool Sprout(Tile tile)
     {
         if (tile.Type == TileType.Ground && !tile.HasFood())
@@ -114,6 +128,10 @@ public class FoodManager
         return false;
     }
 
+    /// <summary>
+    /// Spreads food from tiles adjacent to the initial tile.
+    /// </summary>
+    /// <param name="tile">The tile to spread from</param>
     private void Spread(Tile tile) 
     {
         foreach (Tile t in tile.GetNeighbours())
@@ -125,11 +143,19 @@ public class FoodManager
         }
     }
 
+    /// <summary>
+    /// Registers the callback for when food sprouts.
+    /// </summary>
+    /// <param name="cb">Callback to register</param>
     public void RegisterOnFoodSproutedCallback(Action<Food> cb)
     {
         OnFoodSproutedCallback += cb;
     }
 
+    /// <summary>
+    /// Registers the callback for when food is exhausted.
+    /// </summary>
+    /// <param name="cb">Callback to register</param>
     public void RegisterOnFoodExhaustedCallback(Action<Food> cb)
     {
         OnFoodExhaustedCallback += cb;

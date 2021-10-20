@@ -37,7 +37,6 @@ public class World
     public void Update(float deltaTime)
     {
         AnimalManager.Update(deltaTime);
-        FoodManager.Update(deltaTime);
     }
     
     public static int ManhattanDistance(int x1, int y1, int x2, int y2)
