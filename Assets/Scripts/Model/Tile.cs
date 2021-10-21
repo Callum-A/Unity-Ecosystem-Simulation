@@ -21,12 +21,12 @@ public class Tile
 
     public float MovementCost
     {
-        get 
+        get
         {
             if (_type == TileType.Water)
             {
                 return 5f;
-            } 
+            }
             else
             {
                 return 1f;
@@ -64,12 +64,12 @@ public class Tile
         return World.GetTileAt(X, Y + 1);
     }
 
-    public Tile NorthEast() 
+    public Tile NorthEast()
     {
         return World.GetTileAt(X + 1, Y + 1);
     }
 
-    public Tile NorthWest() 
+    public Tile NorthWest()
     {
         return World.GetTileAt(X - 1, Y + 1);
     }
@@ -84,12 +84,12 @@ public class Tile
         return World.GetTileAt(X, Y - 1);
     }
 
-    public Tile SouthEast() 
+    public Tile SouthEast()
     {
         return World.GetTileAt(X + 1, Y - 1);
     }
 
-    public Tile SouthWest() 
+    public Tile SouthWest()
     {
         return World.GetTileAt(X - 1, Y - 1);
     }
@@ -114,7 +114,7 @@ public class Tile
     /// direction of the surrounding tiles.
     /// </summary>
     /// <returns>An array of surrounding tiles</returns>
-    public Tile[] GetNeighboursIncludingDiagonal() 
+    public Tile[] GetNeighboursIncludingDiagonal()
     {
         Tile[] ns = new Tile[8];
 
@@ -152,7 +152,7 @@ public class Tile
         {
             for (int x = columnFloor; x < columnCeiling; x++)
             {
-                if (World.ManhattanDistance(this.X, this.Y, x, y) <= radius)  
+                if (World.ManhattanDistance(this.X, this.Y, x, y) <= radius)
                 {
                     radiusList.Add(World.GetTileAt(x, y));
                 }
@@ -191,23 +191,25 @@ public class Tile
         return radiusList;
     }
 
-    public void addFood(Food foodToAdd) 
+    public void addFood(Food foodToAdd)
     {
         this.food = foodToAdd;
     }
 
-    public bool isFoodOccupied() 
+    public bool isFoodOccupied()
     {
         return food.IsOccupied;
     }
 
-    public void setFoodOccupied() 
+    public void setFoodOccupied()
     {
+        Debug.Log("Setting Food Occupied");
         food.IsOccupied = true;
     }
 
-    public void setFoodUnoccpied() 
+    public void setFoodUnoccupied()
     {
+        Debug.Log("Setting Food Unoccupied");
         food.IsOccupied = false;
     }
 
@@ -217,7 +219,7 @@ public class Tile
     /// <returns>True if food is present</returns>
     public bool HasFood()
     {
-        if (food != null)
+        if (this.food != null)
         {
             return true;
         }
@@ -228,7 +230,7 @@ public class Tile
     /// <summary>
     /// Consumes food on the tile if there is any.
     /// </summary>
-    public bool ConsumeFood() 
+    public bool ConsumeFood()
     {
         if (HasFood())
         {
@@ -242,7 +244,7 @@ public class Tile
     /// <summary>
     /// Removes food from a tile, sets the food on the tile to null.
     /// </summary>
-    public void RemoveFood() 
+    public void RemoveFood()
     {
         this.food = null;
     }

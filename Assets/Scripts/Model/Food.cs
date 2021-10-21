@@ -55,6 +55,7 @@ public class Food
     {
         this.tile = tile;
         nutrition = 6;
+        this.isOccupied = false;
     }
 
     /// <summary>

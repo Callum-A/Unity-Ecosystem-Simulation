@@ -198,7 +198,7 @@ public abstract class Animal
         timeSinceStartedDrinking += deltaTime;
         if (timeSinceStartedDrinking >= drinkingTimeInSeconds)
         {
-            Debug.Log("Done drinking!");
+            Debug.Log("Done drinking! " + this.ToString());
             Thirst = 1f;
             CurrentState = AnimalState.Idle;
         }
@@ -250,7 +250,7 @@ public abstract class Animal
         {
             // We need to pick a direction to walk in to seek, metagame to find water?
             // TODO: Make it go near water
-            CurrentState = AnimalState.SeekFood;
+            CurrentState = AnimalState.SeekWater;
             Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
             DestinationTile = dest;
         }
