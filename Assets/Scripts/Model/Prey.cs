@@ -25,7 +25,7 @@ public class Prey : Animal
     /// </summary>
     public override void Die()
     {
-        Debug.Log("Now dying!");
+        Debug.Log("Now dying! - "  + this.ToString());
         AnimalManager.DespawnAnimal(this);
     }
 
@@ -112,7 +112,13 @@ public class Prey : Animal
             bool hasEaten = CurrentTile.ConsumeFood();
             // TODO: Check this to see if we've actually eaten
             Hunger = 1f;
-            Debug.Log("Eating done!");
+            Debug.Log("Eating done!" + this.ToString());
+
+            if (DestinationTile.HasFood())
+            {
+                DestinationTile.setFoodUnoccupied();
+            }
+
             CurrentState = AnimalState.Idle;
         }
     }
@@ -143,13 +149,15 @@ public class Prey : Animal
         // Check for food tiles in our sight radius
         List<Tile> tilesICanSee = CurrentTile.GetRadius(SightRange);
         Tile foodTile = null;
+        
         foreach (Tile t in tilesICanSee)
         {
             if (t != null)
             {
-                if (t.food != null)
+                if (t.HasFood() && !t.isFoodOccupied())
                 {
                     foodTile = t;
+                    t.setFoodOccupied();
                     break;
                 }
             }
@@ -160,6 +168,7 @@ public class Prey : Animal
             CurrentState = AnimalState.FoundFood;
             DestinationTile = foodTile;
         }
+
         else
         {
             // We need to pick a direction to walk in to seek
@@ -219,6 +228,7 @@ public class Prey : Animal
                 AnimalManager.SpawnPrey(CurrentTile);
             }
         }
+        
         else
         {
 
@@ -250,5 +260,11 @@ public class Prey : Animal
             StopMovement();
             CurrentState = AnimalState.Idle;
         }
+    }
+
+    override
+    public string ToString() 
+    {
+        return "Prey_" + ID;
     }
 }

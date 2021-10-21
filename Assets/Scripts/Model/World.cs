@@ -109,7 +109,8 @@ public class World
         foreach (Tile t in FoodManager.FoodTiles)
         {
             int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
-            if (currentDist < closestDistance)
+            
+            if (currentDist < closestDistance && t.HasFood() && !t.isFoodOccupied())
             {
                 closestDistance = currentDist;
                 closest = t;
