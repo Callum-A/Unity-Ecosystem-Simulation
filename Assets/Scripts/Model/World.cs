@@ -12,20 +12,22 @@ public class World
 
     private TerrainGenerator terrainGenerator;
     public AnimalManager AnimalManager { get; protected set; }
+    public FoodManager FoodManager { get; protected set; }
     public WorldData Data { get; protected set;}
 
-    // TODO: Move this to the struct that Dylan will add
-    public List<Tile> FoodTiles { get; protected set; }
+
+    private WorldData worldData;
 
     public World(int w, int h)
     {
         Width = w;
         Height = h;
         tiles = new Tile[Width, Height];
-        FoodTiles = new List<Tile>();
         terrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
+        FoodManager = new FoodManager();
         Data = new WorldData();
+      
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -60,17 +62,9 @@ public class World
         AnimalManager.SpawnAnimals(preyAmount, predatorAmount);
     }
 
-    public void SproutInitialFood() 
+    public void SproutInitialFood()
     {
-        foreach (Tile tile in tiles)
-        {
-            tile.InitialSprout();
-            if (tile.food != null)
-            {
-                // TODO: Also add to food tiles on natural growth
-                FoodTiles.Add(tile);
-            }
-        }
+        FoodManager.SproutInitialFood(tiles);
     }
 
     public Tile GetTileAt(int x, int y)
@@ -92,6 +86,7 @@ public class World
     {
         List<Tile> tiles = tile.GetRadius(r);
         List<Tile> nonWater = new List<Tile>(); // memory inefficient but idc
+        
         foreach (Tile t in tiles)
         {
             if (t != null)
@@ -102,6 +97,7 @@ public class World
                 }
             }
         }
+
         return nonWater[UnityEngine.Random.Range(0, nonWater.Count)];
     }
 
@@ -109,7 +105,8 @@ public class World
     {
         Tile closest = null;
         int closestDistance = Int32.MaxValue;
-        foreach (Tile t in FoodTiles)
+        
+        foreach (Tile t in FoodManager.FoodTiles)
         {
             int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
             if (currentDist < closestDistance)
@@ -118,6 +115,7 @@ public class World
                 closest = t;
             }
         }
+
         return closest;
     }
 }

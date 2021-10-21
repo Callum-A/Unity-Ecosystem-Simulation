@@ -51,8 +51,6 @@ public class Tile
     }
 
     private Action<Tile> OnTileTypeChangedCallback;
-    private Action<Food> OnFoodSproutedCallback;
-    private Action<Food> OnFoodExhaustedCallback;
 
     public Tile(int x, int y, World world)
     {
@@ -193,36 +191,24 @@ public class Tile
         return radiusList;
     }
 
-    /// <summary>
-    /// Rolls to determine whether food will sprout on this tile, called by spread.
-    /// </summary>
-    public void Sprout()  
+    public void addFood(Food foodToAdd) 
     {
-        if (this.Type == TileType.Ground && !HasFood())
-        {
-            if (UnityEngine.Random.Range(0, Food.SpreadRate) == 0)
-            {
-                food = new Food(this);
-                food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
-                OnFoodSproutedCallback(food);
-            }
-        }
+        this.food = foodToAdd;
     }
 
-    /// <summary>
-    /// Rolls to determine whether food will sprout on this tile, used only once on instantiation.
-    /// </summary>
-    public void InitialSprout()
+    public bool isFoodOccupied() 
     {
-        if (this.Type == TileType.Ground && !HasFood())
-        {
-            if (UnityEngine.Random.Range(0, Food.InitialSproutRate) == 0)
-            {
-                food = new Food(this);
-                food.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
-                OnFoodSproutedCallback(food);
-            }
-        }
+        return food.IsOccupied;
+    }
+
+    public void setFoodOccupied() 
+    {
+        food.IsOccupied = true;
+    }
+
+    public void setFoodUnoccpied() 
+    {
+        food.IsOccupied = false;
     }
 
     /// <summary>
@@ -269,26 +255,6 @@ public class Tile
     public void UnregisterOnTileTypeChangedCallback(Action<Tile> cb)
     {
         OnTileTypeChangedCallback -= cb;
-    }
-
-    public void RegisterOnFoodSproutedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodSproutedCallback += cb;
-    }
-
-    public void UnregisterOnFoodSproutedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodSproutedCallback -= cb;
-    }
-
-    public void RegisterOnFoodExhaustedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodExhaustedCallback += cb;
-    }
-
-    public void UnregisterOnFoodExhaustedCallbackCallback(Action<Food> cb)
-    {
-        OnFoodExhaustedCallback -= cb;
     }
 
 }

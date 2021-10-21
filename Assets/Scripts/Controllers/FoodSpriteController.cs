@@ -2,14 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodController : SpriteController<Food>
+public class FoodSpriteController : SpriteController<Food>
 {
     public Sprite FoodSprite;
     
     /// <summary>
     /// Keeps track of the number of food sprites for testing.
     /// </summary>
-    public int FoodCount { get; protected set; }
 
     /// <summary>
     /// Called when food has been spawned, creates and sets up initial Sprite for them.
@@ -30,8 +29,6 @@ public class FoodController : SpriteController<Food>
             sr.sortingOrder = 1;
 
             AddGameObject(food, gameObject);
-
-            FoodCount++;
         }
     }
 
@@ -44,7 +41,7 @@ public class FoodController : SpriteController<Food>
         //Destroy Game Object
         GameObject go = GetGameObjectByInstance(food);
         Destroy(go);
-        food.Tile.RemoveFood();
-        FoodCount--;
+
+        Debug.Log("FOOD SPRITE CONTROLLER - FOOD SPRTIE REMOVED");
     }
 }
