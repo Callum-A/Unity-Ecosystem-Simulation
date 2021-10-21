@@ -116,6 +116,8 @@ public class TerrainGenerator
             }
         }
 
+        data.coastTiles = findCoastTiles(data);
+
         return data;
     }
 
@@ -142,6 +144,29 @@ public class TerrainGenerator
             tile.Type = TileType.Ground;
             data.grassTiles.Add(tile);
         }
+    }
+
+    //used to find the water adjacent tiles. Currently inefficent but an easy implemntaion
+    public List<Tile> findCoastTiles(TerrainData data)
+    {
+        List<Tile> coastTiles = new List<Tile>();
+
+        foreach (Tile tile in data.sandTiles)
+        {
+            foreach (Tile neighbour in tile.GetNeighbours())
+            {
+                if (neighbour != null)
+                {
+                    if (neighbour.Type == TileType.Water)
+                    {
+                        coastTiles.Add(tile);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return coastTiles;
     }
 
 }

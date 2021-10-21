@@ -57,6 +57,12 @@ public class WorldData
         protected set { }
     }
 
+    public List<Tile> CoastTiles
+    {
+        get { return terrainData.coastTiles; }
+        protected set { }
+    }
+
     #endregion
 
 
@@ -74,6 +80,9 @@ public struct TerrainData
     public List<Tile> sandTiles;
     public List<Tile> grassTiles;
 
+    // used for meta gaming where water is, may not stay for long.
+    public List<Tile> coastTiles;
+
     public TerrainData(int numTiles)
     {
         this.numTiles = numTiles;
@@ -81,5 +90,7 @@ public struct TerrainData
         waterTiles = new List<Tile>();
         sandTiles = new List<Tile>();
         grassTiles = new List<Tile>();
+
+        coastTiles = new List<Tile>();
     }
 }
