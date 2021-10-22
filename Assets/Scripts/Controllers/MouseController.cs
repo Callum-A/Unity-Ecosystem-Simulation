@@ -27,6 +27,28 @@ public class MouseController : MonoBehaviour
         return WorldController.Instance.World.GetTileAt(currFramePosition);
     }
 
+    /// <summary>
+    /// Gets the current animal under the mouse, can return null.
+    /// </summary>
+    /// <returns>The animal we are mousing over.</returns>
+    public Animal GetMouseoverAnimal()
+    {
+        Tile t = GetMouseoverTile();
+        List<Animal> allAnimals = world.AnimalManager.AllAnimals;
+        Animal animal = null;
+        foreach (Animal a in allAnimals)
+        {
+            if (a.CurrentTile == t || a.NextTile == t)
+            {
+                animal = a;
+                Debug.Log("Animal found " + a.ToString());
+                break;
+            }
+        }
+
+        return animal;
+    }
+
     // Update is called once per frame
     void Update()
     {
