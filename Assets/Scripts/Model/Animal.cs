@@ -251,7 +251,8 @@ public abstract class Animal
             // We need to pick a direction to walk in to seek, metagame to find water?
             // TODO: Make it go near water
             CurrentState = AnimalState.SeekWater;
-            Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
+            //Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
+            Tile dest = WorldController.Instance.World.FindClosestDrikableTile(CurrentTile);
             DestinationTile = dest;
         }
     }
