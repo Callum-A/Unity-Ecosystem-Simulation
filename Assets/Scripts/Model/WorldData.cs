@@ -68,7 +68,7 @@ public class WorldData
 
     public WorldData()
     {
-       
+        
     }
 }
 
@@ -90,7 +90,6 @@ public struct TerrainData
         waterTiles = new List<Tile>();
         sandTiles = new List<Tile>();
         grassTiles = new List<Tile>();
-
         coastTiles = new List<Tile>();
     }
 }

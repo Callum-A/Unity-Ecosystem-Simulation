@@ -13,10 +13,7 @@ public class World
     private TerrainGenerator terrainGenerator;
     public AnimalManager AnimalManager { get; protected set; }
     public FoodManager FoodManager { get; protected set; }
-    public WorldData Data { get; protected set;}
-
-
-    private WorldData worldData;
+    public WorldData Data { get; protected set; }
 
     public World(int w, int h)
     {
@@ -27,7 +24,7 @@ public class World
         AnimalManager = new AnimalManager(this);
         FoodManager = new FoodManager();
         Data = new WorldData();
-      
+
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
@@ -41,7 +38,7 @@ public class World
     {
         AnimalManager.Update(deltaTime);
     }
-    
+
     public static int ManhattanDistance(int x1, int y1, int x2, int y2)
     {
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
@@ -49,7 +46,7 @@ public class World
 
     public static double EuclideanDistance(float x1, float y1, float x2, float y2)
     {
-        return (Math.Sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2)));
+        return (Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
     public void GenerateTerrain()
@@ -86,7 +83,7 @@ public class World
     {
         List<Tile> tiles = tile.GetRadius(r);
         List<Tile> nonWater = new List<Tile>(); // memory inefficient but idc
-        
+
         foreach (Tile t in tiles)
         {
             if (t != null)
@@ -105,11 +102,11 @@ public class World
     {
         Tile closest = null;
         int closestDistance = Int32.MaxValue;
-        
+
         foreach (Tile t in FoodManager.FoodTiles)
         {
             int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
-            
+
             if (currentDist < closestDistance && t.HasFood() && !t.isFoodOccupied())
             {
                 closestDistance = currentDist;
@@ -119,4 +116,40 @@ public class World
 
         return closest;
     }
+
+    public Tile FindClosestDrikableTile(Tile tile)
+    {
+        Tile closest = null;
+        int closestDistance = Int32.MaxValue;
+
+        foreach (Tile t in getCoastalTiles())
+        {
+            int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
+
+            if (currentDist < closestDistance)
+            {
+                closestDistance = currentDist;
+                closest = t;
+            }
+        }
+
+        return closest;
+    }
+
+    public List<Tile> getWaterTiles()
+    {
+        return Data.WaterTiles;
+    }
+
+    public List<Tile> getCoastalTiles() 
+    {
+        return Data.CoastTiles;
+    }
+
+    public List<Tile> getGrassTiles() 
+    {
+        return Data.GrassTiles;
+    }
+
+
 }
