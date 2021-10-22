@@ -11,7 +11,7 @@ public class Food
     /// <summary>
     /// The Nutrition remaining on the food.
     /// </summary>
-    private int nutrition;
+    public int nutrition { get; protected set; }
 
     private Tile tile;
     /// <summary>
