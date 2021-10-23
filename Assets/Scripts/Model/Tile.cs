@@ -233,6 +233,19 @@ public class Tile
         return GetClosestTile(UnoccupiedFoodTiles);
     }
 
+    public Tile GetRandomNonWaterTileInRadius(int r)
+    {
+        List<Tile> tiles = this.GetRadius(r);
+        tiles = tiles.FindAll(t => t.Type != TileType.Water);
+
+        if (tiles.Count == 0)
+        {
+            Debug.LogError("No water tiles in radius found, from Tile -" + this.X + "," + this.Y);
+        }
+
+        return tiles[UnityEngine.Random.Range(0, tiles.Count)];
+    }
+
     public void addFood(Food foodToAdd)
     {
         this.food = foodToAdd;

@@ -175,7 +175,7 @@ public class Prey : Animal
             // TODO: Seek in a cardinal direction
             CurrentState = AnimalState.SeekFood;
             foodTile = CurrentTile.GetClosestFoodTile();
-            Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(foodTile, SightRange);
+            Tile dest = foodTile.GetRandomNonWaterTileInRadius(SightRange);
             DestinationTile = dest;
         }
     }
@@ -231,10 +231,8 @@ public class Prey : Animal
         
         else
         {
-
             CurrentState = AnimalState.Wandering;
-            DestinationTile = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
-
+            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
         }
     }
 
