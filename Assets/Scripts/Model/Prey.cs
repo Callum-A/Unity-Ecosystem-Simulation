@@ -174,7 +174,7 @@ public class Prey : Animal
             // We need to pick a direction to walk in to seek
             // TODO: Seek in a cardinal direction
             CurrentState = AnimalState.SeekFood;
-            foodTile = WorldController.Instance.World.FindClosestFoodTile(CurrentTile);
+            foodTile = CurrentTile.GetClosestFoodTile();
             Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(foodTile, SightRange);
             DestinationTile = dest;
         }

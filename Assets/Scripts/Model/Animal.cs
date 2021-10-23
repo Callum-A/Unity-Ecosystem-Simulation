@@ -228,18 +228,8 @@ public abstract class Animal
         StopMovement();
         // Check for food tiles in our sight radius
         List<Tile> tilesICanSee = CurrentTile.GetRadius(SightRange);
-        Tile waterTile = null;
-        foreach (Tile t in tilesICanSee)
-        {
-            if (t != null)
-            {
-                if (t.Type == TileType.Water)
-                {
-                    waterTile = t;
-                    break;
-                }
-            }
-        }
+        Tile waterTile = CurrentTile.GetClosestTile(tilesICanSee, TileType.Water);
+ 
 
         if (waterTile != null)
         {
@@ -252,7 +242,8 @@ public abstract class Animal
             // TODO: Make it go near water
             CurrentState = AnimalState.SeekWater;
             //Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, SightRange);
-            Tile dest = WorldController.Instance.World.FindClosestDrikableTile(CurrentTile);
+            //Tile dest = WorldController.Instance.World.FindClosestDrikableTile(CurrentTile);
+            Tile dest = CurrentTile.GetClosestWaterTile();
             DestinationTile = dest;
         }
     }
