@@ -191,6 +191,48 @@ public class Tile
         return radiusList;
     }
 
+    public Tile GetClosestTile(List<Tile> tiles)
+    {
+        Tile closest = null;
+        int closestDistance = Int32.MaxValue;
+
+        foreach (Tile t in tiles)
+        {
+            int currentDist = World.ManhattanDistance(this.X, this.Y, t.X, t.Y);
+
+            if (currentDist < closestDistance)
+            {
+                closestDistance = currentDist;
+                closest = t;
+            }
+        }
+
+        return closest;
+    }
+
+    public Tile GetClosestTile(List<Tile> tiles, TileType tileType)
+    {
+        List<Tile> tilesOfType = tiles.FindAll(t => t.Type == tileType);
+
+        if (tilesOfType.Count > 0)
+        {
+            return GetClosestTile(tilesOfType);
+        }
+
+        return null;
+    }
+
+    public Tile GetClosestWaterTile()
+    {
+        return GetClosestTile(World.getCoastalTiles());
+    }
+
+    public Tile GetClosestFoodTile()
+    {
+        List<Tile> UnoccupiedFoodTiles = World.getFoodTiles().FindAll(t => !t.isFoodOccupied());
+        return GetClosestTile(UnoccupiedFoodTiles);
+    }
+
     public void addFood(Food foodToAdd)
     {
         this.food = foodToAdd;

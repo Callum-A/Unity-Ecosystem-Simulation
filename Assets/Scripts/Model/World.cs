@@ -151,5 +151,9 @@ public class World
         return Data.GrassTiles;
     }
 
+    public List<Tile> getFoodTiles() 
+    {
+        return FoodManager.FoodTiles;
+    }
 
 }
