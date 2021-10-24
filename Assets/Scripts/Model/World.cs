@@ -79,63 +79,6 @@ public class World
         return GetTileAt(Mathf.FloorToInt(coord.x), Mathf.FloorToInt(coord.y));
     }
 
-    public Tile GetRandomNonWaterTileInRadius(Tile tile, int r)
-    {
-        List<Tile> tiles = tile.GetRadius(r);
-        List<Tile> nonWater = new List<Tile>(); // memory inefficient but idc
-
-        foreach (Tile t in tiles)
-        {
-            if (t != null)
-            {
-                if (t.Type != TileType.Water)
-                {
-                    nonWater.Add(t);
-                }
-            }
-        }
-
-        return nonWater[UnityEngine.Random.Range(0, nonWater.Count)];
-    }
-
-    public Tile FindClosestFoodTile(Tile tile)
-    {
-        Tile closest = null;
-        int closestDistance = Int32.MaxValue;
-
-        foreach (Tile t in FoodManager.FoodTiles)
-        {
-            int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
-
-            if (currentDist < closestDistance && t.HasFood() && !t.isFoodOccupied())
-            {
-                closestDistance = currentDist;
-                closest = t;
-            }
-        }
-
-        return closest;
-    }
-
-    public Tile FindClosestDrikableTile(Tile tile)
-    {
-        Tile closest = null;
-        int closestDistance = Int32.MaxValue;
-
-        foreach (Tile t in getCoastalTiles())
-        {
-            int currentDist = ManhattanDistance(tile.X, tile.Y, t.X, t.Y);
-
-            if (currentDist < closestDistance)
-            {
-                closestDistance = currentDist;
-                closest = t;
-            }
-        }
-
-        return closest;
-    }
-
     public List<Tile> getWaterTiles()
     {
         return Data.WaterTiles;
@@ -151,5 +94,9 @@ public class World
         return Data.GrassTiles;
     }
 
+    public List<Tile> getFoodTiles() 
+    {
+        return FoodManager.FoodTiles;
+    }
 
 }

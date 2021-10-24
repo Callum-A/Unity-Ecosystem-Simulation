@@ -152,7 +152,8 @@ public class Predator : Animal
             // We need to pick a direction to walk in to seek
             CurrentState = AnimalState.SeekFood;
             // TODO: meta game this so they walk near prey
-            Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, 5);
+            //Tile dest = WorldController.Instance.World.GetRandomNonWaterTileInRadius(CurrentTile, 5);
+            Tile dest = CurrentTile.GetRandomNonWaterTileInRadius(5);
             DestinationTile = dest;
         }
     }
@@ -176,7 +177,8 @@ public class Predator : Animal
         else
         {
             CurrentState = AnimalState.Wandering;
-            DestinationTile = world.GetRandomNonWaterTileInRadius(CurrentTile, 5);
+            //DestinationTile = world.GetRandomNonWaterTileInRadius(CurrentTile, 5);
+            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(5);
         }
     }
 
