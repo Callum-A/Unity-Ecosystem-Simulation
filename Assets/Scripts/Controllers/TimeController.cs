@@ -60,7 +60,7 @@ public class TimeController : MonoBehaviour
             {
                 OnNewDayCallback(WorldController.Instance.World);
             }
-            Debug.Log("new Day " + NumberOfDays);
+            WorldController.Instance.EventLogController.AddLog($"Day {NumberOfDays} started!");
         }
     }
 }
