@@ -10,6 +10,7 @@ public class WorldController : MonoBehaviour
     public TileSpriteController TileSpriteController;
     public FoodSpriteController FoodSpriteController;
     public AnimalSpriteController AnimalSpriteController;
+    public EventLogController EventLogController;
 
     /// <summary>
     /// Helper variables for initial food simulation will be removed later on after prey is fully implemented.
@@ -64,6 +65,7 @@ public class WorldController : MonoBehaviour
         World.GenerateTerrain();
         World.SproutInitialFood();
         World.SpawnAnimals(10, 0);
+        EventLogController.AddLog("Simulation started!");
     }
 
     private void Start()
