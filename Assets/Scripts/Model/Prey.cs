@@ -25,6 +25,11 @@ public class Prey : Animal
     /// </summary>
     public override void Die()
     {
+        if (DestinationTile.HasFood() && DestinationTile.isFoodOccupied())
+        {
+            DestinationTile.setFoodUnoccupied();
+        }
+
         Debug.Log("Now dying! - "  + this.ToString());
         AnimalManager.DespawnAnimal(this);
     }
