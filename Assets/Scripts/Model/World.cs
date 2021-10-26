@@ -99,4 +99,14 @@ public class World
         return FoodManager.FoodTiles;
     }
 
+    public List<Prey> getPrey() 
+    {
+        return AnimalManager.Prey;
+    }
+
+    public List<Predator> getPredators()
+    {
+        return AnimalManager.Predators;
+    }
+
 }
