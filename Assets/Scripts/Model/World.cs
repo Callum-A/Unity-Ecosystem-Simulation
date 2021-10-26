@@ -109,4 +109,8 @@ public class World
         return AnimalManager.Predators;
     }
 
+    public int getTotalNutritionOnMap() 
+    {
+        return FoodManager.getTotalNutrition();
+    }
 }
