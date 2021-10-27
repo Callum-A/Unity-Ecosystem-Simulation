@@ -65,11 +65,11 @@ public class WorldController : MonoBehaviour
         World.GenerateTerrain();
         World.SproutInitialFood();
         World.SpawnAnimals(10, 0);
-        //EventLogController.AddLog("Simulation started!");
-        //EventLogController.AddLog("Initial Food: " + World.getFoodTiles().Count + " Total Nutrition: " + World.getTotalNutritionOnMap());
-        //EventLogController.AddLog("Initial Prey: " + World.getPrey().Count);
     }
 
+    /// <summary>
+    /// Prints the state of the world to the event log.
+    /// </summary>
     public void WorldCountLog() 
     {
         EventLogController.AddLog($"Day {TimeController.Instance.NumberOfDays} started!");

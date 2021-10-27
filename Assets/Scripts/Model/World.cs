@@ -79,36 +79,64 @@ public class World
         return GetTileAt(Mathf.FloorToInt(coord.x), Mathf.FloorToInt(coord.y));
     }
 
+    /// <summary>
+    /// Gets all of the water tiles on the map.
+    /// </summary>
+    /// <returns>List of water tiles</returns>
     public List<Tile> getWaterTiles()
     {
         return Data.WaterTiles;
     }
 
+    /// <summary>
+    /// Gets all the coastal tiles, the water tiles that are adjacent to a sant tile.
+    /// </summary>
+    /// <returns>List of coastal tiles</returns>
     public List<Tile> getCoastalTiles() 
     {
         return Data.CoastTiles;
     }
 
+    /// <summary>
+    /// Gets all the grass tiles on the map.
+    /// </summary>
+    /// <returns>List of grass tiles</returns>
     public List<Tile> getGrassTiles() 
     {
         return Data.GrassTiles;
     }
 
+    /// <summary>
+    /// Gets all the tiles with food on the map.
+    /// </summary>
+    /// <returns>List of tiles that contain food</returns>
     public List<Tile> getFoodTiles() 
     {
         return FoodManager.FoodTiles;
     }
 
+    /// <summary>
+    /// Get all the prey on the map
+    /// </summary>
+    /// <returns>List of prey.</returns>
     public List<Prey> getPrey() 
     {
         return AnimalManager.Prey;
     }
 
+    /// <summary>
+    /// Get all the predators on the map
+    /// </summary>
+    /// <returns>List of predators.</returns>
     public List<Predator> getPredators()
     {
         return AnimalManager.Predators;
     }
 
+    /// <summary>
+    /// Get the total nutrition on the map.
+    /// </summary>
+    /// <returns>Return the total nutrition</returns>
     public int getTotalNutritionOnMap() 
     {
         return FoodManager.getTotalNutrition();
