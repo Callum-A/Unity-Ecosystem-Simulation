@@ -144,6 +144,23 @@ public class FoodManager
     }
 
     /// <summary>
+    /// Calculates the remianing nutrition in all food tiles.
+    /// </summary>
+    /// <returns>int total nutrition</returns>
+    public int getTotalNutrition() 
+    {
+        int totalNutrition = 0;
+
+        foreach (Tile tile in FoodTiles)
+        {
+            Food food = tile.food;
+            totalNutrition += food.nutrition;
+        }
+
+        return totalNutrition;
+    }
+
+    /// <summary>
     /// Registers the callback for when food sprouts.
     /// </summary>
     /// <param name="cb">Callback to register</param>

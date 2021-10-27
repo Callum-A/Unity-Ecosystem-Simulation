@@ -65,12 +65,23 @@ public class WorldController : MonoBehaviour
         World.GenerateTerrain();
         World.SproutInitialFood();
         World.SpawnAnimals(10, 0);
-        EventLogController.AddLog("Simulation started!");
+    }
+
+    /// <summary>
+    /// Prints the state of the world to the event log.
+    /// </summary>
+    public void WorldCountLog() 
+    {
+        EventLogController.AddLog($"Day {TimeController.Instance.NumberOfDays} started!");
+        EventLogController.AddLog("Current Food: " + World.getFoodTiles().Count);
+        EventLogController.AddLog("Current Nutrition: " + World.getTotalNutritionOnMap());
+        EventLogController.AddLog("Current Prey: " + World.getPrey().Count);
     }
 
     private void Start()
     {
         TimeController.Instance.RegisterOnNewDayCallback(World.FoodManager.OnNewDay);
+        TimeController.Instance.RegisterOnNewDayCallback(o => WorldCountLog());
     }
 
 }
