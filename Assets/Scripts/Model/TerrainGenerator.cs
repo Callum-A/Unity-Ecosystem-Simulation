@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -77,6 +77,11 @@ public class TerrainGenerator
                 else if (noiseHeight < minNoiseHeight)
                 {
                     minNoiseHeight = noiseHeight;
+                }
+
+                if (false)
+                {
+                    noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
                 }
 
                 noiseMap[x, y] = noiseHeight;
