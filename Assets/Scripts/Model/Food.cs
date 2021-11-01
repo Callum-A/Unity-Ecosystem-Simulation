@@ -74,6 +74,11 @@ public class Food
         }
     }
 
+    public void Drown() 
+    {
+        OnFoodExhausted(this);
+    }
+
     /// <summary>
     /// Register the callback for when a food supply is Exhasted.
     /// </summary>

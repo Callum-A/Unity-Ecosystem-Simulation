@@ -296,6 +296,14 @@ public class Tile
         return false;
     }
 
+    public void DrownTile() 
+    {
+        if (HasFood()) 
+        {
+            food.Drown();
+        }
+    }
+
     /// <summary>
     /// Removes food from a tile, sets the food on the tile to null.
     /// </summary>
