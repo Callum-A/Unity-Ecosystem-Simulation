@@ -54,6 +54,23 @@ public class World
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles);
     }
 
+    public void ChangeWaterLevel(float change)
+    {
+
+        if (change > 0)
+        {
+            TerrainGenerator.WaterHeight += change;
+
+            if (TerrainGenerator.WaterHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+        }
+        else if (change < 0)
+        {
+            TerrainGenerator.WaterHeight += change;
+
+            if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+        }
+    }
+
     public void SpawnAnimals(int preyAmount, int predatorAmount)
     {
         AnimalManager.SpawnAnimals(preyAmount, predatorAmount);

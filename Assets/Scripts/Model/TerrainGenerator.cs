@@ -23,6 +23,10 @@ public class TerrainGenerator
     public Vector2 Offset { get { return offset; } set { offset = value; } }
 
     //Tile heights
+    private float waterHeightInit = 0.3f;
+    public float sandHeightInit = 0.35f;
+    private float grassHeightInit = 1f;
+
     private float waterHeight = 0.3f;
     private float sandHeight = 0.35f;
     private float grassHeight = 1f;

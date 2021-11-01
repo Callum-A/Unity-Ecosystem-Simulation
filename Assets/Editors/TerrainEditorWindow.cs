@@ -33,6 +33,7 @@ public class TerrainEditorWindow : EditorWindow
     #endregion
 
     #region tileLayers
+
     private float waterHeight = 0f;
     private float sandHeight = 0f;
     private float grassHeight = 0f;
@@ -80,6 +81,25 @@ public class TerrainEditorWindow : EditorWindow
         GUILayout.Space(10f);
         GUILayout.Label("Tile Levels", EditorStyles.boldLabel);
         GUILayout.Space(5f);
+
+        if (GUILayout.Button("Increment Water Level"))
+        {
+            WorldController.Instance.World.ChangeWaterLevel(0.1f);
+            waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
+            sandHeight = WorldController.Instance.World.TerrainGenerator.SandHeight;
+            grassHeight = WorldController.Instance.World.TerrainGenerator.GrassHeight;
+            updateLayers();
+        }
+
+        if (GUILayout.Button("Decrememt Water Level"))
+        {
+            WorldController.Instance.World.ChangeWaterLevel(-0.1f);
+            waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
+            sandHeight = WorldController.Instance.World.TerrainGenerator.SandHeight;
+            grassHeight = WorldController.Instance.World.TerrainGenerator.GrassHeight;
+            updateLayers();
+        }
+
 
         advLayersEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advLayersEnabled);
 
