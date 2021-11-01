@@ -22,6 +22,9 @@ public class TerrainGenerator
     public float Lacunarity { get { return lacunarity; } set { lacunarity = value; } }
     public Vector2 Offset { get { return offset; } set { offset = value; } }
 
+    private bool isIsland = false;
+    public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
+
     //Tile heights
     private float waterHeightInit = 0.3f;
     public float sandHeightInit = 0.35f;
@@ -94,7 +97,7 @@ public class TerrainGenerator
                     minNoiseHeight = noiseHeight;
                 }
 
-                if (false)
+                if (isIsland == true)
                 {
                     noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
                 }

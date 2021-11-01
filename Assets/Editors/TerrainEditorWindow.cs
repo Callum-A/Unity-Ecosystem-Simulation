@@ -9,8 +9,8 @@ public class TerrainEditorWindow : EditorWindow
 
     bool advLayersEnabled;
 
-    bool showNoise = true;
-    bool showLayers = true;
+   // bool showNoise = true;
+  // bool showLayers = true;
 
     #endregion
 
@@ -29,6 +29,8 @@ public class TerrainEditorWindow : EditorWindow
     float persistanceInitial = 0f;
     float lacunarityInitial = 0;
     Vector2 offsetInitial = new Vector2(0, 0);
+
+    bool isIsland = false;
 
     #endregion
 
@@ -58,6 +60,8 @@ public class TerrainEditorWindow : EditorWindow
         GUILayout.Space(5f);
 
         seed = EditorGUILayout.IntField("Seed", seed);
+
+        isIsland = EditorGUILayout.Toggle("Island's Mode", isIsland);
 
         advNoiseEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advNoiseEnabled);
 
@@ -91,7 +95,7 @@ public class TerrainEditorWindow : EditorWindow
             updateLayers();
         }
 
-        if (GUILayout.Button("Decrememt Water Level"))
+        if (GUILayout.Button("Decrement Water Level"))
         {
             WorldController.Instance.World.ChangeWaterLevel(-0.1f);
             waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
@@ -141,6 +145,8 @@ public class TerrainEditorWindow : EditorWindow
         WorldController.Instance.World.TerrainGenerator.Lacunarity = lacunarity;
         //WorldController.Instance.World.TerrainGenerator.Offset = offset;
 
+        WorldController.Instance.World.TerrainGenerator.IsIsland = isIsland;
+
         WorldController.Instance.World.GenerateTerrain();
     }
 
@@ -176,7 +182,7 @@ public class TerrainEditorWindow : EditorWindow
 
     private void initalise()
     {
-        //ugly variable setting hidden away in a function
+        //ugly variable setting hidden away in a function TODO: add iitial variables to WorldData.
 
         seed = WorldController.Instance.World.TerrainGenerator.Seed;
         scale = WorldController.Instance.World.TerrainGenerator.Scale;
@@ -184,6 +190,8 @@ public class TerrainEditorWindow : EditorWindow
         persistance = WorldController.Instance.World.TerrainGenerator.Persistance;
         lacunarity = WorldController.Instance.World.TerrainGenerator.Lacunarity;
         offset = WorldController.Instance.World.TerrainGenerator.Offset;
+
+        isIsland = WorldController.Instance.World.TerrainGenerator.IsIsland;
 
         seedInitial = WorldController.Instance.World.TerrainGenerator.Seed;
         scaleInitial = WorldController.Instance.World.TerrainGenerator.Scale;
