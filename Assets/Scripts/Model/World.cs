@@ -10,7 +10,7 @@ public class World
     public Tile[,] tiles { get; protected set; }
     public PathTileGraph tileGraph; // pathfinding graph, for navigating 
 
-    private TerrainGenerator terrainGenerator;
+    public TerrainGenerator TerrainGenerator { get; protected set; }
     public AnimalManager AnimalManager { get; protected set; }
     public FoodManager FoodManager { get; protected set; }
     public WorldData Data { get; protected set; }
@@ -20,7 +20,7 @@ public class World
         Width = w;
         Height = h;
         tiles = new Tile[Width, Height];
-        terrainGenerator = new TerrainGenerator();
+        TerrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
         FoodManager = new FoodManager();
         Data = new WorldData();
@@ -51,7 +51,7 @@ public class World
 
     public void GenerateTerrain()
     {
-        Data.TerrainData = terrainGenerator.GenerateTerrain(tiles);
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles);
     }
 
     public void SpawnAnimals(int preyAmount, int predatorAmount)

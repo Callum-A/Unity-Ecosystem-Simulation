@@ -8,17 +8,28 @@ public class TerrainGenerator
 
     //TODO: Noise function varibles shouldn't be hardcorded, should be set to defaults and edited through menus in unity.
     // hardcoded noise variables.
-    public int seed = 207;
+    private int seed = 207;
     public float scale = 44;
     public int octaves = 5;
     public float persistance = 0.229f;
     public float lacunarity = 3;
     public Vector2 offset = new Vector2(0, 0);
 
+    public int Seed { get { return seed; } set { seed = value; } }
+    public float Scale { get { return scale; } set { scale = value; } }
+    public int Octaves { get { return octaves; } set { octaves = value; } }
+    public float Persistance { get { return persistance; } set { persistance = value; } }
+    public float Lacunarity { get { return lacunarity; } set { lacunarity = value; } }
+    public Vector2 Offset { get { return offset; } set { offset = value; } }
+
     //Tile heights
     private float waterHeight = 0.3f;
     private float sandHeight = 0.35f;
     private float grassHeight = 1f;
+
+    public float WaterHeight { get { return waterHeight; } set { waterHeight = value; } }
+    public float SandHeight { get { return sandHeight; } set { sandHeight = value; } }
+    public float GrassHeight { get { return grassHeight; } set { grassHeight = value; } }
 
     /// <summary>
     /// Updates a 2D array of floats of normalised values, used as a heightmap. Uses varibles within terrain generation class to generate said noise (e.g. seed).
