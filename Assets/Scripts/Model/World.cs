@@ -54,20 +54,29 @@ public class World
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles);
     }
 
+    //TODO: clamp increases to prevent float wackiness
     public void ChangeWaterLevel(float change)
     {
+        if (TerrainGenerator.WaterHeight + change > 1)
+        {
+            change = 1 - TerrainGenerator.WaterHeight;
+        }
+        else if (TerrainGenerator.WaterHeight + change < 0)
+        {
+            change = 0 - TerrainGenerator.WaterHeight;
+        }
 
         if (change > 0)
         {
             TerrainGenerator.WaterHeight += change;
 
-            if (TerrainGenerator.WaterHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+            //if (TerrainGenerator.WaterHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
         }
         else if (change < 0)
         {
             TerrainGenerator.WaterHeight += change;
 
-            if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+           // if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
         }
     }
 
