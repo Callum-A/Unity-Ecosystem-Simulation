@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MouseController : MonoBehaviour
 {
@@ -76,7 +77,12 @@ public class MouseController : MonoBehaviour
             Camera.main.transform.Translate(diff);
         }
 
-        Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
+        // If we are not over UI we can zoom
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            Camera.main.orthographicSize -= Camera.main.orthographicSize * Input.GetAxis("Mouse ScrollWheel");
+        }
+        
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
     }
 }
