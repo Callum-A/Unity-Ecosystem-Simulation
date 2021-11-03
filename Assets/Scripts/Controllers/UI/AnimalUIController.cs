@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class AnimalUIController : MonoBehaviour
 {
@@ -34,7 +35,10 @@ public class AnimalUIController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            currentlySelected = mouseController.GetMouseoverAnimal();
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                currentlySelected = mouseController.GetMouseoverAnimal();
+            }
         }
         
         if (currentlySelected != null)
@@ -50,6 +54,22 @@ public class AnimalUIController : MonoBehaviour
             HungerText.text = "Hunger: N/A";
             ThirstText.text = "Thirst: N/A";
             StateText.text = "Current State: N/A";
+        }
+    }
+
+    public void SetCurrentlySelectedToHungry()
+    {
+        if (currentlySelected != null)
+        {
+            currentlySelected.Hunger = 0.31f;
+        }
+    }
+
+    public void SetCurrentlySelectedToThirsty()
+    {
+        if (currentlySelected != null)
+        {
+            currentlySelected.Thirst = 0.31f;
         }
     }
 }
