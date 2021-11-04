@@ -8,11 +8,11 @@ public class AnimalUIController : MonoBehaviour
 {
     public Text NameText;
 
-    public Text HungerText;
-
-    public Text ThirstText;
-
     public Text StateText;
+
+    public Slider HungerSlider;
+
+    public Slider ThirstSlider;
 
     private MouseController mouseController;
 
@@ -23,8 +23,7 @@ public class AnimalUIController : MonoBehaviour
     {
         mouseController = FindObjectOfType<MouseController>();
         currentlySelected = null;
-        if (mouseController == null || NameText == null || HungerText == null || ThirstText == null ||
-            StateText == null)
+        if (mouseController == null || NameText == null || StateText == null)
         {
             enabled = false;
         }
@@ -44,15 +43,13 @@ public class AnimalUIController : MonoBehaviour
         if (currentlySelected != null)
         {
             NameText.text = "Name: " + currentlySelected.ToString();
-            HungerText.text = $"Hunger: {currentlySelected.Hunger}";
-            ThirstText.text = $"Thirst: {currentlySelected.Thirst}";
+            HungerSlider.value = currentlySelected.Hunger;
+            ThirstSlider.value = currentlySelected.Thirst;
             StateText.text = $"Current State: {currentlySelected.CurrentState}";
         }
         else
         {
             NameText.text = "Name: N/A";
-            HungerText.text = "Hunger: N/A";
-            ThirstText.text = "Thirst: N/A";
             StateText.text = "Current State: N/A";
         }
     }
