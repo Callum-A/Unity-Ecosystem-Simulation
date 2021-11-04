@@ -118,6 +118,12 @@ public abstract class Animal
     /// </summary>
     public abstract void Die();
 
+    public void Drown() 
+    {
+        Debug.Log("DROWNING " + this.ToString());
+        this.Die();
+    }
+
     /// <summary>
     /// Abstract main update function.
     /// </summary>

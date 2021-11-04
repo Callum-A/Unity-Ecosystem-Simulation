@@ -25,7 +25,7 @@ public class Prey : Animal
     /// </summary>
     public override void Die()
     {
-        if (DestinationTile.HasFood() && DestinationTile.isFoodOccupied())
+        if (DestinationTile != null && DestinationTile.HasFood() && DestinationTile.isFoodOccupied())
         {
             DestinationTile.setFoodUnoccupied();
         }
@@ -238,6 +238,9 @@ public class Prey : Animal
         {
             CurrentState = AnimalState.Wandering;
             DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
+
+            if (DestinationTile == null) { Drown(); }
+
         }
     }
 

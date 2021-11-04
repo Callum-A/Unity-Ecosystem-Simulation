@@ -240,7 +240,8 @@ public class Tile
 
         if (tiles.Count == 0)
         {
-            Debug.LogError("No water tiles in radius found, from Tile -" + this.X + "," + this.Y);
+            //Debug.LogError("No water tiles in radius found, from Tile -" + this.X + "," + this.Y);
+            return null;
         }
 
         return tiles[UnityEngine.Random.Range(0, tiles.Count)];
