@@ -26,9 +26,9 @@ public class TerrainGenerator
     public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
 
     //Tile heights
-    private float waterHeightInit = 0.3f;
+    //private float waterHeightInit = 0.3f;
     public float sandHeightInit = 0.35f;
-    private float grassHeightInit = 1f;
+    //private float grassHeightInit = 1f;
 
     private float waterHeight = 0.3f;
     private float sandHeight = 0.35f;
@@ -88,6 +88,11 @@ public class TerrainGenerator
                     frequency *= lacunarity;
                 }
 
+                if (isIsland == true)
+                {
+                    noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
+                }
+
                 if (noiseHeight > maxNoiseHeight)
                 {
                     maxNoiseHeight = noiseHeight;
@@ -95,11 +100,6 @@ public class TerrainGenerator
                 else if (noiseHeight < minNoiseHeight)
                 {
                     minNoiseHeight = noiseHeight;
-                }
-
-                if (isIsland == true)
-                {
-                    noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
                 }
 
                 noiseMap[x, y] = noiseHeight;

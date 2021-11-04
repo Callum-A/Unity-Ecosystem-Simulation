@@ -61,7 +61,7 @@ public class TerrainEditorWindow : EditorWindow
 
         seed = EditorGUILayout.IntField("Seed", seed);
 
-        isIsland = EditorGUILayout.Toggle("Island's Mode", isIsland);
+        isIsland = EditorGUILayout.Toggle("Island Generation", isIsland);
 
         advNoiseEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advNoiseEnabled);
 
