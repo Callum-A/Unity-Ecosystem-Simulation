@@ -154,7 +154,11 @@ public class Tile
             {
                 if (World.ManhattanDistance(this.X, this.Y, x, y) <= radius)
                 {
-                    radiusList.Add(World.GetTileAt(x, y));
+                    Tile t = World.GetTileAt(x, y);
+                    if (t != null)
+                    {
+                        radiusList.Add(t);
+                    }
                 }
             }
         }
@@ -183,7 +187,11 @@ public class Tile
             {
                 if (World.EuclideanDistance(this.X, this.Y, x, y) <= radius)
                 {
-                    radiusList.Add(World.GetTileAt(x, y));
+                    Tile t = World.GetTileAt(x, y);
+                    if (t != null)
+                    {
+                        radiusList.Add(t);
+                    }
                 }
             }
         }

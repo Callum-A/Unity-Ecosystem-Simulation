@@ -9,6 +9,7 @@ public class TimeController : MonoBehaviour
     public float SECONDS_IN_A_DAY;
     private float currentSeconds;
     public int NumberOfDays { get; protected set; }
+    public static int TimeMultiplier { get; protected set; } = 1;
 
     private Action<World> OnNewDayCallback;
 
@@ -24,6 +25,17 @@ public class TimeController : MonoBehaviour
     private void Start()
     {
         NumberOfDays = 0;
+    }
+
+    public void SetTimeMultiplier(int multiplier)
+    {
+        if (multiplier < 1)
+        {
+            TimeMultiplier = 1;
+            return;
+        }
+        TimeMultiplier = multiplier;
+        WorldController.Instance.EventLogController.AddLog($"Setting time multiplier to {multiplier}x");
     }
 
     public float GetTimesADayMultiplier(float times)
@@ -50,7 +62,7 @@ public class TimeController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentSeconds += Time.deltaTime;
+        currentSeconds += (TimeMultiplier * Time.deltaTime);
         if (currentSeconds >= SECONDS_IN_A_DAY)
         {
 

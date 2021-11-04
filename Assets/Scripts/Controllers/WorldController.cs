@@ -39,7 +39,7 @@ public class WorldController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        World.Update(Time.deltaTime);
+        World.Update(TimeController.TimeMultiplier * Time.deltaTime);
     }
 
     private void InitialiseTiles()
