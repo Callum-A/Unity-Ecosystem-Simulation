@@ -48,6 +48,11 @@ public class Food
     private Action<Food> OnFoodExhausted;
 
     /// <summary>
+    /// Action to change sprite rendering based on nutrition.
+    /// </summary>
+    private Action<Food> OnFoodChanged;
+
+    /// <summary>
     /// Constuctor used to create a food object.
     /// </summary>
     /// <param name="tile">The tile that this food object occupies</param>
@@ -70,6 +75,13 @@ public class Food
             if (OnFoodExhausted != null)
             {
                 OnFoodExhausted(this);
+            }
+        }
+        else
+        {
+            if (OnFoodChanged != null)
+            {
+                OnFoodChanged(this);
             }
         }
     }
@@ -95,5 +107,14 @@ public class Food
     public void UnregisterOnFoodExhaustedCallback(Action<Food> cb)
     {
         OnFoodExhausted -= cb;
+    }
+
+    /// <summary>
+    /// Register food changed callback to update sprite.
+    /// </summary>
+    /// <param name="cb"></param>
+    public void RegisterOnFoodChangedCallback(Action<Food> cb)
+    {
+        OnFoodChanged += cb;
     }
 }

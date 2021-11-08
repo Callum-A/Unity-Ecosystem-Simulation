@@ -50,6 +50,7 @@ public class WorldController : MonoBehaviour
         World.AnimalManager.RegisterOnAnimalDestroyedCallback(AnimalSpriteController.OnAnimalDestroyed);
         World.FoodManager.RegisterOnFoodSproutedCallback(FoodSpriteController.OnFoodSpawned);
         World.FoodManager.RegisterOnFoodExhaustedCallback(FoodSpriteController.OnFoodExhausted);
+        World.FoodManager.RegisterOnFoodChangedCallback(FoodSpriteController.OnFoodChanged);
 
         for (int x = 0; x < World.Width; x++)
         {
