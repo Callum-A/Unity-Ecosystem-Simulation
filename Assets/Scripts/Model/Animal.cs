@@ -36,8 +36,8 @@ public abstract class Animal
     public AnimalState CurrentState { get; protected set; }
 
     public int ID { get; protected set; }
-    public float Hunger { get; protected set; }
-    public float Thirst { get; protected set; }
+    public float Hunger;
+    public float Thirst;
     public AnimalType AnimalType { get; protected set; }
 
     public float Speed { get; protected set; }
@@ -117,6 +117,12 @@ public abstract class Animal
     /// Abstract method called when the animal dies.
     /// </summary>
     public abstract void Die();
+
+    public void Drown() 
+    {
+        Debug.Log("DROWNING " + this.ToString());
+        this.Die();
+    }
 
     /// <summary>
     /// Abstract main update function.

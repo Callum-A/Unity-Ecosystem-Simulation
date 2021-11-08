@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class AnimalUIController : MonoBehaviour
 {
     public Text NameText;
 
-    public Text HungerText;
-
-    public Text ThirstText;
-
     public Text StateText;
+
+    public Slider HungerSlider;
+
+    public Slider ThirstSlider;
 
     private MouseController mouseController;
 
@@ -22,8 +23,7 @@ public class AnimalUIController : MonoBehaviour
     {
         mouseController = FindObjectOfType<MouseController>();
         currentlySelected = null;
-        if (mouseController == null || NameText == null || HungerText == null || ThirstText == null ||
-            StateText == null)
+        if (mouseController == null || NameText == null || StateText == null)
         {
             enabled = false;
         }
@@ -34,22 +34,39 @@ public class AnimalUIController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            currentlySelected = mouseController.GetMouseoverAnimal();
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                currentlySelected = mouseController.GetMouseoverAnimal();
+            }
         }
         
         if (currentlySelected != null)
         {
             NameText.text = "Name: " + currentlySelected.ToString();
-            HungerText.text = $"Hunger: {currentlySelected.Hunger}";
-            ThirstText.text = $"Thirst: {currentlySelected.Thirst}";
+            HungerSlider.value = currentlySelected.Hunger;
+            ThirstSlider.value = currentlySelected.Thirst;
             StateText.text = $"Current State: {currentlySelected.CurrentState}";
         }
         else
         {
             NameText.text = "Name: N/A";
-            HungerText.text = "Hunger: N/A";
-            ThirstText.text = "Thirst: N/A";
             StateText.text = "Current State: N/A";
+        }
+    }
+
+    public void SetCurrentlySelectedToHungry()
+    {
+        if (currentlySelected != null)
+        {
+            currentlySelected.Hunger = 0.31f;
+        }
+    }
+
+    public void SetCurrentlySelectedToThirsty()
+    {
+        if (currentlySelected != null)
+        {
+            currentlySelected.Thirst = 0.31f;
         }
     }
 }
