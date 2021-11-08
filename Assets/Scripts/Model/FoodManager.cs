@@ -11,6 +11,7 @@ public class FoodManager
     private List<Tile> newFoodTiles;
 
     private Action<Food> OnFoodSproutedCallback;
+    private Action<Food> OnFoodChangedCallback;
     private Action<Food> OnFoodExhaustedCallback;
 
     public FoodManager()
@@ -87,6 +88,7 @@ public class FoodManager
             {
                 Food newFood = new Food(tile);
                 newFood.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+                newFood.RegisterOnFoodChangedCallback(OnFoodChangedCallback);
                 tile.addFood(newFood);
 
                 OnFoodSproutedCallback(tile.food);
@@ -114,6 +116,7 @@ public class FoodManager
             {
                 Food newFood = new Food(tile);
                 newFood.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+                newFood.RegisterOnFoodChangedCallback(OnFoodChangedCallback);
                 tile.addFood(newFood);
                 OnFoodSproutedCallback(tile.food);
                 newFoodTiles.Add(tile);
@@ -176,6 +179,15 @@ public class FoodManager
     public void RegisterOnFoodExhaustedCallback(Action<Food> cb)
     {
         OnFoodExhaustedCallback += cb;
+    }
+
+    /// <summary>
+    /// Registers the callback when food is changed to update sprites.
+    /// </summary>
+    /// <param name="cb">Callback to register.</param>
+    public void RegisterOnFoodChangedCallback(Action<Food> cb)
+    {
+        OnFoodChangedCallback += cb;
     }
 }
 
