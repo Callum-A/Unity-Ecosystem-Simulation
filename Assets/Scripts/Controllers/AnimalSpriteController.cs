@@ -6,13 +6,12 @@ public class AnimalSpriteController : SpriteController<Animal>
 {
     private World world => WorldController.Instance.World;
     public Sprite PreySprite;
-    public Sprite PreySearchSprite;
-    public Sprite PreyDrinkSprite;
-    public Sprite PreyEatSprite;
     public Sprite PredatorSprite;
-    public Sprite PredatorSearchSprite;
-    public Sprite PredatorDrinkSprite;
-    public Sprite PredatorEatSprite;
+
+    private void Start()
+    {
+        LoadSprites("Images/Animals");
+    }
 
     public void OnAnimalDestroyed(Animal a)
     {
@@ -44,49 +43,29 @@ public class AnimalSpriteController : SpriteController<Animal>
     private void ChangeAnimalSprite(Animal a, GameObject animalGo)
     {
         SpriteRenderer sr = animalGo.GetComponent<SpriteRenderer>();
-        if (a.AnimalType == AnimalType.Prey)
+        string b = a.AnimalType == AnimalType.Prey ? "rabbit" : "fox";
+        Sprite s = null;
+        switch (a.CurrentState)
         {
-            switch (a.CurrentState)
-            {
-                case AnimalState.Idle:
-                case AnimalState.Wandering:
-                    sr.sprite = PreySprite;
-                    break;
-                case AnimalState.SeekFood:
-                case AnimalState.SeekWater:
-                    sr.sprite = PreySearchSprite;
-                    break;
-                case AnimalState.FoundFood:
-                case AnimalState.Hungry:
-                    sr.sprite = PreyEatSprite;
-                    break;
-                case AnimalState.FoundWater:
-                case AnimalState.Thirsty:
-                    sr.sprite = PreyDrinkSprite;
-                    break;
-            }
+            case AnimalState.Idle:
+            case AnimalState.Wandering:
+                s = GetSpriteByName(b);
+                break;
+            case AnimalState.SeekFood:
+            case AnimalState.SeekWater:
+                s = GetSpriteByName(b + "_search");
+                break;
+            case AnimalState.FoundFood:
+            case AnimalState.Hungry:
+            case AnimalState.Eating:
+                s = GetSpriteByName(b + "_food");
+                break;
+            case AnimalState.FoundWater:
+            case AnimalState.Thirsty:
+            case AnimalState.Drinking:
+                s = GetSpriteByName(b + "_water");
+                break;
         }
-        else
-        {
-            switch (a.CurrentState)
-            {
-                case AnimalState.Idle:
-                case AnimalState.Wandering:
-                    sr.sprite = PredatorSprite;
-                    break;
-                case AnimalState.SeekFood:
-                case AnimalState.SeekWater:
-                    sr.sprite = PredatorSearchSprite;
-                    break;
-                case AnimalState.FoundFood:
-                case AnimalState.Hungry:
-                    sr.sprite = PredatorEatSprite;
-                    break;
-                case AnimalState.FoundWater:
-                case AnimalState.Thirsty:
-                    sr.sprite = PredatorDrinkSprite;
-                    break;
-            }
-        }
+        sr.sprite = s;
     }
 }

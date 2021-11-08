@@ -5,12 +5,12 @@ using UnityEngine;
 public class FoodSpriteController : SpriteController<Food>
 {
     public Sprite FoodSprite;
-    public Sprite FoodSprite5; // name is food sprite and then number of nutri it is displayed at so this is displayed when nutri = 5
-    public Sprite FoodSprite4;
-    public Sprite FoodSprite3;
-    public Sprite FoodSprite2;
-    public Sprite FoodSprite1;
-    
+
+    private void Start()
+    {
+        LoadSprites("Images/Tile");
+    }
+
     /// <summary>
     /// Keeps track of the number of food sprites for testing.
     /// </summary>
@@ -45,30 +45,17 @@ public class FoodSpriteController : SpriteController<Food>
     {
         GameObject go = GetGameObjectByInstance(food);
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-        switch (food.nutrition)
+        string b = "Bushes32x32_02";
+        Sprite s;
+        if (food.nutrition == 6)
         {
-            case 6:
-                sr.sprite = FoodSprite;
-                break;
-            case 5:
-                sr.sprite = FoodSprite5;
-                break;
-            case 4:
-                sr.sprite = FoodSprite4;
-                break;
-            case 3:
-                sr.sprite = FoodSprite3;
-                break;
-            case 2:
-                sr.sprite = FoodSprite2;
-                break;
-            case 1:
-                sr.sprite = FoodSprite1;
-                break;
-            default:
-                Debug.Log("REACHED UNREACHABLE IN FSC SWITCH");
-                break;
+            s = GetSpriteByName(b);
         }
+        else
+        {
+            s = GetSpriteByName(b + "_" + food.nutrition);
+        }
+        sr.sprite = s;
     }
 
     /// <summary>
