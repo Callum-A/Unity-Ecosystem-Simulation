@@ -4479,7 +4479,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreySprite: {fileID: 21300000, guid: cf6e49f9fe459f14693459b473f6892b, type: 3}
+  PreySearchSprite: {fileID: 21300000, guid: 0b28e5d5706f32a42b1db00b6bf3bf29, type: 3}
+  PreyDrinkSprite: {fileID: 21300000, guid: 0361ad720b4a9e64aa0850ae203bda9a, type: 3}
+  PreyEatSprite: {fileID: 21300000, guid: e556038f162c70e4e8f45b5a4ab4cfc9, type: 3}
   PredatorSprite: {fileID: 21300000, guid: fb21806409810cc4f8d803534b508f0c, type: 3}
+  PredatorSearchSprite: {fileID: 21300000, guid: afc2ab0c96be3eb42897a965f62af4cd, type: 3}
+  PredatorDrinkSprite: {fileID: 21300000, guid: 53b7e93d3d101574ca592b6e81452d2c, type: 3}
+  PredatorEatSprite: {fileID: 21300000, guid: f481377dba8341a4fa57d0b388783211, type: 3}
 --- !u!1 &2120872433
 GameObject:
   m_ObjectHideFlags: 0
