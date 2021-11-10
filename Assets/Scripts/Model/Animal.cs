@@ -36,6 +36,11 @@ public abstract class Animal
     public AnimalState CurrentState { get; protected set; }
 
     public int ID { get; protected set; }
+    public float TimeAlive { get; protected set; }
+    public int Age
+    {
+        get { return (int)Math.Round(TimeAlive/TimeController.Instance.SECONDS_IN_A_DAY, 1); }
+    }
     public float Hunger;
     public float Thirst;
     public AnimalType AnimalType { get; protected set; }
