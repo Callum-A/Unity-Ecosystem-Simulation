@@ -3555,6 +3555,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FoodSprite: {fileID: 21300000, guid: 948123edd44ca6440a88bcdb5e0a5dda, type: 3}
+  FoodSprite5: {fileID: 21300000, guid: 6277ccd54964572488494effcee5f316, type: 3}
+  FoodSprite4: {fileID: 21300000, guid: 424c8c637136b94408f681c63b58bd38, type: 3}
+  FoodSprite3: {fileID: 21300000, guid: 251849e40ee78af47b535aa027c07ba5, type: 3}
+  FoodSprite2: {fileID: 21300000, guid: 0bc0bc01aa81b0545ac2b2831ddb9866, type: 3}
+  FoodSprite1: {fileID: 21300000, guid: c7fcc5f48dc8cc24da2bae4bafab955b, type: 3}
 --- !u!1 &1528928003
 GameObject:
   m_ObjectHideFlags: 0
@@ -4479,7 +4484,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreySprite: {fileID: 21300000, guid: cf6e49f9fe459f14693459b473f6892b, type: 3}
+  PreySearchSprite: {fileID: 21300000, guid: 0b28e5d5706f32a42b1db00b6bf3bf29, type: 3}
+  PreyDrinkSprite: {fileID: 21300000, guid: 0361ad720b4a9e64aa0850ae203bda9a, type: 3}
+  PreyEatSprite: {fileID: 21300000, guid: e556038f162c70e4e8f45b5a4ab4cfc9, type: 3}
   PredatorSprite: {fileID: 21300000, guid: fb21806409810cc4f8d803534b508f0c, type: 3}
+  PredatorSearchSprite: {fileID: 21300000, guid: afc2ab0c96be3eb42897a965f62af4cd, type: 3}
+  PredatorDrinkSprite: {fileID: 21300000, guid: 53b7e93d3d101574ca592b6e81452d2c, type: 3}
+  PredatorEatSprite: {fileID: 21300000, guid: f481377dba8341a4fa57d0b388783211, type: 3}
 --- !u!1 &2120872433
 GameObject:
   m_ObjectHideFlags: 0

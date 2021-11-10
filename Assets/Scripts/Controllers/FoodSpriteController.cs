@@ -5,7 +5,12 @@ using UnityEngine;
 public class FoodSpriteController : SpriteController<Food>
 {
     public Sprite FoodSprite;
-    
+
+    private void Start()
+    {
+        LoadSprites("Images/Tile");
+    }
+
     /// <summary>
     /// Keeps track of the number of food sprites for testing.
     /// </summary>
@@ -33,6 +38,27 @@ public class FoodSpriteController : SpriteController<Food>
     }
 
     /// <summary>
+    /// Change the food sprite based on how much nutri it has left, also handles food clean up when it hits 0.
+    /// </summary>
+    /// <param name="food">Food that has changed.</param>
+    public void OnFoodChanged(Food food)
+    {
+        GameObject go = GetGameObjectByInstance(food);
+        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+        string b = "Bushes32x32_02";
+        Sprite s;
+        if (food.nutrition == 6)
+        {
+            s = GetSpriteByName(b);
+        }
+        else
+        {
+            s = GetSpriteByName(b + "_" + food.nutrition);
+        }
+        sr.sprite = s;
+    }
+
+    /// <summary>
     /// Called when food has been exhasted, destroys the game object and removes it from the tile.
     /// </summary>
     /// <param name="food">Food object to handle</param>
@@ -42,6 +68,6 @@ public class FoodSpriteController : SpriteController<Food>
         GameObject go = GetGameObjectByInstance(food);
         Destroy(go);
 
-        Debug.Log("FOOD SPRITE CONTROLLER - FOOD SPRTIE REMOVED");
+        
     }
 }
