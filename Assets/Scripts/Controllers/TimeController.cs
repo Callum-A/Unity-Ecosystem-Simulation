@@ -29,7 +29,7 @@ public class TimeController : MonoBehaviour
 
     public void SetTimeMultiplier(int multiplier)
     {
-        if (multiplier < 1)
+        if (multiplier < 0)
         {
             TimeMultiplier = 1;
             return;
