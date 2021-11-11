@@ -6,7 +6,7 @@ public class Predator : Animal
 {
     public Prey CurrentTarget { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager,int  id) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id) { }
+    public Predator(Tile tile, AnimalManager animalManager, int id) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id) { }
 
     // TODO: Implement death here and start testing population levels etc.
     /// <summary>
@@ -23,7 +23,7 @@ public class Predator : Animal
     /// </summary>
     public override void Die()
     {
-        Debug.Log("Now dying!");
+        WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
         AnimalManager.DespawnAnimal(this);
     }
 
