@@ -186,7 +186,6 @@ public class AnimalManager
         AllAnimals.Remove(a);
     }
 
-
     public void DespawnAnimal(Animal a) 
     {
         if (a.AnimalType == AnimalType.Prey)
@@ -200,6 +199,14 @@ public class AnimalManager
         }
 
         Despawn(a);
+    }
+
+    public void AgeUpAnimals() 
+    {
+        foreach ( Animal a in AllAnimals)
+        {
+            a.AgeUp();
+        }
     }
 
     public void RegisterOnAnimalCreatedCallback(Action<Animal> cb)

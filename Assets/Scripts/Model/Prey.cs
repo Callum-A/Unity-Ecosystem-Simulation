@@ -43,6 +43,7 @@ public class Prey : Animal
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
         Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(2f));
         timeSinceLastBreeded += deltaTime;
+        UpdateAge(deltaTime);
         UpdateDoMovement(deltaTime);
         switch (CurrentState)
         {

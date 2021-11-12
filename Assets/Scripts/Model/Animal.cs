@@ -9,6 +9,13 @@ public enum AnimalType
     Predator
 }
 
+public enum LifeStage
+{ 
+    Child,
+    Adult,
+    Elder
+}
+
 public enum AnimalState
 {
     Idle, // we have nothing to do we are standing still, entry state
@@ -39,8 +46,9 @@ public abstract class Animal
     public float TimeAlive { get; protected set; }
     public int Age
     {
-        get { return (int)Math.Round(TimeAlive/TimeController.Instance.SECONDS_IN_A_DAY, 1); }
+        get { return (int)Math.Floor(TimeAlive/TimeController.Instance.SECONDS_IN_A_DAY); }
     }
+    public LifeStage lifeStage { get; protected set; }
     public float Hunger;
     public float Thirst;
     public AnimalType AnimalType { get; protected set; }
@@ -66,6 +74,7 @@ public abstract class Animal
         AnimalManager = animalManager;
         CurrentState = AnimalState.Idle;
         ID = id;
+        lifeStage = LifeStage.Child;
     }
 
     /// <summary>
@@ -256,6 +265,41 @@ public abstract class Animal
             //Tile dest = WorldController.Instance.World.FindClosestDrikableTile(CurrentTile);
             Tile dest = CurrentTile.GetClosestWaterTile();
             DestinationTile = dest;
+        }
+    }
+
+    public void UpdateAge(float deltaTime) 
+    {
+        this.TimeAlive += deltaTime;
+    }
+
+    public void AgeUp() 
+    {
+        int age = Age;
+
+        //Aging up
+        if (lifeStage != LifeStage.Elder)
+        {
+            if (age == 10 && lifeStage != LifeStage.Adult)
+            {
+                lifeStage = LifeStage.Adult;
+            }
+
+            else if (age == 40)
+            {
+                lifeStage = LifeStage.Elder;
+                Die();
+            }
+        }
+
+        //Chance to die
+        else 
+        {
+            if (UnityEngine.Random.Range(0, 100) < (age - 40 + 5)) 
+            {
+                Debug.Log("Died at " + age + " days old.");
+                Die();
+            }
         }
     }
 

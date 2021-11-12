@@ -81,6 +81,7 @@ public class WorldController : MonoBehaviour
 
     private void Start()
     {
+        TimeController.Instance.RegisterOnNewDayCallback(o => World.AnimalManager.AgeUpAnimals());
         TimeController.Instance.RegisterOnNewDayCallback(World.FoodManager.OnNewDay);
         TimeController.Instance.RegisterOnNewDayCallback(o => WorldCountLog());
     }
