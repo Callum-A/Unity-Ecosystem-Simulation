@@ -83,6 +83,7 @@ public class WorldController : MonoBehaviour
     {
         TimeController.Instance.RegisterOnNewDayCallback(World.FoodManager.OnNewDay);
         TimeController.Instance.RegisterOnNewDayCallback(o => WorldCountLog());
+        TimeController.Instance.RegisterOnNewDayCallback(World.EventManager.OnNewDay);
     }
 
 }
