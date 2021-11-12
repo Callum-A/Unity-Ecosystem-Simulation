@@ -204,6 +204,14 @@ public abstract class Animal
             StopMovement();
             CurrentState = AnimalState.Thirsty;
         }
+
+        // If we see water tiles before we reach our destination
+        List<Tile> waterTilesInSightRange = CurrentTile.GetWaterTilesInRadius(SightRange);
+        if (waterTilesInSightRange.Count > 0)
+        {
+            StopMovement();
+            CurrentState = AnimalState.Thirsty;
+        }
     }
 
     // TODO: rework this timer I don't like how it looks

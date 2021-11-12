@@ -29,7 +29,7 @@ public class Prey : Animal
         {
             DestinationTile.setFoodUnoccupied();
         }
-
+        WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
         Debug.Log("Now dying! - "  + this.ToString());
         AnimalManager.DespawnAnimal(this);
     }
@@ -95,6 +95,14 @@ public class Prey : Animal
     public void UpdateDoSeekFood(float deltaTime)
     {
         if (CurrentTile == DestinationTile)
+        {
+            StopMovement();
+            CurrentState = AnimalState.Hungry;
+        }
+
+        // If we see food tiles before reaching our destination
+        List<Tile> foodTilesInSightRange = CurrentTile.GetFoodTilesInRadius(SightRange);
+        if (foodTilesInSightRange.Count > 0)
         {
             StopMovement();
             CurrentState = AnimalState.Hungry;
