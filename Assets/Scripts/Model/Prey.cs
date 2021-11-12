@@ -118,7 +118,7 @@ public class Prey : Animal
             bool hasEaten = CurrentTile.ConsumeFood();
             // TODO: Check this to see if we've actually eaten
             Hunger = 1f;
-            Debug.Log("Eating done!" + this.ToString());
+            //Debug.Log("Eating done!" + this.ToString());
 
             if (DestinationTile.HasFood())
             {
@@ -230,7 +230,7 @@ public class Prey : Animal
             if (partner != null)
             {
                 timeSinceLastBreeded = 0f;
-                Debug.Log("Found partner so spawning new animal");
+                //Debug.Log("Found partner so spawning new animal");
                 AnimalManager.SpawnPrey(CurrentTile);
             }
         }

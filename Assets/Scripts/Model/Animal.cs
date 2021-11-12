@@ -53,6 +53,7 @@ public abstract class Animal
     public float Thirst;
     public AnimalType AnimalType { get; protected set; }
 
+    
     public float Speed { get; protected set; }
     public int SightRange { get; protected set; }
     private PathAStar pathAStar;
@@ -134,7 +135,7 @@ public abstract class Animal
 
     public void Drown() 
     {
-        Debug.Log("DROWNING " + this.ToString());
+        //Debug.Log("DROWNING " + this.ToString());
         this.Die();
     }
 
@@ -218,7 +219,7 @@ public abstract class Animal
         timeSinceStartedDrinking += deltaTime;
         if (timeSinceStartedDrinking >= drinkingTimeInSeconds)
         {
-            Debug.Log("Done drinking! " + this.ToString());
+            //Debug.Log("Done drinking! " + this.ToString());
             Thirst = 1f;
             CurrentState = AnimalState.Idle;
         }
@@ -283,19 +284,23 @@ public abstract class Animal
             if (age == 10 && lifeStage != LifeStage.Adult)
             {
                 lifeStage = LifeStage.Adult;
+                Debug.Log(this.ToString() + "is now an Adult");
             }
 
             else if (age == 40)
             {
                 lifeStage = LifeStage.Elder;
-                Die();
+                Debug.Log(this.ToString() + "is now an Elder");
             }
         }
 
         //Chance to die
         else 
         {
-            if (UnityEngine.Random.Range(0, 100) < (age - 40 + 5)) 
+            int randomNum = UnityEngine.Random.Range(0, 100);
+            int changeOfDeath = age - 35;
+
+            if (randomNum < (changeOfDeath)) 
             {
                 Debug.Log("Died at " + age + " days old.");
                 Die();

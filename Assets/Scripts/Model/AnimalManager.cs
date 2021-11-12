@@ -203,8 +203,9 @@ public class AnimalManager
 
     public void AgeUpAnimals() 
     {
-        foreach ( Animal a in AllAnimals)
+        for (int i = 0; i < AllAnimals.Count; i++) 
         {
+            Animal a = AllAnimals[i];
             a.AgeUp();
         }
     }
