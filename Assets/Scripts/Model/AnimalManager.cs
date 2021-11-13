@@ -88,7 +88,7 @@ public class AnimalManager
         foreach (Prey p in Prey)
         {
             if (p.CurrentTile.X >= startX && p.CurrentTile.X <= endX && p.CurrentTile.Y >= startY &&
-                p.CurrentTile.Y <= endY)
+                p.CurrentTile.Y <= endY && !p.IsBeingChased)
             {
                 inRadius.Add(p);
             }
