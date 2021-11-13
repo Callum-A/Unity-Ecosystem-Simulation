@@ -13,6 +13,7 @@ public class World
     private TerrainGenerator terrainGenerator;
     public AnimalManager AnimalManager { get; protected set; }
     public FoodManager FoodManager { get; protected set; }
+    public EventManager EventManager { get; protected set; }
     public WorldData Data { get; protected set; }
 
     public World(int w, int h)
@@ -23,6 +24,7 @@ public class World
         terrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
         FoodManager = new FoodManager();
+        EventManager = new EventManager();
         Data = new WorldData();
 
         for (int x = 0; x < Width; x++)
