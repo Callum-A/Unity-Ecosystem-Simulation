@@ -15,11 +15,20 @@ public class WorldData
         get { return terrainData; }
         set { terrainData = value; }
     }
-    public int numTiles
+    public int NumTiles
     {
         get { return terrainData.numTiles; }
         protected set { }
     }
+
+    public float WaterHeight { get; protected set; }
+    public float WaterHeightInitial { get { return terrainData.waterHeight; } protected set { } }
+
+    public float SandHeight { get; protected set; }
+    public float SandHeightInitial { get { return terrainData.sandHeight; } protected set { } }
+
+    public float GrassHeight { get; protected set; }
+    public float GrassHeightInitial { get { return terrainData.grassHeight; } protected set { } }
 
     public List<Tile> WaterTiles
     {
@@ -66,9 +75,11 @@ public class WorldData
     #endregion
 
 
-    public WorldData()
+    public void Initialise()
     {
-        
+        WaterHeight = terrainData.waterHeight;
+        SandHeight = terrainData.sandHeight;
+        GrassHeight = terrainData.grassHeight;
     }
 }
 
@@ -80,12 +91,20 @@ public struct TerrainData
     public List<Tile> sandTiles;
     public List<Tile> grassTiles;
 
+    public float waterHeight;
+    public float sandHeight;
+    public float grassHeight;
+
     // used for meta gaming where water is, may not stay for long.
     public List<Tile> coastTiles;
 
-    public TerrainData(int numTiles)
+    public TerrainData(int numTiles, float waterHeight, float sandHeight, float grassHeight)
     {
         this.numTiles = numTiles;
+
+        this.waterHeight = waterHeight;
+        this.sandHeight = sandHeight;
+        this.grassHeight = grassHeight;
 
         waterTiles = new List<Tile>();
         sandTiles = new List<Tile>();

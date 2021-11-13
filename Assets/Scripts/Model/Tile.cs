@@ -46,6 +46,10 @@ public class Tile
             if (oldValue != _type)
             {
                 OnTileTypeChangedCallback(this);
+                if (Type == TileType.Water)
+                {
+                    DrownTile();
+                }
             }
         }
     }

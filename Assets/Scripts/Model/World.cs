@@ -52,6 +52,7 @@ public class World
     public void GenerateTerrain()
     {
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles);
+        Data.Initialise();
     }
 
     //TODO: clamp increases to prevent float wackiness

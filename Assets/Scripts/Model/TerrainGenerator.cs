@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TerrainGenerator
 {
-    public float[,] noiseMap { get; protected set; }
+    public float[,] NoiseMap { get; protected set; }
 
     //TODO: Noise function varibles shouldn't be hardcorded, should be set to defaults and edited through menus in unity.
     // hardcoded noise variables.
@@ -45,7 +45,7 @@ public class TerrainGenerator
     /// <param name="height"></param>
     private void UpdateNoiseMap(int width, int height)
     {
-        noiseMap = new float[width, height];
+        NoiseMap = new float[width, height];
 
         System.Random rng = new System.Random(seed);
         Vector2[] octaveOffset = new Vector2[octaves];
@@ -102,7 +102,7 @@ public class TerrainGenerator
                     minNoiseHeight = noiseHeight;
                 }
 
-                noiseMap[x, y] = noiseHeight;
+                NoiseMap[x, y] = noiseHeight;
             }
         }
 
@@ -110,7 +110,7 @@ public class TerrainGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+                NoiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, NoiseMap[x, y]);
             }
         }
     }
@@ -125,14 +125,14 @@ public class TerrainGenerator
     {
         UpdateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1));
 
-        TerrainData data = new TerrainData(Tiles.Length);
+        TerrainData data = new TerrainData(Tiles.Length, waterHeight, sandHeight, grassHeight);
 
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
             for (int y = 0; y < Tiles.GetLength(1); y++)
             {
                 Tile t = Tiles[x, y];
-                float noise = noiseMap[x, y];
+                float noise = NoiseMap[x, y];
 
                 setUpTile(t, noise, data);
 
@@ -143,6 +143,7 @@ public class TerrainGenerator
 
         return data;
     }
+
 
     /// <summary>
     /// Updates a tile's type based on the value of noise.
