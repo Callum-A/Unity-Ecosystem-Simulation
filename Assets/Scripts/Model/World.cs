@@ -51,7 +51,7 @@ public class World
 
     public void GenerateTerrain()
     {
-        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles);
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, 207, 44, 5, 0.229f, 3, new Vector2(0, 0));
         Data.Initialise();
     }
 

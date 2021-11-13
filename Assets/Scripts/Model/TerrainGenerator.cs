@@ -39,11 +39,17 @@ public class TerrainGenerator
     public float GrassHeight { get { return grassHeight; } set { grassHeight = value; } }
 
     /// <summary>
-    /// Updates a 2D array of floats of normalised values, used as a heightmap. Uses varibles within terrain generation class to generate said noise (e.g. seed).
+    ///  Generates a 2D array of normalised values to be used as a noise map.
     /// </summary>
-    /// <param name="width"> The width of the </param>
-    /// <param name="height"></param>
-    private void UpdateNoiseMap(int width, int height)
+    /// <param name="width">Width of the map</param>
+    /// <param name="height">Height of the map</param>
+    /// <param name="seed">The seed used for the randomised sample offsets</param>
+    /// <param name="scale">The scale of the noise.</param>
+    /// <param name="octaves">Iterations of samples on the noise, higher values lead to more detailed noise, but increased computation</param>
+    /// <param name="persistence">A multiplier for how quickly the amplitude of each successive octave decreases. Higher values lead to rougher noise.</param>
+    /// <param name="lacunarity">A multiplier for how quickly the frequency of each successive octave increases. Higher values lead to smoother noise.</param>
+    /// <param name="offset">Addtional sample point offset. Shifts each sample by the given cordinates.</param>
+    private void UpdateNoiseMap(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
         NoiseMap = new float[width, height];
 
@@ -84,7 +90,7 @@ public class TerrainGenerator
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
                     noiseHeight += perlinValue * amplitude;
 
-                    amplitude *= persistance;
+                    amplitude *= persistence;
                     frequency *= lacunarity;
                 }
 
@@ -115,17 +121,31 @@ public class TerrainGenerator
         }
     }
 
-    /// <summary>
-    /// Generates terrain for a given tile map, updating the type for each tile.
-    /// </summary>
-    /// <param name="Tiles">A 2D array of tiles you want to generate terrain for.</param>
-    /// <param name="width">Width of </param>
-    /// <param name="height"></param>
-    public TerrainData GenerateTerrain(Tile[,] Tiles)
+    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float lacunarity, float persistence, Vector2 offset)
     {
-        UpdateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1));
+        UpdateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, lacunarity, persistence, offset);
 
         TerrainData data = new TerrainData(Tiles.Length, waterHeight, sandHeight, grassHeight);
+
+        for (int x = 0; x < Tiles.GetLength(0); x++)
+        {
+            for (int y = 0; y < Tiles.GetLength(1); y++)
+            {
+                Tile t = Tiles[x, y];
+                float noise = NoiseMap[x, y];
+
+                setUpTile(t, noise, data);
+
+            }
+        }
+
+        data.coastTiles = findCoastTiles(data);
+
+        return data;
+    }
+
+    public TerrainData GenerateTerrain(Tile[,] Tiles, TerrainData data)
+    {
 
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
