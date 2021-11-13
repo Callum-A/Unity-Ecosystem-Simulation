@@ -52,30 +52,34 @@ public class World
     public void GenerateTerrain()
     {
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, 207, 44, 5, 0.229f, 3, new Vector2(0, 0));
-        Data.Initialise();
+    }
+
+    public void UpdateTerrain()
+    {
+        Data.TerrainData = TerrainGenerator.UpdateTerrain(tiles, Data.TerrainData);
     }
 
     //TODO: clamp increases to prevent float wackiness
     public void ChangeWaterLevel(float change)
     {
-        if (TerrainGenerator.WaterHeight + change > 1)
+        if (Data.WaterHeight + change > 1)
         {
-            change = 1 - TerrainGenerator.WaterHeight;
+            change = 1 - Data.WaterHeight;
         }
-        else if (TerrainGenerator.WaterHeight + change < 0)
+        else if (Data.WaterHeight + change < 0)
         {
-            change = 0 - TerrainGenerator.WaterHeight;
+            change = 0 - Data.WaterHeight;
         }
 
         if (change > 0)
         {
-            TerrainGenerator.WaterHeight += change;
+            Data.WaterHeight += change;
 
             //if (TerrainGenerator.WaterHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
         }
         else if (change < 0)
         {
-            TerrainGenerator.WaterHeight += change;
+            Data.WaterHeight += change;
 
            // if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
         }

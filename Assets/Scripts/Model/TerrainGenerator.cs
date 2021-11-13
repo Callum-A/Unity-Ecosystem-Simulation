@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class TerrainGenerator
 {
-    public float[,] NoiseMap { get; protected set; }
+    //public float[,] NoiseMap { get; protected set; }
 
     //TODO: Noise function varibles shouldn't be hardcorded, should be set to defaults and edited through menus in unity.
     // hardcoded noise variables.
-    private int seed = 207;
-    public float scale = 44;
-    public int octaves = 5;
-    public float persistance = 0.229f;
-    public float lacunarity = 3;
-    public Vector2 offset = new Vector2(0, 0);
+    //private int seed = 207;
+    //public float scale = 44;
+    //public int octaves = 5;
+    //public float persistance = 0.229f;
+    //public float lacunarity = 3;
+    //public Vector2 offset = new Vector2(0, 0);
 
-    public int Seed { get { return seed; } set { seed = value; } }
-    public float Scale { get { return scale; } set { scale = value; } }
-    public int Octaves { get { return octaves; } set { octaves = value; } }
-    public float Persistance { get { return persistance; } set { persistance = value; } }
-    public float Lacunarity { get { return lacunarity; } set { lacunarity = value; } }
-    public Vector2 Offset { get { return offset; } set { offset = value; } }
+    //public int Seed { get { return seed; } set { seed = value; } }
+    //public float Scale { get { return scale; } set { scale = value; } }
+    //public int Octaves { get { return octaves; } set { octaves = value; } }
+    //public float Persistance { get { return persistance; } set { persistance = value; } }
+    //public float Lacunarity { get { return lacunarity; } set { lacunarity = value; } }
+    //public Vector2 Offset { get { return offset; } set { offset = value; } }
 
     private bool isIsland = false;
     public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
@@ -49,9 +49,9 @@ public class TerrainGenerator
     /// <param name="persistence">A multiplier for how quickly the amplitude of each successive octave decreases. Higher values lead to rougher noise.</param>
     /// <param name="lacunarity">A multiplier for how quickly the frequency of each successive octave increases. Higher values lead to smoother noise.</param>
     /// <param name="offset">Addtional sample point offset. Shifts each sample by the given cordinates.</param>
-    private void UpdateNoiseMap(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
+    private float[,] GenerateNoiseMap(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
-        NoiseMap = new float[width, height];
+        float[,] noisemap = new float[width, height];
 
         System.Random rng = new System.Random(seed);
         Vector2[] octaveOffset = new Vector2[octaves];
@@ -108,7 +108,7 @@ public class TerrainGenerator
                     minNoiseHeight = noiseHeight;
                 }
 
-                NoiseMap[x, y] = noiseHeight;
+                noisemap[x, y] = noiseHeight;
             }
         }
 
@@ -116,26 +116,27 @@ public class TerrainGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                NoiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, NoiseMap[x, y]);
+                noisemap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noisemap[x, y]);
             }
         }
+
+        return noisemap;
     }
 
     public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float lacunarity, float persistence, Vector2 offset)
     {
-        UpdateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, lacunarity, persistence, offset);
+        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, lacunarity, persistence, offset);
 
-        TerrainData data = new TerrainData(Tiles.Length, waterHeight, sandHeight, grassHeight);
+        TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, lacunarity, persistence, offset, waterHeight, sandHeight, grassHeight);
 
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
             for (int y = 0; y < Tiles.GetLength(1); y++)
             {
                 Tile t = Tiles[x, y];
-                float noise = NoiseMap[x, y];
+                float noise = heightmap[x, y];
 
                 setUpTile(t, noise, data);
-
             }
         }
 
@@ -144,18 +145,16 @@ public class TerrainGenerator
         return data;
     }
 
-    public TerrainData GenerateTerrain(Tile[,] Tiles, TerrainData data)
+    public TerrainData UpdateTerrain(Tile[,] Tiles, TerrainData data)
     {
-
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
             for (int y = 0; y < Tiles.GetLength(1); y++)
             {
                 Tile t = Tiles[x, y];
-                float noise = NoiseMap[x, y];
+                float noise = data.noisemap[x, y];
 
                 setUpTile(t, noise, data);
-
             }
         }
 
@@ -173,17 +172,17 @@ public class TerrainGenerator
     /// <param name="data">A terrain data struct, used to pass terrain generation data to the World class</param>param>
     private void setUpTile(Tile tile, float noise, TerrainData data)
     {
-        if (noise <= waterHeight)
+        if (noise <= data.waterHeight)
         {
             tile.Type = TileType.Water;
             data.waterTiles.Add(tile);
         }
-        else if (noise <= sandHeight)
+        else if (noise <= data.sandHeight)
         {
             tile.Type = TileType.Sand;
             data.sandTiles.Add(tile);
         }
-        else if (noise <= grassHeight)
+        else if (noise <= data.grassHeight)
         {
             tile.Type = TileType.Ground;
             data.grassTiles.Add(tile);
