@@ -10,6 +10,12 @@ public class AnimalUIController : MonoBehaviour
 
     public Text StateText;
 
+    public Text AgeText;
+
+    public Text AgeStageText;
+
+    public Text GenderText;
+
     public Slider HungerSlider;
 
     public Slider ThirstSlider;
@@ -46,11 +52,17 @@ public class AnimalUIController : MonoBehaviour
             HungerSlider.value = currentlySelected.Hunger;
             ThirstSlider.value = currentlySelected.Thirst;
             StateText.text = $"Current State: {currentlySelected.CurrentState}";
+            AgeText.text = $"Age: {currentlySelected.Age}";
+            AgeStageText.text = $"Age Stage: {currentlySelected.lifeStage}";
+            GenderText.text = $"Gender: {currentlySelected.AnimalSex}";
         }
         else
         {
             NameText.text = "Name: N/A";
             StateText.text = "Current State: N/A";
+            AgeText.text = "Age: N/A";
+            AgeStageText.text = "Age Stage: N/A";
+            GenderText.text = "Gender: N/A";
         }
     }
 
