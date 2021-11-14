@@ -282,39 +282,7 @@ public abstract class Animal
         this.TimeAlive += deltaTime;
     }
 
-    public void AgeUp() 
-    {
-        int age = Age;
-
-        //Aging up
-        if (lifeStage != LifeStage.Elder)
-        {
-            if (age == 10 && lifeStage != LifeStage.Adult)
-            {
-                lifeStage = LifeStage.Adult;
-                Debug.Log(this.ToString() + "is now an Adult");
-            }
-
-            else if (age == 40)
-            {
-                lifeStage = LifeStage.Elder;
-                Debug.Log(this.ToString() + "is now an Elder");
-            }
-        }
-
-        //Chance to die
-        else 
-        {
-            int randomNum = UnityEngine.Random.Range(0, 100);
-            int changeOfDeath = age - 35;
-
-            if (randomNum < (changeOfDeath)) 
-            {
-                Debug.Log("Died at " + age + " days old.");
-                Die();
-            }
-        }
-    }
+    public abstract void AgeUp();
 
     public void RegisterOnAnimalChangedCallback(Action<Animal> cb)
     {

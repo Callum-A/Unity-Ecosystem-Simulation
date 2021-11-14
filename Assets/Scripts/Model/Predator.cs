@@ -205,4 +205,39 @@ public class Predator : Animal
             CurrentState = AnimalState.Idle;
         }
     }
+
+    override
+    public void AgeUp()
+    {
+        int age = Age;
+
+        //Aging up
+        if (lifeStage != LifeStage.Elder)
+        {
+            if (age == 5 && lifeStage != LifeStage.Adult)
+            {
+                lifeStage = LifeStage.Adult;
+                Debug.Log(this.ToString() + "is now an Adult");
+            }
+
+            else if (age == 20)
+            {
+                lifeStage = LifeStage.Elder;
+                Debug.Log(this.ToString() + "is now an Elder");
+            }
+        }
+
+        //Chance to die
+        else
+        {
+            int randomNum = UnityEngine.Random.Range(0, 100);
+            int changeOfDeath = age - 15;
+
+            if (randomNum < (changeOfDeath))
+            {
+                Debug.Log("Died at " + age + " days old.");
+                Die();
+            }
+        }
+    }
 }
