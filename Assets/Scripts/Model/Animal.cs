@@ -16,6 +16,12 @@ public enum LifeStage
     Elder
 }
 
+public enum Gender 
+{ 
+    Male,
+    Female
+}
+
 public enum AnimalState
 {
     Idle, // we have nothing to do we are standing still, entry state
@@ -52,7 +58,7 @@ public abstract class Animal
     public float Hunger;
     public float Thirst;
     public AnimalType AnimalType { get; protected set; }
-
+    public Gender AnimalSex { get; protected set;}
     
     public float Speed { get; protected set; }
     public int SightRange { get; protected set; }
@@ -61,7 +67,7 @@ public abstract class Animal
 
     protected Action<Animal> OnAnimalChangedCallback;
 
-    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id)
+    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id, Gender gender)
     {
         CurrentTile = tile;
         NextTile = tile;
@@ -76,6 +82,7 @@ public abstract class Animal
         CurrentState = AnimalState.Idle;
         ID = id;
         lifeStage = LifeStage.Child;
+        AnimalSex = gender;
     }
 
     /// <summary>
@@ -283,6 +290,12 @@ public abstract class Animal
     }
 
     public abstract void AgeUp();
+
+    public abstract void setChild();
+
+    public abstract void setAdult();
+
+    public abstract void setElder();
 
     public void RegisterOnAnimalChangedCallback(Action<Animal> cb)
     {

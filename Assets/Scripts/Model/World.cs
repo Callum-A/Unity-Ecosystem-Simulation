@@ -57,6 +57,11 @@ public class World
     public void SpawnAnimals(int preyAmount, int predatorAmount)
     {
         AnimalManager.SpawnAnimals(preyAmount, predatorAmount);
+
+        foreach (Animal a in AnimalManager.AllAnimals) 
+        {
+            a.setAdult();
+        }
     }
 
     public void SproutInitialFood()

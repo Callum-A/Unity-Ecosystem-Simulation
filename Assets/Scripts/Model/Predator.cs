@@ -6,7 +6,7 @@ public class Predator : Animal
 {
     public Prey CurrentTarget { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager, int id) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id) { }
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id, gender) { }
 
     // TODO: Implement death here and start testing population levels etc.
     /// <summary>
@@ -239,5 +239,26 @@ public class Predator : Animal
                 Die();
             }
         }
+    }
+
+    override
+   public void setChild()
+    {
+        this.TimeAlive = 0;
+        this.lifeStage = LifeStage.Child;
+    }
+
+    override
+    public void setAdult()
+    {
+        this.TimeAlive = 5 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Adult;
+    }
+
+    override
+    public void setElder()
+    {
+        this.TimeAlive = 20 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Elder;
     }
 }

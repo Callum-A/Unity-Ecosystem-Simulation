@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Prey : Animal
 {
-    public Prey(Tile tile, AnimalManager animalManager, int id) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id) { }
+    public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id, gender) { }
 
     /// <summary>
     /// Prey should die function, returns true when it should die. Should die if hunger
@@ -310,6 +310,27 @@ public class Prey : Animal
                 Die();
             }
         }
+    }
+
+    override
+    public void setChild() 
+    {
+        this.TimeAlive = 0;
+        this.lifeStage = LifeStage.Child;
+    }
+
+    override
+    public void setAdult()
+    {
+        this.TimeAlive = 10 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Adult;
+    }
+
+    override
+    public void setElder()
+    {
+        this.TimeAlive = 40 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Elder;
     }
 
     override
