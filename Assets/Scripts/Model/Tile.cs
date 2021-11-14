@@ -294,13 +294,13 @@ public class Tile
 
     public void setFoodOccupied()
     {
-        Debug.Log("Setting Food Occupied");
+        //Debug.Log("Setting Food Occupied");
         food.IsOccupied = true;
     }
 
     public void setFoodUnoccupied()
     {
-        Debug.Log("Setting Food Unoccupied");
+        //Debug.Log("Setting Food Unoccupied");
         food.IsOccupied = false;
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Prey : Animal
 {
-    public Prey(Tile tile, AnimalManager animalManager, int id) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id) { }
+    public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id, gender) { }
 
     /// <summary>
     /// Prey should die function, returns true when it should die. Should die if hunger
@@ -43,6 +43,7 @@ public class Prey : Animal
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
         Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(2f));
         timeSinceLastBreeded += deltaTime;
+        UpdateAge(deltaTime);
         UpdateDoMovement(deltaTime);
         switch (CurrentState)
         {
@@ -125,7 +126,7 @@ public class Prey : Animal
             bool hasEaten = CurrentTile.ConsumeFood();
             // TODO: Check this to see if we've actually eaten
             Hunger = 1f;
-            Debug.Log("Eating done!" + this.ToString());
+            //Debug.Log("Eating done!" + this.ToString());
 
             if (DestinationTile.HasFood())
             {
@@ -237,7 +238,7 @@ public class Prey : Animal
             if (partner != null)
             {
                 timeSinceLastBreeded = 0f;
-                Debug.Log("Found partner so spawning new animal");
+                //Debug.Log("Found partner so spawning new animal");
                 AnimalManager.SpawnPrey(CurrentTile);
             }
         }
@@ -274,6 +275,62 @@ public class Prey : Animal
             StopMovement();
             CurrentState = AnimalState.Idle;
         }
+    }
+
+    override
+    public void AgeUp()
+    {
+        int age = Age;
+
+        //Aging up
+        if (lifeStage != LifeStage.Elder)
+        {
+            if (age == 10 && lifeStage != LifeStage.Adult)
+            {
+                lifeStage = LifeStage.Adult;
+                Debug.Log(this.ToString() + "is now an Adult");
+            }
+
+            else if (age == 40)
+            {
+                lifeStage = LifeStage.Elder;
+                Debug.Log(this.ToString() + "is now an Elder");
+            }
+        }
+
+        //Chance to die
+        else
+        {
+            int randomNum = UnityEngine.Random.Range(0, 100);
+            int changeOfDeath = age - 35;
+
+            if (randomNum < (changeOfDeath))
+            {
+                Debug.Log("Died at " + age + " days old.");
+                Die();
+            }
+        }
+    }
+
+    override
+    public void setChild() 
+    {
+        this.TimeAlive = 0;
+        this.lifeStage = LifeStage.Child;
+    }
+
+    override
+    public void setAdult()
+    {
+        this.TimeAlive = 10 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Adult;
+    }
+
+    override
+    public void setElder()
+    {
+        this.TimeAlive = 40 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Elder;
     }
 
     override

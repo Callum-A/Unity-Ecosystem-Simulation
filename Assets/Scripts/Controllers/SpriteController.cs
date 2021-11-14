@@ -25,7 +25,7 @@ public abstract class SpriteController<T> : MonoBehaviour
         Sprite[] sprites = Resources.LoadAll<Sprite>(path);
         foreach (Sprite sprite in sprites)
         {
-            Debug.Log("Loaded sprite: " + sprite.name);
+            //Debug.Log("Loaded sprite: " + sprite.name);
             spriteMap[sprite.name] = sprite;
         }
     }
