@@ -19,14 +19,14 @@ public class TerrainEditorWindow : EditorWindow
     int seed = 0;
     float scale = 0.0001f;
     int octaves = 0;
-    float persistance = 0f;
+    float persistence = 0f;
     float lacunarity = 0;
     Vector2 offset = new Vector2(0, 0);
 
     int seedInitial = 0;
     float scaleInitial = 0.0001f;
     int octavesInitial = 0;
-    float persistanceInitial = 0f;
+    float persistenceInitial = 0f;
     float lacunarityInitial = 0;
     Vector2 offsetInitial = new Vector2(0, 0);
 
@@ -67,19 +67,19 @@ public class TerrainEditorWindow : EditorWindow
 
         scale = EditorGUILayout.FloatField("Scale", scale);
         octaves = EditorGUILayout.IntField("Octaves", octaves);
-        persistance = EditorGUILayout.Slider("Persistance", persistance, 0, 1);
+        persistence = EditorGUILayout.Slider("Persistance", persistence, 0, 1);
         lacunarity = EditorGUILayout.FloatField("Lacunarity", lacunarity);
 
         EditorGUILayout.EndToggleGroup();
 
         if (GUILayout.Button("Update Noise"))
         {
-            updateNoise();
+            UpdateNoise();
         }
 
         if (GUILayout.Button("Reset Noise"))
         {
-            resetNoise();
+            ResetNoise();
         }
 
         GUILayout.Space(10f);
@@ -88,20 +88,20 @@ public class TerrainEditorWindow : EditorWindow
 
         if (GUILayout.Button("Increment Water Level"))
         {
-            WorldController.Instance.World.ChangeWaterLevel(0.1f);
-            waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
-            sandHeight = WorldController.Instance.World.TerrainGenerator.SandHeight;
-            grassHeight = WorldController.Instance.World.TerrainGenerator.GrassHeight;
-            updateLayers();
+            WorldController.Instance.World.ChangeWaterLevel(0.05f);
+            waterHeight = WorldController.Instance.World.Data.WaterHeight;
+            sandHeight = WorldController.Instance.World.Data.SandHeight;
+            grassHeight = WorldController.Instance.World.Data.GrassHeight;
+            UpdateLayers();
         }
 
         if (GUILayout.Button("Decrement Water Level"))
         {
-            WorldController.Instance.World.ChangeWaterLevel(-0.1f);
-            waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
-            sandHeight = WorldController.Instance.World.TerrainGenerator.SandHeight;
-            grassHeight = WorldController.Instance.World.TerrainGenerator.GrassHeight;
-            updateLayers();
+            WorldController.Instance.World.ChangeWaterLevel(-0.05f);
+            waterHeight = WorldController.Instance.World.Data.WaterHeight;
+            sandHeight = WorldController.Instance.World.Data.SandHeight;
+            grassHeight = WorldController.Instance.World.Data.GrassHeight;
+            UpdateLayers();
         }
 
 
@@ -115,12 +115,12 @@ public class TerrainEditorWindow : EditorWindow
 
         if (GUILayout.Button("Update Layers"))
         {
-            updateLayers();
+            UpdateLayers();
         }
 
         if (GUILayout.Button("Reset Layers"))
         {
-            resetLayers();
+            ResetLayers();
         }
 
 
@@ -133,29 +133,29 @@ public class TerrainEditorWindow : EditorWindow
 
     public void Awake()
     {
-        initalise();
+        Initalise();
     }
 
-    private void updateNoise()
+    private void UpdateNoise()
     {
         WorldController.Instance.World.TerrainGenerator.IsIsland = isIsland;
 
-        WorldController.Instance.World.GenerateTerrain();
+        WorldController.Instance.World.GenerateTerrain(seed, scale, octaves, persistence, lacunarity, offset);
     }
 
-    private void resetNoise()
+    private void ResetNoise()
     {
         seed = seedInitial;
         scale = scaleInitial;
         octaves = octavesInitial;
-        persistance = persistanceInitial;
+        persistence = persistenceInitial;
         lacunarity = lacunarityInitial;
-        //offset = offsetInitial;
+        offset = offsetInitial;
 
-        updateNoise();
+        UpdateNoise();
     }
 
-    private void updateLayers()
+    private void UpdateLayers()
     {
         WorldController.Instance.World.Data.WaterHeight = waterHeight;
         WorldController.Instance.World.Data.SandHeight = sandHeight;
@@ -164,23 +164,23 @@ public class TerrainEditorWindow : EditorWindow
         WorldController.Instance.World.UpdateTerrain();
     }
 
-    private void resetLayers()
+    private void ResetLayers()
     {
         waterHeight = WorldController.Instance.World.Data.WaterHeightInitial;
         sandHeight = WorldController.Instance.World.Data.SandHeightInitial;
         grassHeight = WorldController.Instance.World.Data.GrassHeightInitial;
 
-        updateLayers();
+        UpdateLayers();
     }
 
-    private void initalise()
+    private void Initalise()
     {
         //ugly variable setting hidden away in a function TODO: add iitial variables to WorldData.
 
         seed = WorldController.Instance.World.Data.Seed;
         scale = WorldController.Instance.World.Data.Scale;
         octaves = WorldController.Instance.World.Data.Octaves;
-        persistance = WorldController.Instance.World.Data.Persistence;
+        persistence = WorldController.Instance.World.Data.Persistence;
         lacunarity = WorldController.Instance.World.Data.Lacunarity;
         offset = WorldController.Instance.World.Data.Offset;
 
@@ -189,7 +189,7 @@ public class TerrainEditorWindow : EditorWindow
         seedInitial = WorldController.Instance.World.Data.Seed;
         scaleInitial = WorldController.Instance.World.Data.Scale;
         octavesInitial = WorldController.Instance.World.Data.Octaves;
-        persistanceInitial = WorldController.Instance.World.Data.Persistence;
+        persistenceInitial = WorldController.Instance.World.Data.Persistence;
         lacunarityInitial = WorldController.Instance.World.Data.Lacunarity;
         offsetInitial = WorldController.Instance.World.Data.Offset;
 

@@ -49,9 +49,9 @@ public class World
         return (Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
-    public void GenerateTerrain()
+    public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
-        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, 207, 44, 5, 0.229f, 3, new Vector2(0, 0));
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset);
     }
 
     public void UpdateTerrain()
@@ -74,14 +74,14 @@ public class World
         if (change > 0)
         {
             Data.WaterHeight += change;
-
-            //if (TerrainGenerator.WaterHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+            Data.SandHeight += change;
+            
         }
         else if (change < 0)
         {
             Data.WaterHeight += change;
-
-           // if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+            Data.SandHeight += change;
+            // if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
         }
     }
 

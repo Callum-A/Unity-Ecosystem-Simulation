@@ -123,11 +123,11 @@ public class TerrainGenerator
         return noisemap;
     }
 
-    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float lacunarity, float persistence, Vector2 offset)
+    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
-        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, lacunarity, persistence, offset);
+        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, persistence, lacunarity, offset);
 
-        TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, lacunarity, persistence, offset, waterHeight, sandHeight, grassHeight);
+        TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
 
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
