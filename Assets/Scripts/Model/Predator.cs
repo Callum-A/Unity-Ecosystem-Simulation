@@ -15,6 +15,10 @@ public class Predator : Animal
     /// <returns>Boolean if the predator should die.</returns>
     public override bool ShouldDie()
     {
+        if (Hunger < 0f && CurrentState != AnimalState.Eating || Thirst < 0f && CurrentState != AnimalState.Drinking)
+        {
+            return true;
+        }
         return false;
     }
 
@@ -23,7 +27,12 @@ public class Predator : Animal
     /// </summary>
     public override void Die()
     {
+        if (CurrentTarget != null && CurrentTarget.IsBeingChased)
+        {
+            CurrentTarget.SetIsBeingChased(false);
+        }
         WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
+        Debug.Log("Now dying! - " + this.ToString());
         AnimalManager.DespawnAnimal(this);
     }
 
@@ -103,6 +112,7 @@ public class Predator : Animal
     public void UpdateDoEating(float deltaTime)
     {
         // TODO: add some kind of timer? chance to fail?
+        CurrentTarget.SetIsBeingChased(false);
         CurrentTarget.Die();
         CurrentTarget = null;
         CurrentState = AnimalState.Idle;
@@ -145,6 +155,7 @@ public class Predator : Animal
         {
             CurrentState = AnimalState.FoundFood;
             CurrentTarget = closestPreyICanSee;
+            closestPreyICanSee.SetIsBeingChased(true);
             DestinationTile = closestPreyICanSee.CurrentTile;
         }
         else

@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Prey : Animal
 {
-    public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id, gender) { }
+    public bool IsBeingChased { get; protected set; }
+    public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id, gender)
+    {
+      IsBeingChased = false;
+    }
 
     /// <summary>
     /// Prey should die function, returns true when it should die. Should die if hunger
@@ -32,6 +36,11 @@ public class Prey : Animal
         WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
         Debug.Log("Now dying! - "  + this.ToString());
         AnimalManager.DespawnAnimal(this);
+    }
+
+    public void SetIsBeingChased(bool b)
+    {
+        IsBeingChased = b;
     }
 
     /// <summary>
