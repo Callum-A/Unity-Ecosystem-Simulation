@@ -151,7 +151,9 @@ public class AnimalManager
     /// <returns>The predator spawned.</returns>
     public Predator SpawnPredator(Tile tile)
     {
-        Predator p = new Predator(tile, this, currentPredatorID);
+        Gender gender = (UnityEngine.Random.Range(0, 2) == 0) ? Gender.Male : Gender.Female;
+
+        Predator p = new Predator(tile, this, currentPredatorID, gender);
         Predators.Add(p);
         Spawn(p);
         currentPredatorID++;
@@ -165,10 +167,15 @@ public class AnimalManager
     /// <returns>The prey spawned.</returns>
     public Prey SpawnPrey(Tile tile)
     {
-        Prey p = new Prey(tile, this, currentPreyID);
+        Gender gender = (UnityEngine.Random.Range(0,2) == 0) ? Gender.Male : Gender.Female;
+
+        Prey p = new Prey(tile, this, currentPreyID, gender);
         Prey.Add(p);
         Spawn(p);
         currentPreyID++;
+
+        Debug.Log(p.ToString() + " - " + p.AnimalSex);
+
         return p;
     }
 
@@ -186,7 +193,6 @@ public class AnimalManager
         AllAnimals.Remove(a);
     }
 
-
     public void DespawnAnimal(Animal a) 
     {
         if (a.AnimalType == AnimalType.Prey)
@@ -200,6 +206,15 @@ public class AnimalManager
         }
 
         Despawn(a);
+    }
+
+    public void AgeUpAnimals() 
+    {
+        for (int i = 0; i < AllAnimals.Count; i++) 
+        {
+            Animal a = AllAnimals[i];
+            a.AgeUp();
+        }
     }
 
     public void RegisterOnAnimalCreatedCallback(Action<Animal> cb)

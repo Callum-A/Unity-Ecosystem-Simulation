@@ -44,8 +44,6 @@ public class FoodManager
 
         FoodTiles.AddRange(newFoodTiles);
         newFoodTiles.Clear();
-
-        Debug.Log("Spread Occured, Previous Count = " + oldCount + ", Current Count = " + FoodTiles.Count);
     }
 
     /// <summary>
@@ -71,8 +69,6 @@ public class FoodManager
     {
         FoodTiles.Remove(food.Tile);
         food.Tile.RemoveFood();
-
-        Debug.Log("FOOD MANAGER - FOOD REMOVED");
     }
 
     /// <summary>

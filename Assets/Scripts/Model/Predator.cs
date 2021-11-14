@@ -6,10 +6,7 @@ public class Predator : Animal
 {
     public Prey CurrentTarget { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager, int id) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id)
-    {
-        CurrentTarget = null;
-    }
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id, gender) { }
 
     // TODO: Implement death here and start testing population levels etc.
     /// <summary>
@@ -218,5 +215,61 @@ public class Predator : Animal
             StopMovement();
             CurrentState = AnimalState.Idle;
         }
+    }
+
+    override
+    public void AgeUp()
+    {
+        int age = Age;
+
+        //Aging up
+        if (lifeStage != LifeStage.Elder)
+        {
+            if (age == 5 && lifeStage != LifeStage.Adult)
+            {
+                lifeStage = LifeStage.Adult;
+                Debug.Log(this.ToString() + "is now an Adult");
+            }
+
+            else if (age == 20)
+            {
+                lifeStage = LifeStage.Elder;
+                Debug.Log(this.ToString() + "is now an Elder");
+            }
+        }
+
+        //Chance to die
+        else
+        {
+            int randomNum = UnityEngine.Random.Range(0, 100);
+            int changeOfDeath = age - 15;
+
+            if (randomNum < (changeOfDeath))
+            {
+                Debug.Log("Died at " + age + " days old.");
+                Die();
+            }
+        }
+    }
+
+    override
+   public void setChild()
+    {
+        this.TimeAlive = 0;
+        this.lifeStage = LifeStage.Child;
+    }
+
+    override
+    public void setAdult()
+    {
+        this.TimeAlive = 5 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Adult;
+    }
+
+    override
+    public void setElder()
+    {
+        this.TimeAlive = 20 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Elder;
     }
 }
