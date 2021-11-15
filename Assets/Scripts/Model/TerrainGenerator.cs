@@ -26,10 +26,6 @@ public class TerrainGenerator
     public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
 
     //Tile heights
-    //private float waterHeightInit = 0.3f;
-    public float sandHeightInit = 0.35f;
-    //private float grassHeightInit = 1f;
-
     private float waterHeight = 0.3f;
     private float sandHeight = 0.35f;
     private float grassHeight = 1f;
@@ -129,6 +125,12 @@ public class TerrainGenerator
 
         TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
 
+        //hardcoded regions
+        //data.regions = new TileRegion[3];
+        //data.regions[0] = new TileRegion(TileType.Water, 0.3f);
+        //data.regions[1] = new TileRegion(TileType.Sand, 0.35f);
+        //data.regions[2] = new TileRegion(TileType.Ground, 1f);
+
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
             for (int y = 0; y < Tiles.GetLength(1); y++)
@@ -187,6 +189,29 @@ public class TerrainGenerator
             tile.Type = TileType.Ground;
             data.grassTiles.Add(tile);
         }
+
+        //this is code for when tile regions are implemented
+
+        //foreach (TileRegion region in data.regions)
+        //{
+        //    if (noise <= region.height)
+        //    {
+        //        tile.Type = region.type;
+        //        if (region.type == TileType.Water)
+        //        {
+        //            data.waterTiles.Add(tile);
+        //        }
+        //        else if (region.type == TileType.Water)
+        //        {
+        //            data.sandTiles.Add(tile);
+        //        }
+        //        else if (region.type == TileType.Water)
+        //        {
+        //            data.grassTiles.Add(tile);
+        //        }
+        //        break;
+        //    }
+        //}
     }
 
     //used to find the water adjacent tiles. Currently inefficent but an easy implemntaion

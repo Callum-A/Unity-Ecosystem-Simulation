@@ -9,8 +9,8 @@ public class TerrainEditorWindow : EditorWindow
 
     bool advLayersEnabled;
 
-   // bool showNoise = true;
-  // bool showLayers = true;
+    // bool showNoise = true;
+    // bool showLayers = true;
 
     #endregion
 
@@ -29,6 +29,8 @@ public class TerrainEditorWindow : EditorWindow
     float persistenceInitial = 0f;
     float lacunarityInitial = 0;
     Vector2 offsetInitial = new Vector2(0, 0);
+
+    public TileRegion[] regions = new TileRegion[0];
 
     bool isIsland = false;
 
@@ -110,6 +112,7 @@ public class TerrainEditorWindow : EditorWindow
         waterHeight = EditorGUILayout.Slider("Water Height", waterHeight, 0, 1);
         sandHeight = EditorGUILayout.Slider("Sand Height", sandHeight, 0, 1);
         grassHeight = EditorGUILayout.Slider("Grass Height", grassHeight, 0, 1);
+
 
         EditorGUILayout.EndToggleGroup();
 

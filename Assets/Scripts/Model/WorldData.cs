@@ -44,6 +44,7 @@ public class WorldData
 
     public float GrassHeight { get { return terrainData.grassHeight; } set { terrainData.grassHeight = value; } }
     public float GrassHeightInitial { get { return terrainData.initialGrassHeight; } protected set { } }
+    public TileRegion[] Regions { get { return terrainData.regions; } set { terrainData.regions = value; } }
 
     #endregion
 
@@ -92,6 +93,8 @@ public struct TerrainData
     public float sandHeight;
     public float grassHeight;
 
+    public TileRegion[] regions;
+
     public List<Tile> waterTiles;
     public List<Tile> sandTiles;
     public List<Tile> grassTiles;
@@ -120,9 +123,28 @@ public struct TerrainData
         this.sandHeight = initialSandHeight;
         this.grassHeight = initialGrassHeight;
 
+        regions = new TileRegion[0];
+
         waterTiles = new List<Tile>();
         sandTiles = new List<Tile>();
         grassTiles = new List<Tile>();
         coastTiles = new List<Tile>();
+    }
+
+}
+
+[System.Serializable]
+public struct TileRegion
+{
+    public TileType type;
+    public float height;
+    public float heightInitial;
+
+    public TileRegion(TileType type, float height)
+    {
+        this.type = type;
+
+        heightInitial = height;
+        this.height = heightInitial;
     }
 }
