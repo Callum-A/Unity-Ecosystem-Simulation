@@ -46,8 +46,9 @@ public class Tile
             if (oldValue != _type)
             {
                 OnTileTypeChangedCallback(this);
-                if (Type == TileType.Water)
+                if (Type != TileType.Ground)
                 {
+                    //TODO: rename this to something more generic, or make other helper functions.
                     DrownTile();
                 }
             }
