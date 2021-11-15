@@ -10,7 +10,7 @@ public class World
     public Tile[,] tiles { get; protected set; }
     public PathTileGraph tileGraph; // pathfinding graph, for navigating 
 
-    private TerrainGenerator terrainGenerator;
+    public TerrainGenerator TerrainGenerator { get; protected set; }
     public AnimalManager AnimalManager { get; protected set; }
     public FoodManager FoodManager { get; protected set; }
     public EventManager EventManager { get; protected set; }
@@ -21,7 +21,7 @@ public class World
         Width = w;
         Height = h;
         tiles = new Tile[Width, Height];
-        terrainGenerator = new TerrainGenerator();
+        TerrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
         FoodManager = new FoodManager();
         EventManager = new EventManager();
@@ -51,9 +51,47 @@ public class World
         return (Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
-    public void GenerateTerrain()
+    public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
-        Data.TerrainData = terrainGenerator.GenerateTerrain(tiles);
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset);
+    }
+
+    public void UpdateTerrain()
+    {
+        Data.TerrainData = TerrainGenerator.UpdateTerrain(tiles, Data.TerrainData);
+    }
+
+    //TODO: clamp increases to prevent float wackiness
+    public void ChangeWaterLevel(float change)
+    {
+        if (Data.WaterHeight + change > 1)
+        {
+            change = 1 - Data.WaterHeight;
+        }
+        else if (Data.WaterHeight + change < 0)
+        {
+            change = 0 - Data.WaterHeight;
+        }
+
+        if (change > 0)
+        {
+            Data.WaterHeight += change;
+            Data.SandHeight += change;
+            
+        }
+        else if (change < 0)
+        {
+            Data.WaterHeight += change;
+            if (Data.SandHeightInitial <= Data.SandHeight + change)
+            {
+                Data.SandHeight = Data.SandHeightInitial;
+            }
+            else
+            {
+                Data.SandHeight += change;
+            }
+        }
+        UpdateTerrain();
     }
 
     public void SpawnAnimals(int preyAmount, int predatorAmount)

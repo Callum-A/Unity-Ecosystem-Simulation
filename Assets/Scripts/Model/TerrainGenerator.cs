@@ -1,33 +1,53 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TerrainGenerator
 {
-    public float[,] noiseMap { get; protected set; }
+    //public float[,] NoiseMap { get; protected set; }
 
     //TODO: Noise function varibles shouldn't be hardcorded, should be set to defaults and edited through menus in unity.
     // hardcoded noise variables.
-    public int seed = 207;
-    public float scale = 44;
-    public int octaves = 5;
-    public float persistance = 0.229f;
-    public float lacunarity = 3;
-    public Vector2 offset = new Vector2(0, 0);
+    //private int seed = 207;
+    //public float scale = 44;
+    //public int octaves = 5;
+    //public float persistance = 0.229f;
+    //public float lacunarity = 3;
+    //public Vector2 offset = new Vector2(0, 0);
+
+    //public int Seed { get { return seed; } set { seed = value; } }
+    //public float Scale { get { return scale; } set { scale = value; } }
+    //public int Octaves { get { return octaves; } set { octaves = value; } }
+    //public float Persistance { get { return persistance; } set { persistance = value; } }
+    //public float Lacunarity { get { return lacunarity; } set { lacunarity = value; } }
+    //public Vector2 Offset { get { return offset; } set { offset = value; } }
+
+    private bool isIsland = false;
+    public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
 
     //Tile heights
     private float waterHeight = 0.3f;
     private float sandHeight = 0.35f;
     private float grassHeight = 1f;
 
+    public float WaterHeight { get { return waterHeight; } set { waterHeight = value; } }
+    public float SandHeight { get { return sandHeight; } set { sandHeight = value; } }
+    public float GrassHeight { get { return grassHeight; } set { grassHeight = value; } }
+
     /// <summary>
-    /// Updates a 2D array of floats of normalised values, used as a heightmap. Uses varibles within terrain generation class to generate said noise (e.g. seed).
+    ///  Generates a 2D array of normalised values to be used as a noise map.
     /// </summary>
-    /// <param name="width"> The width of the </param>
-    /// <param name="height"></param>
-    private void UpdateNoiseMap(int width, int height)
+    /// <param name="width">Width of the map</param>
+    /// <param name="height">Height of the map</param>
+    /// <param name="seed">The seed used for the randomised sample offsets</param>
+    /// <param name="scale">The scale of the noise.</param>
+    /// <param name="octaves">Iterations of samples on the noise, higher values lead to more detailed noise, but increased computation</param>
+    /// <param name="persistence">A multiplier for how quickly the amplitude of each successive octave decreases. Higher values lead to rougher noise.</param>
+    /// <param name="lacunarity">A multiplier for how quickly the frequency of each successive octave increases. Higher values lead to smoother noise.</param>
+    /// <param name="offset">Addtional sample point offset. Shifts each sample by the given cordinates.</param>
+    private float[,] GenerateNoiseMap(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
-        noiseMap = new float[width, height];
+        float[,] noisemap = new float[width, height];
 
         System.Random rng = new System.Random(seed);
         Vector2[] octaveOffset = new Vector2[octaves];
@@ -66,8 +86,13 @@ public class TerrainGenerator
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
                     noiseHeight += perlinValue * amplitude;
 
-                    amplitude *= persistance;
+                    amplitude *= persistence;
                     frequency *= lacunarity;
+                }
+
+                if (isIsland == true)
+                {
+                    noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
                 }
 
                 if (noiseHeight > maxNoiseHeight)
@@ -79,7 +104,7 @@ public class TerrainGenerator
                     minNoiseHeight = noiseHeight;
                 }
 
-                noiseMap[x, y] = noiseHeight;
+                noisemap[x, y] = noiseHeight;
             }
         }
 
@@ -87,32 +112,33 @@ public class TerrainGenerator
         {
             for (int y = 0; y < height; y++)
             {
-                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
+                noisemap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noisemap[x, y]);
             }
         }
+
+        return noisemap;
     }
 
-    /// <summary>
-    /// Generates terrain for a given tile map, updating the type for each tile.
-    /// </summary>
-    /// <param name="Tiles">A 2D array of tiles you want to generate terrain for.</param>
-    /// <param name="width">Width of </param>
-    /// <param name="height"></param>
-    public TerrainData GenerateTerrain(Tile[,] Tiles)
+    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
-        UpdateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1));
+        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, persistence, lacunarity, offset);
 
-        TerrainData data = new TerrainData(Tiles.Length);
+        TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
+
+        //hardcoded regions
+        //data.regions = new TileRegion[3];
+        //data.regions[0] = new TileRegion(TileType.Water, 0.3f);
+        //data.regions[1] = new TileRegion(TileType.Sand, 0.35f);
+        //data.regions[2] = new TileRegion(TileType.Ground, 1f);
 
         for (int x = 0; x < Tiles.GetLength(0); x++)
         {
             for (int y = 0; y < Tiles.GetLength(1); y++)
             {
                 Tile t = Tiles[x, y];
-                float noise = noiseMap[x, y];
+                float noise = heightmap[x, y];
 
                 setUpTile(t, noise, data);
-
             }
         }
 
@@ -120,6 +146,25 @@ public class TerrainGenerator
 
         return data;
     }
+
+    public TerrainData UpdateTerrain(Tile[,] Tiles, TerrainData data)
+    {
+        for (int x = 0; x < Tiles.GetLength(0); x++)
+        {
+            for (int y = 0; y < Tiles.GetLength(1); y++)
+            {
+                Tile t = Tiles[x, y];
+                float noise = data.noisemap[x, y];
+
+                setUpTile(t, noise, data);
+            }
+        }
+
+        data.coastTiles = findCoastTiles(data);
+
+        return data;
+    }
+
 
     /// <summary>
     /// Updates a tile's type based on the value of noise.
@@ -129,21 +174,44 @@ public class TerrainGenerator
     /// <param name="data">A terrain data struct, used to pass terrain generation data to the World class</param>param>
     private void setUpTile(Tile tile, float noise, TerrainData data)
     {
-        if (noise <= waterHeight)
+        if (noise <= data.waterHeight)
         {
             tile.Type = TileType.Water;
             data.waterTiles.Add(tile);
         }
-        else if (noise <= sandHeight)
+        else if (noise <= data.sandHeight)
         {
             tile.Type = TileType.Sand;
             data.sandTiles.Add(tile);
         }
-        else if (noise <= grassHeight)
+        else if (noise <= data.grassHeight)
         {
             tile.Type = TileType.Ground;
             data.grassTiles.Add(tile);
         }
+
+        //this is code for when tile regions are implemented
+
+        //foreach (TileRegion region in data.regions)
+        //{
+        //    if (noise <= region.height)
+        //    {
+        //        tile.Type = region.type;
+        //        if (region.type == TileType.Water)
+        //        {
+        //            data.waterTiles.Add(tile);
+        //        }
+        //        else if (region.type == TileType.Water)
+        //        {
+        //            data.sandTiles.Add(tile);
+        //        }
+        //        else if (region.type == TileType.Water)
+        //        {
+        //            data.grassTiles.Add(tile);
+        //        }
+        //        break;
+        //    }
+        //}
     }
 
     //used to find the water adjacent tiles. Currently inefficent but an easy implemntaion
