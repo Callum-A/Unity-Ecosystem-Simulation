@@ -82,9 +82,16 @@ public class World
         else if (change < 0)
         {
             Data.WaterHeight += change;
-            Data.SandHeight += change;
-            // if (TerrainGenerator.SandHeight > TerrainGenerator.sandHeightInit) { TerrainGenerator.SandHeight += change; }
+            if (Data.SandHeightInitial <= Data.SandHeight + change)
+            {
+                Data.SandHeight = Data.SandHeightInitial;
+            }
+            else
+            {
+                Data.SandHeight += change;
+            }
         }
+        UpdateTerrain();
     }
 
     public void SpawnAnimals(int preyAmount, int predatorAmount)

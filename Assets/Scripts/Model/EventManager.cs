@@ -18,6 +18,8 @@ public class EventManager
     {
         RegisterEvent(new TestEvent());
         //RegisterEvent(new DesertificationEvent());
+        //RegisterEvent(new FloodEvent());
+        //RegisterEvent(new DroughtEvent());
     }
 
     public Event ChooseEvent()
