@@ -9,6 +9,19 @@ public enum AnimalType
     Predator
 }
 
+public enum LifeStage
+{ 
+    Child,
+    Adult,
+    Elder
+}
+
+public enum Gender 
+{ 
+    Male,
+    Female
+}
+
 public enum AnimalState
 {
     Idle, // we have nothing to do we are standing still, entry state
@@ -36,10 +49,17 @@ public abstract class Animal
     public AnimalState CurrentState { get; protected set; }
 
     public int ID { get; protected set; }
+    public float TimeAlive { get; protected set; }
+    public int Age
+    {
+        get { return (int)Math.Floor(TimeAlive/TimeController.Instance.SECONDS_IN_A_DAY); }
+    }
+    public LifeStage lifeStage { get; protected set; }
     public float Hunger;
     public float Thirst;
     public AnimalType AnimalType { get; protected set; }
-
+    public Gender AnimalSex { get; protected set;}
+    
     public float Speed { get; protected set; }
     public int SightRange { get; protected set; }
     private PathAStar pathAStar;
@@ -47,7 +67,7 @@ public abstract class Animal
 
     protected Action<Animal> OnAnimalChangedCallback;
 
-    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id)
+    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id, Gender gender)
     {
         CurrentTile = tile;
         NextTile = tile;
@@ -61,6 +81,8 @@ public abstract class Animal
         AnimalManager = animalManager;
         CurrentState = AnimalState.Idle;
         ID = id;
+        lifeStage = LifeStage.Child;
+        AnimalSex = gender;
     }
 
     /// <summary>
@@ -120,7 +142,7 @@ public abstract class Animal
 
     public void Drown() 
     {
-        Debug.Log("DROWNING " + this.ToString());
+        //Debug.Log("DROWNING " + this.ToString());
         this.Die();
     }
 
@@ -189,6 +211,14 @@ public abstract class Animal
             StopMovement();
             CurrentState = AnimalState.Thirsty;
         }
+
+        // If we see water tiles before we reach our destination
+        List<Tile> waterTilesInSightRange = CurrentTile.GetWaterTilesInRadius(SightRange);
+        if (waterTilesInSightRange.Count > 0)
+        {
+            StopMovement();
+            CurrentState = AnimalState.Thirsty;
+        }
     }
 
     // TODO: rework this timer I don't like how it looks
@@ -204,7 +234,7 @@ public abstract class Animal
         timeSinceStartedDrinking += deltaTime;
         if (timeSinceStartedDrinking >= drinkingTimeInSeconds)
         {
-            Debug.Log("Done drinking! " + this.ToString());
+            //Debug.Log("Done drinking! " + this.ToString());
             Thirst = 1f;
             CurrentState = AnimalState.Idle;
         }
@@ -253,6 +283,19 @@ public abstract class Animal
             DestinationTile = dest;
         }
     }
+
+    public void UpdateAge(float deltaTime) 
+    {
+        this.TimeAlive += deltaTime;
+    }
+
+    public abstract void AgeUp();
+
+    public abstract void setChild();
+
+    public abstract void setAdult();
+
+    public abstract void setElder();
 
     public void RegisterOnAnimalChangedCallback(Action<Animal> cb)
     {

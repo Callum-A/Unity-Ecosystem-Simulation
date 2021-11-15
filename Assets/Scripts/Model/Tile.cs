@@ -260,6 +260,33 @@ public class Tile
         return tiles[UnityEngine.Random.Range(0, tiles.Count)];
     }
 
+    private List<Tile> GetTilesOfTypeInRadius(int r, TileType type)
+    {
+        List<Tile> tiles = GetRadius(r);
+        tiles = tiles.FindAll(t => t.Type == type);
+        return tiles;
+    }
+
+    public List<Tile> GetWaterTilesInRadius(int r)
+    {
+        return GetTilesOfTypeInRadius(r, TileType.Water);
+    }
+
+    public List<Tile> GetFoodTilesInRadius(float r)
+    {
+        List<Tile> food = new List<Tile>();
+        List<Tile> radius = GetRadius(r);
+        foreach (Tile t in radius)
+        {
+            if (t.HasFood() && !t.isFoodOccupied())
+            {
+                food.Add(t);
+            }
+        }
+
+        return food;
+    }
+
     public void addFood(Food foodToAdd)
     {
         this.food = foodToAdd;
@@ -272,13 +299,13 @@ public class Tile
 
     public void setFoodOccupied()
     {
-        Debug.Log("Setting Food Occupied");
+        //Debug.Log("Setting Food Occupied");
         food.IsOccupied = true;
     }
 
     public void setFoodUnoccupied()
     {
-        Debug.Log("Setting Food Unoccupied");
+        //Debug.Log("Setting Food Unoccupied");
         food.IsOccupied = false;
     }
 

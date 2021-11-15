@@ -13,6 +13,7 @@ public class World
     public TerrainGenerator TerrainGenerator { get; protected set; }
     public AnimalManager AnimalManager { get; protected set; }
     public FoodManager FoodManager { get; protected set; }
+    public EventManager EventManager { get; protected set; }
     public WorldData Data { get; protected set; }
 
     public World(int w, int h)
@@ -23,6 +24,7 @@ public class World
         TerrainGenerator = new TerrainGenerator();
         AnimalManager = new AnimalManager(this);
         FoodManager = new FoodManager();
+        EventManager = new EventManager();
         Data = new WorldData();
 
         for (int x = 0; x < Width; x++)
@@ -88,6 +90,11 @@ public class World
     public void SpawnAnimals(int preyAmount, int predatorAmount)
     {
         AnimalManager.SpawnAnimals(preyAmount, predatorAmount);
+
+        foreach (Animal a in AnimalManager.AllAnimals) 
+        {
+            a.setAdult();
+        }
     }
 
     public void SproutInitialFood()

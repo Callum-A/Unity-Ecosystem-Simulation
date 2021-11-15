@@ -6,7 +6,7 @@ public class Predator : Animal
 {
     public Prey CurrentTarget { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager,int  id) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id) { }
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id, gender) { }
 
     // TODO: Implement death here and start testing population levels etc.
     /// <summary>
@@ -15,6 +15,10 @@ public class Predator : Animal
     /// <returns>Boolean if the predator should die.</returns>
     public override bool ShouldDie()
     {
+        if (Hunger < 0f && CurrentState != AnimalState.Eating || Thirst < 0f && CurrentState != AnimalState.Drinking)
+        {
+            return true;
+        }
         return false;
     }
 
@@ -23,7 +27,12 @@ public class Predator : Animal
     /// </summary>
     public override void Die()
     {
-        Debug.Log("Now dying!");
+        if (CurrentTarget != null && CurrentTarget.IsBeingChased)
+        {
+            CurrentTarget.SetIsBeingChased(false);
+        }
+        WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
+        Debug.Log("Now dying! - " + this.ToString());
         AnimalManager.DespawnAnimal(this);
     }
 
@@ -103,6 +112,7 @@ public class Predator : Animal
     public void UpdateDoEating(float deltaTime)
     {
         // TODO: add some kind of timer? chance to fail?
+        CurrentTarget.SetIsBeingChased(false);
         CurrentTarget.Die();
         CurrentTarget = null;
         CurrentState = AnimalState.Idle;
@@ -145,6 +155,7 @@ public class Predator : Animal
         {
             CurrentState = AnimalState.FoundFood;
             CurrentTarget = closestPreyICanSee;
+            closestPreyICanSee.SetIsBeingChased(true);
             DestinationTile = closestPreyICanSee.CurrentTile;
         }
         else
@@ -204,5 +215,61 @@ public class Predator : Animal
             StopMovement();
             CurrentState = AnimalState.Idle;
         }
+    }
+
+    override
+    public void AgeUp()
+    {
+        int age = Age;
+
+        //Aging up
+        if (lifeStage != LifeStage.Elder)
+        {
+            if (age == 5 && lifeStage != LifeStage.Adult)
+            {
+                lifeStage = LifeStage.Adult;
+                Debug.Log(this.ToString() + "is now an Adult");
+            }
+
+            else if (age == 20)
+            {
+                lifeStage = LifeStage.Elder;
+                Debug.Log(this.ToString() + "is now an Elder");
+            }
+        }
+
+        //Chance to die
+        else
+        {
+            int randomNum = UnityEngine.Random.Range(0, 100);
+            int changeOfDeath = age - 15;
+
+            if (randomNum < (changeOfDeath))
+            {
+                Debug.Log("Died at " + age + " days old.");
+                Die();
+            }
+        }
+    }
+
+    override
+   public void setChild()
+    {
+        this.TimeAlive = 0;
+        this.lifeStage = LifeStage.Child;
+    }
+
+    override
+    public void setAdult()
+    {
+        this.TimeAlive = 5 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Adult;
+    }
+
+    override
+    public void setElder()
+    {
+        this.TimeAlive = 20 * TimeController.Instance.SECONDS_IN_A_DAY;
+        this.lifeStage = LifeStage.Elder;
     }
 }
