@@ -12,6 +12,8 @@ public class AnimalManager
     private int currentPreyID;
     private int currentPredatorID;
 
+    public PathFindingManager PathManager;
+
     private Action<Animal> OnAnimalCreatedCallback;
     private Action<Animal> OnAnimalDestroyedCallback;
 

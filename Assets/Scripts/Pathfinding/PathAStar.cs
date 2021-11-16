@@ -6,7 +6,7 @@ using Priority_Queue;
 
 public class PathAStar
 {
-    private Queue<Tile> path;
+    public Queue<Tile> path;
     public PathAStar(World world, Tile startTile, Tile endTile)
     {
         if (world.tileGraph == null)
