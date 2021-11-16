@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class PathFindingManager
 {
+
+    public PathAStar patsh;
+
+    public PathFindingManager()
+    {
+        patsh = new PathAStar();
+    }
     public Queue<Tile> SolvePath(World world, Tile currentTile, Tile destinationTile)
     {
-        return new PathAStar(world, currentTile, destinationTile).path;
+        return patsh.doShit(world, currentTile, destinationTile);
     }
 }

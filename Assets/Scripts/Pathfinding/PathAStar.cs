@@ -7,7 +7,12 @@ using Priority_Queue;
 public class PathAStar
 {
     public Queue<Tile> path;
-    public PathAStar(World world, Tile startTile, Tile endTile)
+    public PathAStar()
+    {
+        
+    }
+
+    public Queue<Tile> doShit(World world, Tile startTile, Tile endTile)
     {
         if (world.tileGraph == null)
         {
@@ -17,12 +22,12 @@ public class PathAStar
         if (!nodes.ContainsKey(startTile))
         {
             Debug.LogError("Pathfinding nodes does not contain start tile");
-            return;
+            return null;
         }
         if (!nodes.ContainsKey(endTile))
         {
             Debug.LogError("Pathfinding nodes does not contain end tile");
-            return;
+            return null;
         }
         List<PathNode<Tile>> closedSet = new List<PathNode<Tile>>();
         SimplePriorityQueue<PathNode<Tile>> openSet = new SimplePriorityQueue<PathNode<Tile>>();
@@ -50,9 +55,9 @@ public class PathAStar
             {
                 // Populates path with the path
                 ReconstructPath(cameFrom, current);
-                return;
+                return path;
             }
-            
+
             closedSet.Add(current);
             foreach (PathEdge<Tile> edge in current.edges)
             {
@@ -80,7 +85,9 @@ public class PathAStar
                 }
             }
         }
-        
+
+        return null;
+
         // If we get here we never reach goal, no path
     }
 

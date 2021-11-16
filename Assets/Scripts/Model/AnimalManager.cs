@@ -25,6 +25,8 @@ public class AnimalManager
         AllAnimals = new List<Animal>();
         currentPreyID = 0;
         currentPredatorID = 0;
+
+        PathManager = new PathFindingManager();
     }
 
     /// <summary>
