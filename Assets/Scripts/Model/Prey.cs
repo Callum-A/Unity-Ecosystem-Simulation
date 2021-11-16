@@ -1,3 +1,4 @@
+using Assets.Scripts.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ public class Prey : Animal
     public bool IsBeingChased { get; protected set; }
     public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 1f, 5, AnimalType.Prey, animalManager, id, gender)
     {
-      IsBeingChased = false;
+        IsBeingChased = false;
     }
 
     /// <summary>
@@ -34,7 +35,7 @@ public class Prey : Animal
             DestinationTile.setFoodUnoccupied();
         }
         WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
-        Debug.Log("Now dying! - "  + this.ToString());
+        Debug.Log("Now dying! - " + this.ToString());
         AnimalManager.DespawnAnimal(this);
     }
 
@@ -54,6 +55,7 @@ public class Prey : Animal
         timeSinceLastBreeded += deltaTime;
         UpdateAge(deltaTime);
         UpdateDoMovement(deltaTime);
+        UpdatePregnancy(deltaTime);
         switch (CurrentState)
         {
             case AnimalState.Idle:
@@ -172,7 +174,7 @@ public class Prey : Animal
         // Check for food tiles in our sight radius
         List<Tile> tilesICanSee = CurrentTile.GetRadius(SightRange);
         Tile foodTile = null;
-        
+
         foreach (Tile t in tilesICanSee)
         {
             if (t != null)
@@ -205,7 +207,7 @@ public class Prey : Animal
 
     // TODO: Randomise this on start
     private float timeSinceLastBreeded = 0;
-    private float breedingCooldown = 2 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 2 days
+    private float breedingCooldown = 3 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 3 days
 
     /// <summary>
     /// Idle state, either moves to hungry, thirsty or wanders.
@@ -215,43 +217,43 @@ public class Prey : Animal
     {
         World world = WorldController.Instance.World;
         StopMovement();
+
+        if (!canBreed()) 
+        { 
+            AnimalManager.breedingManager.removeFromBreedList(this); 
+        }
+
         if (IsThirsty())
         {
             CurrentState = AnimalState.Thirsty;
         }
+
         else if (IsHungry())
         {
             CurrentState = AnimalState.Hungry;
         }
-        else if (NeedsMet() && timeSinceLastBreeded >= breedingCooldown && world.AnimalManager.Prey.Count >= 2)
+
+        else if (canBreed())
         {
-            // TODO: Randomise the cooldown on start so they dont all breed after a bit
-            // TODO: Improve breeding, add gender? Add a meet up point instead of just checking for anyone in a radius
-            // TODO: Move to breed state
-            List<Prey> animals = world.AnimalManager.Prey;
-            Prey partner = null;
-            foreach (Prey a in animals)
-            {
-                if (a == this)
-                {
-                    continue; // can't breed with self
-                }
+            AnimalManager.breedingManager.addToBreedList(this);
 
-                if (World.ManhattanDistance(CurrentTile.X, CurrentTile.Y, a.CurrentTile.X, a.CurrentTile.Y) < 3f) // TODO: Change to breed radius variable
+            if (AnimalSex == Gender.Male)
+            {
+                if (AnimalManager.breedingManager.TryMate(this))
                 {
-                    partner = a;
-                    break;
+                    timeSinceLastBreeded = 0f;
                 }
             }
 
-            if (partner != null)
-            {
-                timeSinceLastBreeded = 0f;
-                //Debug.Log("Found partner so spawning new animal");
-                AnimalManager.SpawnPrey(CurrentTile);
-            }
+            //    if (World.ManhattanDistance(CurrentTile.X, CurrentTile.Y, a.CurrentTile.X, a.CurrentTile.Y) < 3f) // TODO: Change to breed radius variable
+            //    {
+            //        partner = a;
+            //        break;
+            //    }
+            //}
+
         }
-        
+
         else
         {
             CurrentState = AnimalState.Wandering;
@@ -260,6 +262,12 @@ public class Prey : Animal
             if (DestinationTile == null) { Drown(); }
 
         }
+    }
+
+    private bool canBreed()
+    {
+        //NeedsMet() && timeSinceLastBreeded >= breedingCooldown && world.AnimalManager.Prey.Count >= 2 && !isPregnant()
+        return (NeedsMet() && timeSinceLastBreeded >= breedingCooldown && !isPregnant() && lifeStage == LifeStage.Adult);
     }
 
     /// <summary>
@@ -322,7 +330,7 @@ public class Prey : Animal
     }
 
     override
-    public void setChild() 
+    public void setChild()
     {
         this.TimeAlive = 0;
         this.lifeStage = LifeStage.Child;
@@ -342,9 +350,49 @@ public class Prey : Animal
         this.lifeStage = LifeStage.Elder;
     }
 
+    public void Impregnate()
+    {
+        pregnacy = new Pregnancy(this);
+        timeSinceLastBreeded = 0f;
+    }
+
+    public void UpdatePregnancy(float deltatime)
+    {
+        if (isPregnant())
+        {
+            pregnacy.UpdatePregnancy(deltatime);
+        }
+    }
+
+    public bool isPregnant()
+    {
+        return pregnacy != null;
+    }
+
+    public void GiveBirth()
+    {
+        int litterSize = UnityEngine.Random.Range(1, 9);
+
+        for (int i = 0; i < litterSize; i++)
+        {
+            AnimalManager.SpawnPrey(CurrentTile);
+        }
+
+        Debug.Log(this + " - Gives Birth");
+
+        pregnacy = null;
+        timeSinceLastBreeded = 0f;
+    }
+
+    public void MisCarry()
+    {
+        pregnacy = null;
+    }
+
     override
-    public string ToString() 
+    public string ToString()
     {
         return "Prey_" + ID;
     }
 }
+

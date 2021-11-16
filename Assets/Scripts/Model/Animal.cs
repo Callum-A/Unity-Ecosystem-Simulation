@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Assets.Scripts.Model;
 
 public enum AnimalType
 {
@@ -34,7 +35,10 @@ public enum AnimalState
     FoundWater,
     SeekWater,
     Breeding,
-    Drinking
+    Drinking,
+    ReadyToMate,
+    SearchingForMate,
+    Mating
 }
 
 public abstract class Animal
@@ -47,7 +51,8 @@ public abstract class Animal
 
     public AnimalManager AnimalManager { get; protected set; }
     public AnimalState CurrentState { get; protected set; }
-
+    public bool readyToBreed { get; protected set; }
+    public Pregnancy pregnacy { get; protected set; }
     public int ID { get; protected set; }
     public float TimeAlive { get; protected set; }
     public int Age

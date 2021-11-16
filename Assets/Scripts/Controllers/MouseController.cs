@@ -42,7 +42,6 @@ public class MouseController : MonoBehaviour
             if (a.CurrentTile == t || a.NextTile == t)
             {
                 animal = a;
-                Debug.Log("Animal found " + a.ToString());
                 break;
             }
         }
