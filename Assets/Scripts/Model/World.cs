@@ -61,6 +61,7 @@ public class World
     public void UpdateTerrain()
     {
         Data.TerrainData = TerrainGenerator.UpdateTerrain(tiles, Data.TerrainData);
+        tileGraph = null;
     }
 
     //TODO: clamp increases to prevent float wackiness
