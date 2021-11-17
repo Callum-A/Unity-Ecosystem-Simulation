@@ -171,11 +171,7 @@ public abstract class Animal
             if (path == null || path.Count == 0)
             {
                 // Generate path
-                float t1 = Time.realtimeSinceStartup;
                 path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
-
-                float t2 = Time.realtimeSinceStartup;
-                Debug.Log((t2-t1)*1000);
 
                 if (path.Count == 0)
                 {
