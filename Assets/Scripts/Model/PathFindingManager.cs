@@ -5,14 +5,14 @@ using UnityEngine;
 public class PathFindingManager
 {
 
-    public PathAStar patsh;
+    public PathAStar path;
 
     public PathFindingManager()
     {
-        patsh = new PathAStar();
+        path = new PathAStar();
     }
     public Queue<Tile> SolvePath(World world, Tile currentTile, Tile destinationTile)
     {
-        return patsh.SolvePath(world, currentTile, destinationTile);
+        return path.SolvePath(world, currentTile, destinationTile);
     }
 }
