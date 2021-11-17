@@ -13,6 +13,6 @@ public class PathFindingManager
     }
     public Queue<Tile> SolvePath(World world, Tile currentTile, Tile destinationTile)
     {
-        return patsh.doShit(world, currentTile, destinationTile);
+        return patsh.SolvePath(world, currentTile, destinationTile);
     }
 }

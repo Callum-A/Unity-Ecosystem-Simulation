@@ -7,12 +7,24 @@ using Priority_Queue;
 public class PathAStar
 {
     public Queue<Tile> path;
+
+    private SimplePriorityQueue<PathNode<Tile>> openSet;
+    private List<PathNode<Tile>> closedSet;
+    private Dictionary<PathNode<Tile>, PathNode<Tile>> cameFrom;
+    private Dictionary<PathNode<Tile>, float> gScore;
+    private Dictionary<PathNode<Tile>, float> fScore;
+
     public PathAStar()
     {
-        
+        closedSet = new List<PathNode<Tile>>(); 
+        openSet = new SimplePriorityQueue<PathNode<Tile>>();
+
+        cameFrom = new Dictionary<PathNode<Tile>, PathNode<Tile>>();
+        gScore = new Dictionary<PathNode<Tile>, float>();
+        fScore = new Dictionary<PathNode<Tile>, float>();
     }
 
-    public Queue<Tile> doShit(World world, Tile startTile, Tile endTile)
+    public Queue<Tile> SolvePath(World world, Tile startTile, Tile endTile)
     {
         if (world.tileGraph == null)
         {
@@ -29,19 +41,25 @@ public class PathAStar
             Debug.LogError("Pathfinding nodes does not contain end tile");
             return null;
         }
-        List<PathNode<Tile>> closedSet = new List<PathNode<Tile>>();
-        SimplePriorityQueue<PathNode<Tile>> openSet = new SimplePriorityQueue<PathNode<Tile>>();
+
+        closedSet.Clear();
+        openSet.Clear();
+
         PathNode<Tile> start = nodes[startTile];
         PathNode<Tile> goal = nodes[endTile];
         openSet.Enqueue(start, 0); // Priority 0 as it is dequeued, priority will usually be f score
-        Dictionary<PathNode<Tile>, PathNode<Tile>> cameFrom = new Dictionary<PathNode<Tile>, PathNode<Tile>>();
-        Dictionary<PathNode<Tile>, float> gScore = new Dictionary<PathNode<Tile>, float>();
+
+        cameFrom.Clear();
+        gScore.Clear();
+
         foreach (PathNode<Tile> node in nodes.Values)
         {
             gScore[node] = Mathf.Infinity;
         }
         gScore[nodes[startTile]] = 0;
-        Dictionary<PathNode<Tile>, float> fScore = new Dictionary<PathNode<Tile>, float>();
+
+        fScore.Clear();
+
         foreach (PathNode<Tile> node in nodes.Values)
         {
             fScore[node] = Mathf.Infinity;
@@ -107,7 +125,8 @@ public class PathAStar
 
     float HueristicCostEstimate(PathNode<Tile> a, PathNode<Tile> b)
     {
-        return Mathf.Sqrt(Mathf.Pow(a.data.X - b.data.X, 2) + Mathf.Pow(a.data.Y - b.data.Y, 2));
+        //return Mathf.Sqrt(Mathf.Pow(a.data.X - b.data.X, 2) + Mathf.Pow(a.data.Y - b.data.Y, 2));
+        return Mathf.Abs(a.data.X - b.data.X) + Mathf.Abs(a.data.Y - b.data.Y);
     }
 
     float DistanceBetween(PathNode<Tile> a, PathNode<Tile> b)
