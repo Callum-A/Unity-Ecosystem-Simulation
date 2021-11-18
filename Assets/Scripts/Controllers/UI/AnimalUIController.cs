@@ -81,4 +81,12 @@ public class AnimalUIController : MonoBehaviour
             currentlySelected.Thirst = 0.31f;
         }
     }
+
+    public void CameraLockToSelectedAnimal()
+    {
+        if (currentlySelected != null)
+        {
+            mouseController.LockToAnimal(currentlySelected);
+        }
+    }
 }

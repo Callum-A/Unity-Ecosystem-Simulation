@@ -7,6 +7,7 @@ public class MouseController : MonoBehaviour
 {
     private Vector3 lastFramePosition;
     private Vector3 currFramePosition;
+    private Animal lockedAnimal;
     private World world => WorldController.Instance.World;
 
     /// <summary>
@@ -57,7 +58,12 @@ public class MouseController : MonoBehaviour
         currFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         currFramePosition.z = 0;
 
+        if (lockedAnimal != null)
+        {
+            Camera.main.transform.position = new Vector3(lockedAnimal.X, lockedAnimal.Y, Camera.main.transform.position.z);
+        }
         UpdateCameraMovement();
+        
 
         // Set the last frame position, we need to reget the pos due to movement
         lastFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition); // reget position as it has changed due to translate
@@ -72,6 +78,7 @@ public class MouseController : MonoBehaviour
         // Handle screen dragging
         if (Input.GetMouseButton(1) || Input.GetMouseButton(2)) // RMB or MMB
         {
+            lockedAnimal = null;
             Vector3 diff = lastFramePosition - currFramePosition;
             diff.z = 0;
             Camera.main.transform.Translate(diff);
@@ -84,5 +91,10 @@ public class MouseController : MonoBehaviour
         }
         
         Camera.main.orthographicSize = Mathf.Clamp(Camera.main.orthographicSize, 3f, 25f);
+    }
+
+    public void LockToAnimal(Animal a)
+    {
+        lockedAnimal = a;
     }
 }
