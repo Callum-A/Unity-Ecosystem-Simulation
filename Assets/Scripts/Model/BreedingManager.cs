@@ -12,10 +12,32 @@ namespace Assets.Scripts.Model
         private List<Prey> FemalePreyBreedList;
         private List<Prey> MalePreyBreedList;
 
+        private List<Predator> FemalePredatorBreedList;
+        private List<Predator> MalePredatorBreedList;
+
         public BreedingManager() 
         {
             FemalePreyBreedList = new List<Prey>();
             MalePreyBreedList = new List<Prey>();
+        }
+
+        public void addToBreedList(Predator predatorToAdd) 
+        {
+            if (predatorToAdd.AnimalSex == Gender.Female)
+            {
+                if (!FemalePredatorBreedList.Contains(predatorToAdd))
+                {
+                    FemalePredatorBreedList.Add(predatorToAdd);
+                }
+            }
+
+            else
+            {
+                if (!MalePredatorBreedList.Contains(predatorToAdd))
+                {
+                    MalePredatorBreedList.Add(predatorToAdd);
+                }
+            }
         }
 
         public void addToBreedList(Prey preyToAdd) 
@@ -51,32 +73,17 @@ namespace Assets.Scripts.Model
             }
         }
 
-        public bool TryMate(Prey searcher) 
+        public void removeFromBreedList(Predator predatorToRemove)
         {
-            Prey partner = FindPartner(searcher);
-            
-            Prey mother = null;
-            Prey father = null;
-
-            if (searcher.AnimalSex == Gender.Female)
+            if (predatorToRemove.AnimalSex == Gender.Female)
             {
-                mother = searcher;
-                father = partner;
+                FemalePredatorBreedList.Remove(predatorToRemove);
             }
 
-            else 
+            else
             {
-                mother = partner;
-                father = searcher;
+                MalePredatorBreedList.Remove(predatorToRemove);
             }
-
-            if (partner != null)
-            {
-                Breed(father, mother);
-                return true;
-            }
-
-            return false;
         }
 
         public Prey FindPartner(Prey searcher) 
@@ -95,12 +102,67 @@ namespace Assets.Scripts.Model
             return partner;
         }
 
-        public void Breed(Prey father, Prey mother) 
+        public Predator FindPartner(Predator searcher)
         {
+            List<Predator> potentialMates = (searcher.AnimalSex == Gender.Male) ? FemalePredatorBreedList : MalePredatorBreedList;
+            Predator partner = null;
+
+            foreach (Predator mate in potentialMates)
+            {
+                Tile CurrentTile = searcher.CurrentTile;
+                Tile mateLocation = mate.CurrentTile;
+                partner = mate;
+
+            }
+
+            return partner;
+        }
+
+        public void Breed(Prey searcher, Prey partner) 
+        {
+            Prey mother = null;
+            Prey father = null;
+
+            if (searcher.AnimalSex == Gender.Female)
+            {
+                mother = searcher;
+                father = partner;
+            }
+
+            else
+            {
+                mother = partner;
+                father = searcher;
+            }
+
             removeFromBreedList(father);
             removeFromBreedList(mother);
-            mother.Impregnate();
 
+            mother.Impregnate();
+            Debug.Log(father + " Impregnated " + mother);
+        }
+
+        public void Breed(Predator searcher, Predator partner)
+        {
+            Predator mother = null;
+            Predator father = null;
+
+            if (searcher.AnimalSex == Gender.Female)
+            {
+                mother = searcher;
+                father = partner;
+            }
+
+            else
+            {
+                mother = partner;
+                father = searcher;
+            }
+
+            removeFromBreedList(father);
+            removeFromBreedList(mother);
+
+            mother.Impregnate();
             Debug.Log(father + " Impregnated " + mother);
         }
     }

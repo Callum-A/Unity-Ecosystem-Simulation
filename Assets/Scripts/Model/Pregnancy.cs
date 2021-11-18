@@ -8,11 +8,11 @@ namespace Assets.Scripts.Model
 {
     public class Pregnancy
     {
-        private Prey mother;
+        private Animal mother;
         public float TimeUntilBirth { get; protected set; }
         
 
-        public Pregnancy(Prey mother) 
+        public Pregnancy(Animal mother) 
         {
             TimeUntilBirth = TimeController.Instance.SECONDS_IN_A_DAY * 3;
             this.mother = mother;
@@ -33,6 +33,9 @@ namespace Assets.Scripts.Model
             mother.GiveBirth();
         }
 
-        private void MisCarry() { }
+        private void MisCarry() 
+        {
+            mother.MisCarry();
+        }
     }
 }

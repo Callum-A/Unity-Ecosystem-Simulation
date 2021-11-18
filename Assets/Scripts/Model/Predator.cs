@@ -1,9 +1,11 @@
+using Assets.Scripts.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Predator : Animal
 {
+
     public Prey CurrentTarget { get; protected set; }
 
     public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id, gender) { }
@@ -44,7 +46,10 @@ public class Predator : Animal
     {
         Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
         Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(2f));
+        timeSinceLastBreeded += deltaTime;
+        UpdateAge(deltaTime);
         UpdateDoMovement(deltaTime);
+        UpdatePregnancy(deltaTime);
         switch (CurrentState)
         {
             case AnimalState.Idle:
@@ -76,6 +81,18 @@ public class Predator : Animal
                 break;
             case AnimalState.SeekWater:
                 UpdateDoSeekWater(deltaTime);
+                break;
+            case AnimalState.ReadyToBreed:
+                UpdateDoIsReadyToBreed(deltaTime);
+                break;
+            case AnimalState.SearchingForMate:
+                UpdateDoSeachingForMate(deltaTime);
+                break;
+            case AnimalState.MovingToMate:
+                UpdateDoMovingToMate(deltaTime);
+                break;
+            case AnimalState.Breeding:
+                UpdateDoBreeding(deltaTime);
                 break;
             default:
                 Debug.LogError("Unrecognised state " + CurrentState);
@@ -185,10 +202,15 @@ public class Predator : Animal
         {
             CurrentState = AnimalState.Hungry;
         }
+
+        else if (IsReadyToBreed())
+        {
+            CurrentState = AnimalState.ReadyToBreed;
+        }
+
         else
         {
             CurrentState = AnimalState.Wandering;
-            //DestinationTile = world.GetRandomNonWaterTileInRadius(CurrentTile, 5);
             DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(5);
         }
     }
@@ -215,6 +237,103 @@ public class Predator : Animal
             StopMovement();
             CurrentState = AnimalState.Idle;
         }
+    }
+
+    public void UpdateDoIsReadyToBreed(float deltaTime)
+    {
+        AnimalManager.breedingManager.addToBreedList(this);
+        CurrentState = AnimalState.SearchingForMate;
+    }
+
+    public void UpdateDoSeachingForMate(float deltaTime)
+    {
+        Predator FoundPartner = AnimalManager.breedingManager.FindPartner(this);
+
+        //Cant find a partner
+        if (FoundPartner == null)
+        {
+            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(3);
+            CurrentState = AnimalState.Wandering;
+            return;
+        }
+
+        //Found a partner and does not already have one
+        else if (getPartner() == null)
+        {
+            this.setPartner(FoundPartner);
+            FoundPartner.setPartner(this);
+
+            this.StopMovement();
+            FoundPartner.StopMovement();
+
+            int x1 = this.CurrentTile.X;
+            int y1 = this.CurrentTile.Y;
+
+            int x2 = FoundPartner.CurrentTile.X;
+            int y2 = FoundPartner.CurrentTile.Y;
+
+            int midX = (x1 + x2) / 2;
+            int midY = (y1 + y2) / 2;
+
+            DestinationTile = WorldController.Instance.World.GetTileAt(midX, midY);
+            FoundPartner.DestinationTile = DestinationTile;
+
+            CurrentState = AnimalState.MovingToMate;
+            FoundPartner.CurrentState = AnimalState.MovingToMate;
+
+            AnimalManager.breedingManager.removeFromBreedList(this);
+            AnimalManager.breedingManager.removeFromBreedList(FoundPartner);
+        }
+
+    }
+
+    public void UpdateDoMovingToMate(float deltatime)
+    {
+        Tile partnerTile = getPartner().CurrentTile;
+
+        if (CurrentTile == DestinationTile)
+        {
+            StopMovement();
+        }
+
+        if (getPartner() == null || IsThirsty() || IsHungry() || (getPartner().CurrentState != AnimalState.MovingToMate && getPartner().CurrentState != AnimalState.Breeding))
+        {
+            CurrentState = AnimalState.Idle;
+            return;
+        }
+
+
+        if (partnerTile == DestinationTile && CurrentTile == DestinationTile)
+        {
+            CurrentState = AnimalState.Breeding;
+        }
+
+    }
+
+
+    public void UpdateDoBreeding(float deltaTime)
+    {
+        Predator currentParter = getPartner() as Predator;
+        AnimalManager.breedingManager.Breed(this, currentParter);
+
+        if (AnimalSex == Gender.Male)
+        {
+            timeSinceLastBreeded = 0;
+        }
+
+        //Setting them to
+        //idle after breeding
+        currentParter.CurrentState = AnimalState.Idle;
+        CurrentState = AnimalState.Idle;
+
+        //clearing partners
+        currentParter.clearPartner();
+        clearPartner();
+    }
+
+    private bool IsReadyToBreed()
+    {
+        return (NeedsMet() && timeSinceLastBreeded >= breedingCooldown && !isPregnant() && lifeStage == LifeStage.Adult);
     }
 
     override
@@ -271,5 +390,44 @@ public class Predator : Animal
     {
         this.TimeAlive = 20 * TimeController.Instance.SECONDS_IN_A_DAY;
         this.lifeStage = LifeStage.Elder;
+    }
+
+    public override void Impregnate()
+    {
+        pregnacy = new Pregnancy(this);
+        timeSinceLastBreeded = 0f;
+    }
+
+    public override void UpdatePregnancy(float deltatime)
+    {
+        if (isPregnant())
+        {
+            pregnacy.UpdatePregnancy(deltatime);
+        }
+    }
+
+    public override bool isPregnant()
+    {
+        return pregnacy != null;
+    }
+
+    public override void GiveBirth()
+    {
+        int litterSize = UnityEngine.Random.Range(1, 5);
+
+        for (int i = 0; i < litterSize; i++)
+        {
+            AnimalManager.SpawnPredator(CurrentTile);
+        }
+
+        Debug.Log(this + " - Gives Birth");
+
+        pregnacy = null;
+        timeSinceLastBreeded = 0f;
+    }
+
+    public override void MisCarry()
+    {
+        throw new System.NotImplementedException();
     }
 }

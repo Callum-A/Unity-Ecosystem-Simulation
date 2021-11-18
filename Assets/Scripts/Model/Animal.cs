@@ -34,21 +34,21 @@ public enum AnimalState
     Eating,
     FoundWater,
     SeekWater,
-    Breeding,
     Drinking,
-    ReadyToMate,
+    ReadyToBreed,
     SearchingForMate,
-    Mating
+    MovingToMate,
+    Breeding
 }
 
 public abstract class Animal
 {
+    private Animal partner;
     public float X => Mathf.Lerp(CurrentTile.X, NextTile.X, movePercentage);
     public float Y => Mathf.Lerp(CurrentTile.Y, NextTile.Y, movePercentage);
     public Tile CurrentTile { get; protected set; }
     public Tile DestinationTile { get; protected set; }
     public Tile NextTile { get; protected set; }
-
     public AnimalManager AnimalManager { get; protected set; }
     public AnimalState CurrentState { get; protected set; }
     public bool readyToBreed { get; protected set; }
@@ -62,6 +62,8 @@ public abstract class Animal
     public LifeStage lifeStage { get; protected set; }
     public float Hunger;
     public float Thirst;
+    protected float timeSinceLastBreeded;
+    protected float breedingCooldown = 3 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 3 days
     public AnimalType AnimalType { get; protected set; }
     public Gender AnimalSex { get; protected set;}
     
@@ -88,6 +90,7 @@ public abstract class Animal
         ID = id;
         lifeStage = LifeStage.Child;
         AnimalSex = gender;
+        timeSinceLastBreeded = 0;
     }
 
     /// <summary>
@@ -301,6 +304,31 @@ public abstract class Animal
     public abstract void setAdult();
 
     public abstract void setElder();
+
+    public void setPartner(Animal animal) 
+    {
+        partner = animal;
+    }
+
+    public void clearPartner() 
+    {
+        partner = null;
+    }
+
+    public Animal getPartner() 
+    {
+        return this.partner;
+    }
+
+    public abstract void Impregnate();
+
+    public abstract void UpdatePregnancy(float deltatime);
+
+    public abstract bool isPregnant();
+
+    public abstract void GiveBirth();
+
+    public  abstract void MisCarry();
 
     public void RegisterOnAnimalChangedCallback(Action<Animal> cb)
     {
