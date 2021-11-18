@@ -34,7 +34,7 @@ public class PathTileGraph
             Tile tile = pair.Key;
             PathNode<Tile> n = pair.Value;
             List<PathEdge<Tile>> edges = new List<PathEdge<Tile>>();
-            Tile[] neighbours = tile.GetNeighbours(); // diag okay note some spots can be null
+            Tile[] neighbours = tile.GetNeighboursIncludingDiagonal(); // diag okay note some spots can be null
             for (int i = 0; i < neighbours.Length; i++)
             {
                 Tile neighbour = neighbours[i];

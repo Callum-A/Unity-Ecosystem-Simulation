@@ -12,6 +12,8 @@ public class AnimalManager
     private int currentPreyID;
     private int currentPredatorID;
 
+    public PathFindingManager PathManager;
+
     private Action<Animal> OnAnimalCreatedCallback;
     private Action<Animal> OnAnimalDestroyedCallback;
 
@@ -23,6 +25,8 @@ public class AnimalManager
         AllAnimals = new List<Animal>();
         currentPreyID = 0;
         currentPredatorID = 0;
+
+        PathManager = new PathFindingManager();
     }
 
     /// <summary>

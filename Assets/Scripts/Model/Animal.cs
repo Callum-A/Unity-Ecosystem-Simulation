@@ -62,8 +62,9 @@ public abstract class Animal
     
     public float Speed { get; protected set; }
     public int SightRange { get; protected set; }
-    private PathAStar pathAStar;
     private float movePercentage;
+
+    private Queue<Tile> path;
 
     protected Action<Animal> OnAnimalChangedCallback;
 
@@ -160,29 +161,30 @@ public abstract class Animal
     {
         if (CurrentTile == DestinationTile)
         {
-            pathAStar = null;
+            path = null;
             return;
         }
 
         if (NextTile == null || NextTile == CurrentTile)
         {
             // Get next tile from path finder
-            if (pathAStar == null || pathAStar.Length() == 0)
+            if (path == null || path.Count == 0)
             {
                 // Generate path
-                pathAStar = new PathAStar(CurrentTile.World, CurrentTile, DestinationTile);
-                if (pathAStar.Length() == 0)
+                path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
+
+                if (path.Count == 0)
                 {
                     Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
-                    pathAStar = null;
+                    path = null;
                     return;
                 }
 
-                NextTile = pathAStar.Dequeue(); // skip first as it is our curr tile
+                NextTile = path.Dequeue(); // skip first as it is our curr tile
             }
 
             // Grab next tile from path
-            NextTile = pathAStar.Dequeue();
+            NextTile = path.Dequeue();
         }
 
         float distToTravel = Mathf.Sqrt(Mathf.Pow(CurrentTile.X - NextTile.X, 2) + Mathf.Pow(CurrentTile.Y - NextTile.Y, 2));
