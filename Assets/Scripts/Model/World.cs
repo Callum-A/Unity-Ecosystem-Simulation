@@ -34,6 +34,8 @@ public class World
                 tiles[x, y] = new Tile(x, y, this);
             }
         }
+
+        tileGraph = null;
     }
 
     public void Update(float deltaTime)
