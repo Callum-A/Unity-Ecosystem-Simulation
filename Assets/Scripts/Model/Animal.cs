@@ -325,7 +325,7 @@ public abstract class Animal
         //Found a partner and does not already have one
         else if (getPartner() == null)
         {
-            Debug.Log(this.ToString() + "Partners " + FoundPartner.ToString());
+           // Debug.Log(this.ToString() + "Partners " + FoundPartner.ToString());
 
             this.setPartner(FoundPartner);
             FoundPartner.setPartner(this);
