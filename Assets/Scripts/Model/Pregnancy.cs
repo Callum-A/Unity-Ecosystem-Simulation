@@ -14,7 +14,7 @@ namespace Assets.Scripts.Model
 
         public Pregnancy(Animal mother) 
         {
-            TimeUntilBirth = TimeController.Instance.SECONDS_IN_A_DAY * 3;
+            TimeUntilBirth = mother is Predator ? TimeController.Instance.SECONDS_IN_A_DAY * 5 : TimeController.Instance.SECONDS_IN_A_DAY * 3;
             this.mother = mother;
         }
 

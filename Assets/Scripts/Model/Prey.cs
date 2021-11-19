@@ -260,103 +260,9 @@ public class Prey : Animal
         }
     }
 
-    public void UpdateDoIsReadyToBreed(float deltaTime) 
-    {
-        AnimalManager.breedingManager.addToBreedList(this);
-        CurrentState = AnimalState.SearchingForMate;
-    }
-
-    public void UpdateDoSeachingForMate(float deltaTime)
-    {
-            Prey FoundPartner = AnimalManager.breedingManager.FindPartner(this);
-
-            //Cant find a partner
-            if (FoundPartner == null)
-            {
-                DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(3);
-                CurrentState = AnimalState.Wandering;
-                return;
-            }
-
-            //Found a partner and does not already have one
-            else if (getPartner() == null)
-            {
-                this.setPartner(FoundPartner);
-                FoundPartner.setPartner(this);
-
-                this.StopMovement();
-                FoundPartner.StopMovement();
-
-                int x1 = this.CurrentTile.X;
-                int y1 = this.CurrentTile.Y;
-
-                int x2 = FoundPartner.CurrentTile.X;
-                int y2 = FoundPartner.CurrentTile.Y;
-
-                int midX = (x1 + x2) / 2;
-                int midY = (y1 + y2) / 2;
-
-                DestinationTile = WorldController.Instance.World.GetTileAt(midX, midY);
-                FoundPartner.DestinationTile = DestinationTile;
-
-                CurrentState = AnimalState.MovingToMate;
-                FoundPartner.CurrentState = AnimalState.MovingToMate;
-
-                AnimalManager.breedingManager.removeFromBreedList(this);
-                AnimalManager.breedingManager.removeFromBreedList(FoundPartner);
-            }
-        
-    }
-
-    public void UpdateDoMovingToMate(float deltatime) 
-    {
-        Tile partnerTile = getPartner().CurrentTile;
-
-        if (CurrentTile == DestinationTile) 
-        {
-            StopMovement();
-        }
-
-        if (getPartner() == null || IsThirsty() || IsHungry() || (getPartner().CurrentState != AnimalState.MovingToMate && getPartner().CurrentState != AnimalState.Breeding)) 
-        {
-            CurrentState = AnimalState.Idle;
-            return;
-        }
 
 
-        if (partnerTile == DestinationTile && CurrentTile == DestinationTile) 
-        {
-            CurrentState = AnimalState.Breeding;
-        }
-        
-    }
-
-    public void UpdateDoBreeding(float deltaTime)
-    {
-        Prey currentParter = getPartner() as Prey;
-        AnimalManager.breedingManager.Breed(this, currentParter);
-
-        if (AnimalSex == Gender.Male) 
-        {
-            timeSinceLastBreeded = 0;
-        }
-
-        //Setting them to
-        //idle after breeding
-        currentParter.CurrentState = AnimalState.Idle;
-        CurrentState = AnimalState.Idle;
-
-        //clearing partners
-        currentParter.clearPartner();
-        clearPartner();
-    }
-
-    private bool IsReadyToBreed()
-    {
-        //NeedsMet() && timeSinceLastBreeded >= breedingCooldown && world.AnimalManager.Prey.Count >= 2 && !isPregnant()
-        return (NeedsMet() && timeSinceLastBreeded >= breedingCooldown && !isPregnant() && lifeStage == LifeStage.Adult);
-    }
-
+    
     /// <summary>
     /// I am wandering to a random tile.
     /// </summary>
@@ -437,25 +343,6 @@ public class Prey : Animal
         this.lifeStage = LifeStage.Elder;
     }
 
-    public override void Impregnate()
-    {
-        pregnacy = new Pregnancy(this);
-        timeSinceLastBreeded = 0f;
-    }
-
-    public override void UpdatePregnancy(float deltatime)
-    {
-        if (isPregnant())
-        {
-            pregnacy.UpdatePregnancy(deltatime);
-        }
-    }
-
-    public override bool isPregnant()
-    {
-        return pregnacy != null;
-    }
-
     public override void GiveBirth()
     {
         int litterSize = UnityEngine.Random.Range(1, 9);
@@ -469,11 +356,6 @@ public class Prey : Animal
 
         pregnacy = null;
         timeSinceLastBreeded = 0f;
-    }
-
-    public override void MisCarry()
-    {
-        pregnacy = null;
     }
 
     override

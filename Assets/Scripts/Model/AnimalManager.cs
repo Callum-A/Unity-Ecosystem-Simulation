@@ -194,6 +194,8 @@ public class AnimalManager
         }
 
         AllAnimals.Remove(a);
+
+        a = null;
     }
 
     public void DespawnAnimal(Animal a) 
