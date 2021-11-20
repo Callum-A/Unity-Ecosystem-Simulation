@@ -8,6 +8,8 @@ public class AnimalSpriteController : SpriteController<Animal>
     public Sprite PreySprite;
     public Sprite PredatorSprite;
 
+    public AnimalStateSpriteController stateSprite;
+
     private void Start()
     {
         LoadSprites("Images/Animals");
@@ -30,6 +32,9 @@ public class AnimalSpriteController : SpriteController<Animal>
         SpriteRenderer sr = objGameObject.AddComponent<SpriteRenderer>();
         sr.sortingLayerName = "Animals";
         sr.sprite = a.AnimalType == AnimalType.Prey ? PreySprite : PredatorSprite;
+
+        stateSprite.OnAnimalCreated(objGameObject);
+
         a.RegisterOnAnimalChangedCallback(OnAnimalChanged);
     }
 
@@ -42,30 +47,32 @@ public class AnimalSpriteController : SpriteController<Animal>
 
     private void ChangeAnimalSprite(Animal a, GameObject animalGo)
     {
-        SpriteRenderer sr = animalGo.GetComponent<SpriteRenderer>();
-        string b = a.AnimalType == AnimalType.Prey ? "rabbit" : "fox";
-        Sprite s = null;
-        switch (a.CurrentState)
-        {
-            case AnimalState.Idle:
-            case AnimalState.Wandering:
-                s = GetSpriteByName(b);
-                break;
-            case AnimalState.SeekFood:
-            case AnimalState.SeekWater:
-                s = GetSpriteByName(b + "_search");
-                break;
-            case AnimalState.FoundFood:
-            case AnimalState.Hungry:
-            case AnimalState.Eating:
-                s = GetSpriteByName(b + "_food");
-                break;
-            case AnimalState.FoundWater:
-            case AnimalState.Thirsty:
-            case AnimalState.Drinking:
-                s = GetSpriteByName(b + "_water");
-                break;
-        }
-        sr.sprite = s;
+        //SpriteRenderer sr = animalGo.GetComponent<SpriteRenderer>();
+        //string b = a.AnimalType == AnimalType.Prey ? "rabbit" : "fox";
+        //Sprite s = null;
+        //switch (a.CurrentState)
+        //{
+        //    case AnimalState.Idle:
+        //    case AnimalState.Wandering:
+        //        s = GetSpriteByName(b);
+        //        break;
+        //    case AnimalState.SeekFood:
+        //    case AnimalState.SeekWater:
+        //        s = GetSpriteByName(b + "_search");
+        //        break;
+        //    case AnimalState.FoundFood:
+        //    case AnimalState.Hungry:
+        //    case AnimalState.Eating:
+        //        s = GetSpriteByName(b + "_food");
+        //        break;
+        //    case AnimalState.FoundWater:
+        //    case AnimalState.Thirsty:
+        //    case AnimalState.Drinking:
+        //        s = GetSpriteByName(b + "_water");
+        //        break;
+        //}
+        //sr.sprite = s;
+
+        stateSprite.ChangeAnimalSprite(a, animalGo);
     }
 }
