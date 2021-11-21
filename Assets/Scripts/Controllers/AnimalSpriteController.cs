@@ -65,6 +65,9 @@ public class AnimalSpriteController : SpriteController<Animal>
             case AnimalState.Drinking:
                 s = GetSpriteByName(b + "_water");
                 break;
+           default:
+                s = GetSpriteByName(b);
+                break;
         }
         sr.sprite = s;
     }

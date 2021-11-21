@@ -1,12 +1,14 @@
+using Assets.Scripts.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Predator : Animal
 {
+
     public Prey CurrentTarget { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Predator, animalManager, id, gender) { }
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender) { }
 
     // TODO: Implement death here and start testing population levels etc.
     /// <summary>
@@ -42,9 +44,12 @@ public class Predator : Animal
     /// <param name="deltaTime">Time between last frame.</param>
     public override void Update(float deltaTime)
     {
-        Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
-        Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(2f));
+        Hunger -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(0.5f));
+        Thirst -= (deltaTime * TimeController.Instance.GetTimesADayMultiplier(1.5f));
+        timeSinceLastBreeded += deltaTime;
+        UpdateAge(deltaTime);
         UpdateDoMovement(deltaTime);
+        UpdatePregnancy(deltaTime);
         switch (CurrentState)
         {
             case AnimalState.Idle:
@@ -76,6 +81,18 @@ public class Predator : Animal
                 break;
             case AnimalState.SeekWater:
                 UpdateDoSeekWater(deltaTime);
+                break;
+            case AnimalState.ReadyToBreed:
+                UpdateDoIsReadyToBreed(deltaTime);
+                break;
+            case AnimalState.SearchingForMate:
+                UpdateDoSeachingForMate(deltaTime);
+                break;
+            case AnimalState.MovingToMate:
+                UpdateDoMovingToMate(deltaTime);
+                break;
+            case AnimalState.Breeding:
+                UpdateDoBreeding(deltaTime);
                 break;
             default:
                 Debug.LogError("Unrecognised state " + CurrentState);
@@ -149,7 +166,7 @@ public class Predator : Animal
         StopMovement();
         // Check for food tiles in our sight radius
         // Check for prey in our sight radius
-        Prey closestPreyICanSee = AnimalManager.FindClosestPreyInRadius(CurrentTile.X, CurrentTile.Y, SightRange);
+        Prey closestPreyICanSee = AnimalManager.FindClosestPrey(CurrentTile.X, CurrentTile.Y);
 
         if (closestPreyICanSee != null)
         {
@@ -185,10 +202,15 @@ public class Predator : Animal
         {
             CurrentState = AnimalState.Hungry;
         }
+
+        else if (IsReadyToBreed())
+        {
+            CurrentState = AnimalState.ReadyToBreed;
+        }
+
         else
         {
             CurrentState = AnimalState.Wandering;
-            //DestinationTile = world.GetRandomNonWaterTileInRadius(CurrentTile, 5);
             DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(5);
         }
     }
@@ -272,4 +294,26 @@ public class Predator : Animal
         this.TimeAlive = 20 * TimeController.Instance.SECONDS_IN_A_DAY;
         this.lifeStage = LifeStage.Elder;
     }
+
+    public override void GiveBirth()
+    {
+        int litterSize = UnityEngine.Random.Range(1, 5);
+
+        for (int i = 0; i < litterSize; i++)
+        {
+            AnimalManager.SpawnPredator(CurrentTile);
+        }
+
+        Debug.Log(this + " - Gives Birth");
+
+        pregnacy = null;
+        timeSinceLastBreeded = 0f;
+    }
+
+    override
+    public string ToString()
+    {
+        return "Predator_" + ID;
+    }
+
 }

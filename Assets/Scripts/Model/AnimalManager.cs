@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Assets.Scripts.Model;
 
 public class AnimalManager
 {
     public List<Prey> Prey { get; protected set; }
     public List<Predator> Predators { get; protected set; }
     public List<Animal> AllAnimals { get; protected set; }
+    public BreedingManager breedingManager { get; protected set; }
     private World world;
     private int currentPreyID;
     private int currentPredatorID;
@@ -23,6 +25,7 @@ public class AnimalManager
         Prey = new List<Prey>();
         Predators = new List<Predator>();
         AllAnimals = new List<Animal>();
+        breedingManager = new BreedingManager();
         currentPreyID = 0;
         currentPredatorID = 0;
 
@@ -195,6 +198,8 @@ public class AnimalManager
         }
 
         AllAnimals.Remove(a);
+
+        a = null;
     }
 
     public void DespawnAnimal(Animal a) 
