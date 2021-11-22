@@ -204,6 +204,27 @@ public class Tile
         return radiusList;
     }
 
+    public Tile GetMidPointTile(Tile tile) 
+    {
+        int x1 = this.X;
+        int y1 = this.Y;
+
+        int x2 = tile.X;
+        int y2 = tile.Y;
+
+        int midX = (x1 + x2) / 2;
+        int midY = (y1 + y2) / 2;
+
+        Tile Midpoint = WorldController.Instance.World.GetTileAt(midX, midY);
+
+        if (Midpoint.Type == TileType.Water) 
+        {
+            Midpoint = Midpoint.GetClosestGrassTile();
+        }
+
+        return Midpoint;
+    }
+
     public Tile GetClosestTile(List<Tile> tiles)
     {
         Tile closest = null;
@@ -238,6 +259,11 @@ public class Tile
     public Tile GetClosestWaterTile()
     {
         return GetClosestTile(World.getCoastalTiles());
+    }
+
+    public Tile GetClosestGrassTile() 
+    {
+        return GetClosestTile(World.getGrassTiles());
     }
 
     public Tile GetClosestFoodTile()
