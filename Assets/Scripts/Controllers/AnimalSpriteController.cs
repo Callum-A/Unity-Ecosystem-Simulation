@@ -47,31 +47,26 @@ public class AnimalSpriteController : SpriteController<Animal>
 
     private void ChangeAnimalSprite(Animal a, GameObject animalGo)
     {
-        //SpriteRenderer sr = animalGo.GetComponent<SpriteRenderer>();
-        //string b = a.AnimalType == AnimalType.Prey ? "rabbit" : "fox";
-        //Sprite s = null;
-        //switch (a.CurrentState)
-        //{
-        //    case AnimalState.Idle:
-        //    case AnimalState.Wandering:
-        //        s = GetSpriteByName(b);
-        //        break;
-        //    case AnimalState.SeekFood:
-        //    case AnimalState.SeekWater:
-        //        s = GetSpriteByName(b + "_search");
-        //        break;
-        //    case AnimalState.FoundFood:
-        //    case AnimalState.Hungry:
-        //    case AnimalState.Eating:
-        //        s = GetSpriteByName(b + "_food");
-        //        break;
-        //    case AnimalState.FoundWater:
-        //    case AnimalState.Thirsty:
-        //    case AnimalState.Drinking:
-        //        s = GetSpriteByName(b + "_water");
-        //        break;
-        //}
-        //sr.sprite = s;
+        SpriteRenderer sr = animalGo.GetComponent<SpriteRenderer>();
+        string b = a.AnimalType == AnimalType.Prey ? "rabbit" : "fox";
+        Sprite s = null;
+
+        switch (a.lifeStage)
+        {
+            case LifeStage.Child:
+                s = GetSpriteByName(b + "_child");
+                break;
+            case LifeStage.Adult:
+                s = GetSpriteByName(b);
+                break;
+            case LifeStage.Elder:
+                s = GetSpriteByName(b + "_elder");
+                break;
+            default:
+                s = GetSpriteByName(b);
+                break;
+        }
+        sr.sprite = s;
 
         stateSprite.ChangeAnimalSprite(a, animalGo);
     }
