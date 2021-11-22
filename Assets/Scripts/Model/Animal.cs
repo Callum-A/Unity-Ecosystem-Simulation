@@ -303,10 +303,17 @@ public abstract class Animal
     {
         AnimalManager.breedingManager.addToBreedList(this);
 
-        if (AnimalSex == Gender.Male)
+        if (IsHungry() || IsThirsty())
+        {
+            CurrentState = AnimalState.Idle;
+        }
+
+        else if (AnimalSex == Gender.Male)
         {
             CurrentState = AnimalState.SearchingForMate;
         }
+
+        else if ()
     }
 
     public void UpdateDoSeachingForMate(float deltaTime)
@@ -333,16 +340,7 @@ public abstract class Animal
             this.StopMovement();
             FoundPartner.StopMovement();
 
-            int x1 = this.CurrentTile.X;
-            int y1 = this.CurrentTile.Y;
-
-            int x2 = FoundPartner.CurrentTile.X;
-            int y2 = FoundPartner.CurrentTile.Y;
-
-            int midX = (x1 + x2) / 2;
-            int midY = (y1 + y2) / 2;
-
-            DestinationTile = WorldController.Instance.World.GetTileAt(midX, midY);
+            DestinationTile = CurrentTile.GetMidPointTile(FoundPartner.CurrentTile);
             FoundPartner.DestinationTile = DestinationTile;
 
             CurrentState = AnimalState.MovingToMate;

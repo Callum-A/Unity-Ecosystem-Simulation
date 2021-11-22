@@ -194,6 +194,10 @@ public class Predator : Animal
     {
         World world = WorldController.Instance.World;
         StopMovement();
+        if (!IsReadyToBreed())
+        {
+            AnimalManager.breedingManager.removeFromBreedList(this);
+        }
         if (IsThirsty())
         {
             CurrentState = AnimalState.Thirsty;
