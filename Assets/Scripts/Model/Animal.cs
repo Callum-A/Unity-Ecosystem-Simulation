@@ -313,7 +313,6 @@ public abstract class Animal
             CurrentState = AnimalState.SearchingForMate;
         }
 
-        else if ()
     }
 
     public void UpdateDoSeachingForMate(float deltaTime)
