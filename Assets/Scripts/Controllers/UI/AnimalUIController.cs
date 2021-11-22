@@ -22,7 +22,7 @@ public class AnimalUIController : MonoBehaviour
 
     private MouseController mouseController;
 
-    private Animal currentlySelected;
+    public Animal currentlySelected { get; protected set; }
     
     // Start is called before the first frame update
     void Start()
