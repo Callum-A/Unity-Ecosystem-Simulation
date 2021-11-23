@@ -213,8 +213,16 @@ public class Prey : Animal
             // TODO: Seek in a cardinal direction
             CurrentState = AnimalState.SeekFood;
             foodTile = CurrentTile.GetClosestFoodTile();
-            Tile dest = foodTile.GetRandomNonWaterTileInRadius(SightRange);
-            DestinationTile = dest;
+            if (foodTile != null)
+            {
+                Tile dest = foodTile.GetRandomNonWaterTileInRadius(SightRange);
+                DestinationTile = dest;
+            }
+            else
+            {
+                // Death wander as no food on map
+                DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
+            }
         }
     }
 

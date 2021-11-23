@@ -42,12 +42,12 @@ public class AnimalManager
         // TODO: choose spawn locations
         for (int i = 0; i < preyAmount; i++)
         {
-            SpawnPrey(world.GetTileAt(50, 50));
+            SpawnPrey(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female);
         }
 
         for (int i = 0; i < predatorAmount; i++)
         {
-            SpawnPredator(world.GetTileAt(50, 50));
+            SpawnPredator(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female);
         }
     }
 
@@ -159,7 +159,11 @@ public class AnimalManager
     public Predator SpawnPredator(Tile tile)
     {
         Gender gender = (UnityEngine.Random.Range(0, 2) == 0) ? Gender.Male : Gender.Female;
-
+        return SpawnPredator(tile, gender);
+    }
+    
+    public Predator SpawnPredator(Tile tile, Gender gender)
+    {
         Predator p = new Predator(tile, this, currentPredatorID, gender);
         Predators.Add(p);
         Spawn(p);
@@ -175,14 +179,16 @@ public class AnimalManager
     public Prey SpawnPrey(Tile tile)
     {
         Gender gender = (UnityEngine.Random.Range(0,2) == 0) ? Gender.Male : Gender.Female;
-
+        return SpawnPrey(tile, gender);
+    }
+    
+    public Prey SpawnPrey(Tile tile, Gender gender)
+    {
         Prey p = new Prey(tile, this, currentPreyID, gender);
         Prey.Add(p);
         Spawn(p);
         currentPreyID++;
-
         Debug.Log(p.ToString() + " - " + p.AnimalSex);
-
         return p;
     }
 
