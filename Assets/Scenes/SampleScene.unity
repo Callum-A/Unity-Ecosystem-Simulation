@@ -532,7 +532,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 329184960}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &28580815
 MonoBehaviour:
@@ -916,7 +916,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 329184960}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &170457101
 MonoBehaviour:
@@ -962,6 +962,7 @@ Transform:
   - {fileID: 1518788881}
   - {fileID: 928312156}
   - {fileID: 2083426260}
+  - {fileID: 366390262}
   - {fileID: 170457100}
   - {fileID: 28580814}
   - {fileID: 574995727}
@@ -1031,6 +1032,53 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!1 &366390261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 366390262}
+  - component: {fileID: 366390263}
+  m_Layer: 0
+  m_Name: AnimalStateSpriteController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &366390262
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366390261}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 329184960}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &366390263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366390261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1994dec20c0ae549bb0bf2af451ae43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FoodState: {fileID: 21300000, guid: fada72cfe32062042b115d8539c2786d, type: 3}
+  WaterState: {fileID: 21300000, guid: a847aa659e7b5294482a98393beab6c5, type: 3}
+  SearchState: {fileID: 21300000, guid: a94fc8656a4687143b9dab18b5e6e8f8, type: 3}
+  BreedingState: {fileID: 21300000, guid: 8ada2f2ceb958494a875b40fc7061626, type: 3}
 --- !u!1 &406487054
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,7 +1349,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 329184960}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &574995728
 MonoBehaviour:
@@ -5019,7 +5067,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 329184960}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2078712052
 MonoBehaviour:
@@ -5080,6 +5128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PreySprite: {fileID: 21300000, guid: cf6e49f9fe459f14693459b473f6892b, type: 3}
   PredatorSprite: {fileID: 21300000, guid: fb21806409810cc4f8d803534b508f0c, type: 3}
+  stateSprite: {fileID: 366390263}
 --- !u!1 &2120872433
 GameObject:
   m_ObjectHideFlags: 0

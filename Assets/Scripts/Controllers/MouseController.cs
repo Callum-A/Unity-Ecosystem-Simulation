@@ -59,7 +59,7 @@ public class MouseController : MonoBehaviour
 
         if (lockedAnimal != null)
         {
-            Camera.main.transform.position = new Vector3(lockedAnimal.X, lockedAnimal.Y, Camera.main.transform.position.z);
+            Camera.main.transform.position = new Vector3(lockedAnimal.X + 0.5f, lockedAnimal.Y + 0.5f, Camera.main.transform.position.z);
         }
         UpdateCameraMovement();
         
