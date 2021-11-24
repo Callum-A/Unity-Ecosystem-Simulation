@@ -15,6 +15,7 @@ public static class CSVData
 
     private static int daysProcessed = 0;
     private static readonly string fileName = "data.csv";
+    private static bool hasWritten = false;
 
     public async static void CollectData(World world)
     {
@@ -29,14 +30,17 @@ public static class CSVData
     private async static void WriteCSV()
     {
         string path = Application.streamingAssetsPath + "/" + fileName;
-        if (!File.Exists(path))
+        if (!hasWritten)
         {
+            // Uses a static boolean to create a file on each start
             using (StreamWriter sw = File.CreateText(path))
             {
                 // Write the header
                 sw.WriteLine("Day,PreyPop,PredatorPop,TotalPop,Nutrition,NumFoodTiles,NumWaterTiles");
             }
+            hasWritten = true;
         }
+        
         // We assume all the lists are the same length
         using (StreamWriter sw = File.AppendText(path))
         {
