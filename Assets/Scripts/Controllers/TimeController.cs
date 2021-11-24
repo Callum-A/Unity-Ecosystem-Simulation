@@ -25,6 +25,8 @@ public class TimeController : MonoBehaviour
     private void Start()
     {
         NumberOfDays = 0;
+        OnNewDayCallback += CSVData.CollectData;
+        CSVData.CollectData(WorldController.Instance.World); // Workaround to collect data on app start
     }
 
     public void SetTimeMultiplier(int multiplier)
