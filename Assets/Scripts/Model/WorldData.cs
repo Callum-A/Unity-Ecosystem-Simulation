@@ -13,7 +13,13 @@ public class WorldData
     public TerrainData TerrainData
     {
         get { return terrainData; }
-        set { terrainData = value; }
+        set 
+        { 
+            terrainData = value;
+
+            HeatMapMax = 0;
+            HeatMapMin = 0;
+        }
     }
     public int NumTiles
     {
@@ -23,7 +29,7 @@ public class WorldData
 
     #region Noise Variables
 
-    public float[,] Noisemap { get{ return terrainData.noisemap; } protected set { } }
+    public float[,] Noisemap { get { return terrainData.noisemap; } protected set { } }
 
     public int Seed { get { return terrainData.seed; } protected set { } }
     public float Scale { get { return terrainData.scale; } protected set { } }
@@ -50,13 +56,13 @@ public class WorldData
 
     #region Tile Data
 
-    public List<Tile> WaterTiles{ get { return terrainData.waterTiles; } protected set { } }
+    public List<Tile> WaterTiles { get { return terrainData.waterTiles; } protected set { } }
 
-    public float WaterPercent { get { return ((float)terrainData.waterTiles.Count / (float)terrainData.numTiles) * 100 ; } protected set { } }
+    public float WaterPercent { get { return ((float)terrainData.waterTiles.Count / (float)terrainData.numTiles) * 100; } protected set { } }
 
     public List<Tile> SandTiles { get { return terrainData.sandTiles; } protected set { } }
 
-    public float SandPercent{ get { return ((float)terrainData.sandTiles.Count / (float)terrainData.numTiles) * 100; } protected set { } }
+    public float SandPercent { get { return ((float)terrainData.sandTiles.Count / (float)terrainData.numTiles) * 100; } protected set { } }
 
     public List<Tile> GrassTiles { get { return terrainData.grassTiles; } protected set { } }
 
@@ -67,6 +73,29 @@ public class WorldData
     #endregion
 
     #endregion
+
+    #region HeatMap
+
+    public float HeatMapMax{ set; get; }
+    public float HeatMapMin { set; get; }
+
+    /// <summary>
+    /// Updates the min and max values for the heat map, to allow for normalised values.
+    /// </summary>
+    public void updateHeatMap()
+    {
+        HeatMapMax = 0;
+        HeatMapMin = 0;
+        foreach (Tile tile in WorldController.Instance.World.tiles)
+        {
+            if (tile.HeatCounter > HeatMapMax)
+                HeatMapMax = tile.HeatCounter;
+        }
+    }
+
+    #endregion
+
+
 }
 
 // The TerrainData struct is used to easily return multiple objects back to world after each GenerateTerrain call.
