@@ -1,0 +1,5 @@
+Day,PreyPop,PredatorPop,TotalPop,Nutrition,NumFoodTiles,NumWaterTiles
+0,10,0,10,324,54,2993
+1,10,0,10,310,54,2993
+2,10,0,10,331,61,2993
+3,15,0,15,368,70,2993
