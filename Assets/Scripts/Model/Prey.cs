@@ -353,7 +353,7 @@ public class Prey : Animal
 
     public override void GiveBirth()
     {
-        int litterSize = UnityEngine.Random.Range(1, 9);
+        int litterSize = UnityEngine.Random.Range(4, 9);
 
         for (int i = 0; i < litterSize; i++)
         {
