@@ -20,6 +20,11 @@ public class EventManager
         AddEvents();
     }
 
+    public bool IsEventHappening()
+    {
+        return currentActiveEvent != null;
+    }
+
     private void AddEvents()
     {
         RegisterEvent(new TestEvent());

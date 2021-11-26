@@ -10,6 +10,12 @@ public class MouseController : MonoBehaviour
     private Animal lockedAnimal;
     private World world => WorldController.Instance.World;
 
+    private void Start()
+    {
+        // Center camera on start to center of map
+        Camera.main.transform.position = new Vector3(world.Width / 2, world.Height / 2, Camera.main.transform.position.z);
+    }
+
     /// <summary>
     /// Gets the current mouse position as a unity vector3.
     /// </summary>
@@ -81,6 +87,11 @@ public class MouseController : MonoBehaviour
             Vector3 diff = lastFramePosition - currFramePosition;
             diff.z = 0;
             Camera.main.transform.Translate(diff);
+            Vector3 pos = Camera.main.transform.position;
+            // Clamp within bounds
+            pos.x = Mathf.Clamp(Camera.main.transform.position.x, 0f, world.Width);
+            pos.y = Mathf.Clamp(Camera.main.transform.position.y, 0f, world.Height);
+            Camera.main.transform.position = pos;
         }
 
         // If we are not over UI we can zoom
