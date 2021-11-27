@@ -47,7 +47,7 @@ public class AnimalManager
 
         for (int i = 0; i < predatorAmount; i++)
         {
-            SpawnPredator(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female);
+            SpawnPredator(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female, null);
         }
     }
 
@@ -127,7 +127,7 @@ public class AnimalManager
         foreach (Prey a in Prey)
         {
             int currentDist = World.ManhattanDistance(x, y, a.CurrentTile.X, a.CurrentTile.Y);
-            if (currentDist < closestDistance)
+            if (currentDist < closestDistance && !a.IsBeingChased)
             {
                 closestDistance = currentDist;
                 closest = a;
@@ -156,15 +156,15 @@ public class AnimalManager
     /// </summary>
     /// <param name="tile">Tile to spawn it on.</param>
     /// <returns>The predator spawned.</returns>
-    public Predator SpawnPredator(Tile tile)
+    public Predator SpawnPredator(Tile tile, Predator mother)
     {
         Gender gender = (UnityEngine.Random.Range(0, 2) == 0) ? Gender.Male : Gender.Female;
-        return SpawnPredator(tile, gender);
+        return SpawnPredator(tile, gender, mother);
     }
     
-    public Predator SpawnPredator(Tile tile, Gender gender)
+    public Predator SpawnPredator(Tile tile, Gender gender, Predator mother)
     {
-        Predator p = new Predator(tile, this, currentPredatorID, gender);
+        Predator p = new Predator(tile, this, currentPredatorID, gender, mother);
         Predators.Add(p);
         Spawn(p);
         currentPredatorID++;

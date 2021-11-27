@@ -38,7 +38,8 @@ public enum AnimalState
     ReadyToBreed,
     SearchingForMate,
     MovingToMate,
-    Breeding
+    Breeding,
+    FollowingParent
 }
 
 public abstract class Animal

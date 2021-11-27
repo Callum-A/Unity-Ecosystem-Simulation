@@ -8,6 +8,7 @@ public class Prey : Animal
     public bool IsBeingChased { get; protected set; }
     public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Prey, animalManager, id, gender)
     {
+        breedingCooldown = 2 * TimeController.Instance.SECONDS_IN_A_DAY;
         IsBeingChased = false;
     }
 
@@ -34,6 +35,7 @@ public class Prey : Animal
         {
             DestinationTile.setFoodUnoccupied();
         }
+        AnimalManager.breedingManager.removeFromBreedList(this);
         WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
         Debug.Log("Now dying! - " + this.ToString() + " State: " + this.CurrentState);
         AnimalManager.DespawnAnimal(this);

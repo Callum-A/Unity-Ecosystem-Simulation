@@ -7,10 +7,13 @@ public class Predator : Animal
 {
 
     public Prey CurrentTarget { get; protected set; }
+    public Predator Mother { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender) { }
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender, Predator mother) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender)
+    {
+        Mother = mother;
+    }
 
-    // TODO: Implement death here and start testing population levels etc.
     /// <summary>
     /// Returns true if the predator should die.
     /// </summary>
@@ -33,6 +36,7 @@ public class Predator : Animal
         {
             CurrentTarget.SetIsBeingChased(false);
         }
+        AnimalManager.breedingManager.removeFromBreedList(this);
         WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
         Debug.Log("Now dying! - " + this.ToString());
         AnimalManager.DespawnAnimal(this);
@@ -94,6 +98,9 @@ public class Predator : Animal
             case AnimalState.Breeding:
                 UpdateDoBreeding(deltaTime);
                 break;
+            case AnimalState.FollowingParent:
+                UpdateDoFollowingParent(deltaTime);
+                break;
             default:
                 Debug.LogError("Unrecognised state " + CurrentState);
                 break;
@@ -102,6 +109,44 @@ public class Predator : Animal
         if (OnAnimalChangedCallback != null)
         {
             OnAnimalChangedCallback(this);
+        }
+    }
+
+    /// <summary>
+    /// State for children, they will simply follow there mother and if she dies they die
+    /// </summary>
+    /// <param name="deltaTime">Time between frame</param>
+    public void UpdateDoFollowingParent(float deltaTime)
+    {
+        // Can we now fend for ourselves
+        if (lifeStage == LifeStage.Adult)
+        {
+            CurrentState = AnimalState.Idle;
+            return;
+        }
+
+        // Is our mother dead
+        if (Mother.ShouldDie())
+        {
+            // Death wander
+            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
+            return;
+        }
+
+        // Set out hunger and thirst
+        if (Mother.CurrentState == AnimalState.Eating)
+        {
+            Hunger = 1f;
+        }
+        else if (Mother.CurrentState == AnimalState.Drinking)
+        {
+            Thirst = 1f;
+        }
+
+        // Move with mother
+        if (Mother.DestinationTile != DestinationTile)
+        {
+            DestinationTile = Mother.DestinationTile.GetRandomNonWaterTileInRadius(1);
         }
     }
 
@@ -301,11 +346,12 @@ public class Predator : Animal
 
     public override void GiveBirth()
     {
-        int litterSize = UnityEngine.Random.Range(1, 5);
+        int litterSize = UnityEngine.Random.Range(2, 5);
 
         for (int i = 0; i < litterSize; i++)
         {
-            AnimalManager.SpawnPredator(CurrentTile);
+            Predator child = AnimalManager.SpawnPredator(CurrentTile, this);
+            child.CurrentState = AnimalState.FollowingParent;
         }
 
         Debug.Log(this + " - Gives Birth");
