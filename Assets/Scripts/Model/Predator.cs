@@ -7,12 +7,8 @@ public class Predator : Animal
 {
 
     public Prey CurrentTarget { get; protected set; }
-    public Predator Mother { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender, Predator mother) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender)
-    {
-        Mother = mother;
-    }
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender, Predator mother) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender, mother) {}
 
     /// <summary>
     /// Returns true if the predator should die.
@@ -112,44 +108,6 @@ public class Predator : Animal
         }
     }
 
-    /// <summary>
-    /// State for children, they will simply follow there mother and if she dies they die
-    /// </summary>
-    /// <param name="deltaTime">Time between frame</param>
-    public void UpdateDoFollowingParent(float deltaTime)
-    {
-        // Can we now fend for ourselves
-        if (lifeStage == LifeStage.Adult)
-        {
-            CurrentState = AnimalState.Idle;
-            return;
-        }
-
-        // Is our mother dead
-        if (Mother.ShouldDie())
-        {
-            // Death wander
-            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
-            return;
-        }
-
-        // Set out hunger and thirst
-        if (Mother.CurrentState == AnimalState.Eating)
-        {
-            Hunger = 1f;
-        }
-        else if (Mother.CurrentState == AnimalState.Drinking)
-        {
-            Thirst = 1f;
-        }
-
-        // Move with mother
-        if (Mother.DestinationTile != DestinationTile)
-        {
-            DestinationTile = Mother.DestinationTile.GetRandomNonWaterTileInRadius(1);
-        }
-    }
-
     // TODO: All of this seek food stuff needs to add functionality for:
     //       - Another predator kills the prey (idk how to do this, might need some flag to be set on prey a bool BeingChased?)
     //       - They prey dies of natural causes (hunger thirst etc.)
@@ -175,7 +133,7 @@ public class Predator : Animal
     {
         // TODO: add some kind of timer? chance to fail?
         CurrentTarget.SetIsBeingChased(false);
-        CurrentTarget.Die();
+        CurrentTarget.GetEaten();
         CurrentTarget = null;
         CurrentState = AnimalState.Idle;
         Hunger = 1f;

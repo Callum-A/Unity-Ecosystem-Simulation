@@ -6,10 +6,12 @@ using UnityEngine;
 public class Prey : Animal
 {
     public bool IsBeingChased { get; protected set; }
-    public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender) : base(tile, 2f, 5, AnimalType.Prey, animalManager, id, gender)
+    public bool IsEaten { get; protected set; }
+    public Prey(Tile tile, AnimalManager animalManager, int id, Gender gender, Prey mother) : base(tile, 2f, 5, AnimalType.Prey, animalManager, id, gender, mother)
     {
         breedingCooldown = 2 * TimeController.Instance.SECONDS_IN_A_DAY;
         IsBeingChased = false;
+        IsEaten = false;
     }
 
     /// <summary>
@@ -19,7 +21,7 @@ public class Prey : Animal
     /// <returns>Boolean if it should die.</returns>
     public override bool ShouldDie()
     {
-        if (Hunger < 0f && CurrentState != AnimalState.Eating || Thirst < 0f && CurrentState != AnimalState.Drinking)
+        if (Hunger < 0f && CurrentState != AnimalState.Eating || Thirst < 0f && CurrentState != AnimalState.Drinking || IsEaten)
         {
             return true;
         }
@@ -39,6 +41,12 @@ public class Prey : Animal
         WorldController.Instance.EventLogController.AddLog($"{ToString()} has died!");
         Debug.Log("Now dying! - " + this.ToString() + " State: " + this.CurrentState);
         AnimalManager.DespawnAnimal(this);
+    }
+
+    public void GetEaten()
+    {
+        IsEaten = true;
+        Die();
     }
 
     public void SetIsBeingChased(bool b)
@@ -102,7 +110,9 @@ public class Prey : Animal
             case AnimalState.Breeding:
                 UpdateDoBreeding(deltaTime);
                 break;
-
+            case AnimalState.FollowingParent:
+                UpdateDoFollowingParent(deltaTime);
+                break;
             default:
                 Debug.LogError("Unrecognised state " + CurrentState);
                 break;
@@ -359,7 +369,8 @@ public class Prey : Animal
 
         for (int i = 0; i < litterSize; i++)
         {
-            AnimalManager.SpawnPrey(CurrentTile);
+            Prey child = AnimalManager.SpawnPrey(CurrentTile, this);
+            child.CurrentState = AnimalState.FollowingParent;
         }
 
         Debug.Log(this + " - Gives Birth");

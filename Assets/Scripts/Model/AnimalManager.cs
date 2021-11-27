@@ -42,7 +42,7 @@ public class AnimalManager
         // TODO: choose spawn locations
         for (int i = 0; i < preyAmount; i++)
         {
-            SpawnPrey(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female);
+            SpawnPrey(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female, null);
         }
 
         for (int i = 0; i < predatorAmount; i++)
@@ -127,6 +127,7 @@ public class AnimalManager
         foreach (Prey a in Prey)
         {
             int currentDist = World.ManhattanDistance(x, y, a.CurrentTile.X, a.CurrentTile.Y);
+            if (a.lifeStage == LifeStage.Adult) currentDist += 5; // Add priority for kids and elders
             if (currentDist < closestDistance && !a.IsBeingChased)
             {
                 closestDistance = currentDist;
@@ -176,15 +177,15 @@ public class AnimalManager
     /// </summary>
     /// <param name="tile">Tile to spawn it on.</param>
     /// <returns>The prey spawned.</returns>
-    public Prey SpawnPrey(Tile tile)
+    public Prey SpawnPrey(Tile tile, Prey mother)
     {
         Gender gender = (UnityEngine.Random.Range(0,2) == 0) ? Gender.Male : Gender.Female;
-        return SpawnPrey(tile, gender);
+        return SpawnPrey(tile, gender, mother);
     }
     
-    public Prey SpawnPrey(Tile tile, Gender gender)
+    public Prey SpawnPrey(Tile tile, Gender gender, Prey mother)
     {
-        Prey p = new Prey(tile, this, currentPreyID, gender);
+        Prey p = new Prey(tile, this, currentPreyID, gender, mother);
         Prey.Add(p);
         Spawn(p);
         currentPreyID++;

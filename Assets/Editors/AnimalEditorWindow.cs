@@ -24,7 +24,7 @@ public class AnimalEditorWindow : EditorWindow
         
         if (GUILayout.Button("Spawn Prey"))
         {
-            world.AnimalManager.SpawnPrey(world.GetTileAt(50, 50));
+            world.AnimalManager.SpawnPrey(world.GetTileAt(50, 50), null);
         }
         
         if (GUILayout.Button("Spawn Predator"))
