@@ -49,17 +49,22 @@ public class EventManager
         events.Add(e);
     }
 
-    public void OnNewDay(World world)
+    /// <summary>
+    /// Overload taking an event override to force an event
+    /// </summary>
+    /// <param name="world">The world</param>
+    /// <param name="overide">Force an event from debug menu, usually null when called in OnNewDay</param>
+    public void OnNewDay(World world, Event overide)
     {
         if (currentActiveEvent == null)
         {
-            Event e = ChooseEvent();
+            Event e = overide != null ? overide : ChooseEvent();
 
             if (e != null)
             {
                 // Do event
                 currentActiveEvent = e;
-                currentDurationLeft = UnityEngine.Random.Range(1, 6); ;
+                currentDurationLeft = UnityEngine.Random.Range(1, 6);
                 currentSeverity = UnityEngine.Random.Range(0f, 1f);
                 currentActiveEvent.OnEventStart(world, currentSeverity, currentDurationLeft);
                 WorldController.Instance.EventLogController.AddLog($"Choosing event: {e.ToString()} with severity: {currentSeverity}", Color.red);
@@ -87,5 +92,14 @@ public class EventManager
                 currentActiveEvent.OnEventDay(world, currentSeverity, currentDurationLeft);
             }
         }
+    }
+
+    /// <summary>
+    /// On new day which is called on a new day by time contrtoller to choose an event
+    /// </summary>
+    /// <param name="world">The world</param>
+    public void OnNewDay(World world)
+    {
+        OnNewDay(world, null);
     }
 }

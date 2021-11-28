@@ -10,6 +10,7 @@ public class TimeController : MonoBehaviour
     private float currentSeconds;
     public int NumberOfDays { get; protected set; }
     public static int TimeMultiplier { get; protected set; } = 1;
+    private AnimalSpriteController asc;
 
     private Action<World> OnNewDayCallback;
 
@@ -27,6 +28,7 @@ public class TimeController : MonoBehaviour
         NumberOfDays = 0;
         OnNewDayCallback += CSVData.CollectData;
         CSVData.CollectData(WorldController.Instance.World); // Workaround to collect data on app start
+        asc = FindObjectOfType<AnimalSpriteController>();
     }
 
     public void SetTimeMultiplier(int multiplier)
@@ -36,6 +38,16 @@ public class TimeController : MonoBehaviour
             TimeMultiplier = 1;
             return;
         }
+
+        if (multiplier == 32)
+        {
+            asc.TurnOffGameObjects();
+        }
+        else
+        {
+            asc.TurnOnGameObjects();
+        }
+
         TimeMultiplier = multiplier;
         WorldController.Instance.EventLogController.AddLog($"Setting time multiplier to {multiplier}x");
     }
