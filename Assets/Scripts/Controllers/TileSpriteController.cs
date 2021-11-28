@@ -26,6 +26,12 @@ public class TileSpriteController : SpriteController<Tile>
         HeatMap
     }
 
+    public void ToggleHeatMap() 
+    {
+        mode = (mode == DrawMode.Default) ? DrawMode.HeatMap : DrawMode.Default;
+        t1 = 0f;
+    }
+
     public void OnTileTypeChanged(Tile t)
     {
 
@@ -107,19 +113,6 @@ public class TileSpriteController : SpriteController<Tile>
 
     public void Update()
     {
-        if (Input.GetKeyDown("space"))
-        {
-            if (mode == TileSpriteController.DrawMode.Default)
-            {
-                mode = TileSpriteController.DrawMode.HeatMap;
-                WorldController.Instance.World.Data.updateHeatMap();
-            }
-            else
-            {
-                mode = TileSpriteController.DrawMode.Default;
-            }
-            WorldController.Instance.World.ForceTileUpdate();
-        }
 
         if (mode == TileSpriteController.DrawMode.HeatMap)
         {
@@ -129,6 +122,11 @@ public class TileSpriteController : SpriteController<Tile>
                 WorldController.Instance.World.ForceTileUpdate();
                 t1 = Time.realtimeSinceStartup;
             }
+        }
+
+        else 
+        {
+            WorldController.Instance.World.ForceTileUpdate();
         }
     }
 
