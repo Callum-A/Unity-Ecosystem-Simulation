@@ -38,7 +38,8 @@ public enum AnimalState
     ReadyToBreed,
     SearchingForMate,
     MovingToMate,
-    Breeding
+    Breeding,
+    FollowingParent
 }
 
 public abstract class Animal
@@ -70,13 +71,14 @@ public abstract class Animal
     
     public float Speed { get; protected set; }
     public int SightRange { get; protected set; }
+    public Animal Mother { get; protected set; }
     private float movePercentage;
 
     private Queue<Tile> path;
 
     protected Action<Animal> OnAnimalChangedCallback;
 
-    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id, Gender gender)
+    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id, Gender gender, Animal mother)
     {
         CurrentTile = tile;
         NextTile = tile;
@@ -94,6 +96,7 @@ public abstract class Animal
         lifeStage = LifeStage.Child;
         AnimalSex = gender;
         timeSinceLastBreeded = 0;
+        Mother = mother;
     }
 
     /// <summary>
@@ -401,6 +404,44 @@ public abstract class Animal
         //clearing partners
         getPartner().clearPartner();
         clearPartner();
+    }
+
+    /// <summary>
+    /// State for children, they will simply follow there mother and if she dies they die
+    /// </summary>
+    /// <param name="deltaTime">Time between frame</param>
+    public void UpdateDoFollowingParent(float deltaTime)
+    {
+        // Can we now fend for ourselves
+        if (lifeStage == LifeStage.Adult)
+        {
+            CurrentState = AnimalState.Idle;
+            return;
+        }
+
+        // Is our mother dead
+        if (Mother.ShouldDie())
+        {
+            // Death wander
+            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
+            return;
+        }
+
+        // Set out hunger and thirst
+        if (Mother.CurrentState == AnimalState.Eating)
+        {
+            Hunger = 1f;
+        }
+        else if (Mother.CurrentState == AnimalState.Drinking)
+        {
+            Thirst = 1f;
+        }
+
+        // Move with mother
+        if (Mother.DestinationTile != DestinationTile)
+        {
+            DestinationTile = Mother.DestinationTile.GetRandomNonWaterTileInRadius(1);
+        }
     }
 
     public abstract void AgeUp();
