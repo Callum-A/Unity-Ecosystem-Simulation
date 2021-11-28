@@ -82,11 +82,28 @@ public class WorldController : MonoBehaviour
         EventLogController.AddLog("Current Prey: " + World.getPrey().Count);
     }
 
-    private void startGraph()
+    public void ToggleGraph()
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && File.Exists(@"Assets\StreamingAssets\EcologyCompanion.exe"))
+        if (graphWindow == null || graphWindow.HasExited)
         {
-            graphWindow = Process.Start(@"Assets\StreamingAssets\EcologyCompanion.exe");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && File.Exists(@"Assets\StreamingAssets\EcologyCompanion.exe"))
+            {
+                graphWindow = Process.Start(@"Assets\StreamingAssets\EcologyCompanion.exe");
+            }
+        }
+
+        else 
+        {
+            if (graphWindow.HasExited)
+            {
+                graphWindow = null;
+            }
+
+            else 
+            {
+                graphWindow.Kill();
+                graphWindow = null;
+            }  
         }
     }
 
@@ -97,7 +114,6 @@ public class WorldController : MonoBehaviour
         TimeController.Instance.RegisterOnNewDayCallback(World.FoodManager.OnNewDay);
         TimeController.Instance.RegisterOnNewDayCallback(o => WorldCountLog());
         TimeController.Instance.RegisterOnNewDayCallback(World.EventManager.OnNewDay);
-        startGraph();
     }
 
 }
