@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class WorldController : MonoBehaviour
@@ -11,6 +14,7 @@ public class WorldController : MonoBehaviour
     public FoodSpriteController FoodSpriteController;
     public AnimalSpriteController AnimalSpriteController;
     public EventLogController EventLogController;
+    private Process graphWindow;
 
     /// <summary>
     /// Helper variables for initial food simulation will be removed later on after prey is fully implemented.
@@ -21,7 +25,6 @@ public class WorldController : MonoBehaviour
     public float nutritionNeeded = 40f;
     //---------------------------------------//
 
-
     public static WorldController Instance { get; protected set; }
     public World World { get; protected set; }
 
@@ -29,7 +32,7 @@ public class WorldController : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("This shouldnt be reachable");
+            UnityEngine.Debug.LogError("This shouldnt be reachable");
         }
         Instance = this;
 
@@ -79,12 +82,22 @@ public class WorldController : MonoBehaviour
         EventLogController.AddLog("Current Prey: " + World.getPrey().Count);
     }
 
+    private void startGraph()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && File.Exists(@"Assets\StreamingAssets\EcologyCompanion.exe"))
+        {
+            graphWindow = Process.Start(@"Assets\StreamingAssets\EcologyCompanion.exe");
+        }
+    }
+
+
     private void Start()
     {
         TimeController.Instance.RegisterOnNewDayCallback(o => World.AnimalManager.AgeUpAnimals());
         TimeController.Instance.RegisterOnNewDayCallback(World.FoodManager.OnNewDay);
         TimeController.Instance.RegisterOnNewDayCallback(o => WorldCountLog());
         TimeController.Instance.RegisterOnNewDayCallback(World.EventManager.OnNewDay);
+        startGraph();
     }
 
 }

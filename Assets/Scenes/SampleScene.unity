@@ -5630,7 +5630,7 @@ MonoBehaviour:
   PreySprite: {fileID: 21300000, guid: cf6e49f9fe459f14693459b473f6892b, type: 3}
   PredatorSprite: {fileID: 21300000, guid: fb21806409810cc4f8d803534b508f0c, type: 3}
   stateSprite: {fileID: 366390263}
-  simulatingOverlay: {fileID: 1252668957}
+  simulatingOverlay: {fileID: 404862259}
 --- !u!1 &2120872433
 GameObject:
   m_ObjectHideFlags: 0
