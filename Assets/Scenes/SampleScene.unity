@@ -245,6 +245,13 @@ MonoBehaviour:
   FoodSprite: {fileID: 21300000, guid: 885f1f47f5f86c648a9a94f318734515, type: 3}
   WaterSprite: {fileID: 21300000, guid: a0b26929bd1184348b9ecd3e1d63e022, type: 3}
   SandSprite: {fileID: 21300000, guid: 157a098f72d1dbb40bf3d1d8fb77744c, type: 3}
+  DefualtSprite: {fileID: 21300000, guid: 014ba858283b38c4389a2f56e8cc48df, type: 3}
+  mode: 0
+  HeatColours:
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  - {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &9427616
 GameObject:
   m_ObjectHideFlags: 0

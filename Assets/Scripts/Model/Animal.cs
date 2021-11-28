@@ -49,6 +49,7 @@ public abstract class Animal
     public Tile CurrentTile { get; protected set; }
     public Tile DestinationTile { get; protected set; }
     public Tile NextTile { get; protected set; }
+    public Tile LastTile { get; protected set; }
     public AnimalManager AnimalManager { get; protected set; }
     public AnimalState CurrentState { get; protected set; }
     public bool readyToBreed { get; protected set; }
@@ -80,6 +81,7 @@ public abstract class Animal
         CurrentTile = tile;
         NextTile = tile;
         DestinationTile = tile;
+        LastTile = tile;
         Hunger = 1f;
         Thirst = 1f;
         Speed = speed;
@@ -175,24 +177,33 @@ public abstract class Animal
 
         if (NextTile == null || NextTile == CurrentTile)
         {
-            // Get next tile from path finder
-            if (path == null || path.Count == 0)
-            {
-                // Generate path
-                path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
-
-                if (path.Count == 0)
+           // if (CurrentState != AnimalState.Wandering)
+            //{
+                //Get next tile from path finder
+                if (path == null || path.Count == 0)
                 {
-                    Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
-                    path = null;
-                    return;
+                    // Generate path
+                    path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
+
+                    if (path.Count == 0)
+                    {
+                        Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
+                        path = null;
+                        return;
+                    }
+
+                    NextTile = path.Dequeue(); // skip first as it is our curr tile
                 }
 
-                NextTile = path.Dequeue(); // skip first as it is our curr tile
-            }
+                // Grab next tile from path
+                NextTile = path.Dequeue();
+           // }
+           // else
+           // {
+            //    NextTile = DestinationTile;
+            //}
 
-            // Grab next tile from path
-            NextTile = path.Dequeue();
+            NextTile.HeatCounter += 1.0f;
         }
 
         float distToTravel = Mathf.Sqrt(Mathf.Pow(CurrentTile.X - NextTile.X, 2) + Mathf.Pow(CurrentTile.Y - NextTile.Y, 2));
@@ -204,6 +215,7 @@ public abstract class Animal
             // We have reached our dest
             // TODO: Get next tile from path finding
             //       If no more then we have truly reached our dest
+            LastTile = CurrentTile;
             CurrentTile = NextTile;
             movePercentage = 0;
             // Retain overshot movement?
