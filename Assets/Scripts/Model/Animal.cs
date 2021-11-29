@@ -246,7 +246,7 @@ public abstract class Animal
         movePercentage += percThisFrame;
         if (movePercentage >= 1)
         {
-            if (CurrentTile != null) { NextTile.HeatCounter += 1.0f; }  // update current tile for heatmap
+            if (CurrentTile != null && LastTile != CurrentTile) { CurrentTile.HeatCounter += 1.0f; }  // update current tile for heatmap
 
             // We have reached our dest
             // TODO: Get next tile from path finding
