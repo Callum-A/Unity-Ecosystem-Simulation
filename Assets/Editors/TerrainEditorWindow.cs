@@ -143,7 +143,7 @@ public class TerrainEditorWindow : EditorWindow
     {
         WorldController.Instance.World.TerrainGenerator.IsIsland = isIsland;
 
-        WorldController.Instance.World.GenerateTerrain(seed, scale, octaves, persistence, lacunarity, offset);
+        WorldController.Instance.World.GenerateTerrain(seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
     }
 
     private void ResetNoise()
@@ -196,12 +196,12 @@ public class TerrainEditorWindow : EditorWindow
         lacunarityInitial = WorldController.Instance.World.Data.Lacunarity;
         offsetInitial = WorldController.Instance.World.Data.Offset;
 
-        waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
-        sandHeight = WorldController.Instance.World.TerrainGenerator.SandHeight;
-        grassHeight = WorldController.Instance.World.TerrainGenerator.GrassHeight;
+        waterHeight = WorldController.Instance.World.Data.WaterHeight;
+        sandHeight = WorldController.Instance.World.Data.SandHeight;
+        grassHeight = WorldController.Instance.World.Data.GrassHeight;
 
-        waterHeightInitial = WorldController.Instance.World.TerrainGenerator.WaterHeight;
-        sandHeightInitial = WorldController.Instance.World.TerrainGenerator.SandHeight;
-        grassHeightInitial = WorldController.Instance.World.TerrainGenerator.GrassHeight;
+        waterHeightInitial = WorldController.Instance.World.Data.WaterHeightInitial;
+        sandHeightInitial = WorldController.Instance.World.Data.SandHeightInitial;
+        grassHeightInitial = WorldController.Instance.World.Data.GrassHeightInitial;
     }
 }

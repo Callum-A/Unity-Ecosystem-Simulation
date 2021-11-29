@@ -4,35 +4,35 @@ using UnityEngine;
 
 public class TerrainGenerator
 {
-    //public float[,] NoiseMap { get; protected set; }
-
-    //TODO: Noise function varibles shouldn't be hardcorded, should be set to defaults and edited through menus in unity.
-    // hardcoded noise variables.
-    //private int seed = 207;
-    //public float scale = 44;
-    //public int octaves = 5;
-    //public float persistance = 0.229f;
-    //public float lacunarity = 3;
-    //public Vector2 offset = new Vector2(0, 0);
-
-    //public int Seed { get { return seed; } set { seed = value; } }
-    //public float Scale { get { return scale; } set { scale = value; } }
-    //public int Octaves { get { return octaves; } set { octaves = value; } }
-    //public float Persistance { get { return persistance; } set { persistance = value; } }
-    //public float Lacunarity { get { return lacunarity; } set { lacunarity = value; } }
-    //public Vector2 Offset { get { return offset; } set { offset = value; } }
-
     private bool isIsland = false;
     public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
 
-    //Tile heights
-    private float waterHeight = 0.3f;
-    private float sandHeight = 0.35f;
-    private float grassHeight = 1f;
+    /// <summary>
+    /// Generates and updates terrain with the given parameters. Also creates TerrainData which is stored within world and used to keep track of relevant info.
+    /// </summary>
+    /// <param name="Tiles">The array of tiles of the world.</param>
+    /// <param name="width">Width of the map</param>
+    /// <param name="height">Height of the map</param>
+    /// <param name="seed">The seed used for the randomised sample offsets</param>
+    /// <param name="scale">The scale of the noise.</param>
+    /// <param name="octaves">Iterations of samples on the noise, higher values lead to more detailed noise, but increased computation</param>
+    /// <param name="persistence">A multiplier for how quickly the amplitude of each successive octave decreases. Higher values lead to rougher noise.</param>
+    /// <param name="lacunarity">A multiplier for how quickly the frequency of each successive octave increases. Higher values lead to smoother noise.</param>
+    /// <param name="offset">Addtional sample point offset. Shifts each sample by the given cordinates.</param>
+    /// <param name="waterHeight">Height of where water stops. value of 0 to 1.</param>
+    /// <param name="sandHeight">Height of where sand stops. value of 0 to 1.</param>
+    /// <param name="grassHeight">Height of where grass stops. value of 0 to 1.></param>
+    /// <returns>A TerrainData struct.</returns>
+    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterHeight, float sandHeight, float grassHeight)
+    {
+        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, persistence, lacunarity, offset);
 
-    public float WaterHeight { get { return waterHeight; } set { waterHeight = value; } }
-    public float SandHeight { get { return sandHeight; } set { sandHeight = value; } }
-    public float GrassHeight { get { return grassHeight; } set { grassHeight = value; } }
+        TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
+
+        data = UpdateTerrain(Tiles, data);
+
+        return data;
+    }
 
     /// <summary>
     ///  Generates a 2D array of normalised values to be used as a noise map.
@@ -119,34 +119,12 @@ public class TerrainGenerator
         return noisemap;
     }
 
-    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
-    {
-        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, persistence, lacunarity, offset);
-
-        TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
-
-        //hardcoded regions
-        //data.regions = new TileRegion[3];
-        //data.regions[0] = new TileRegion(TileType.Water, 0.3f);
-        //data.regions[1] = new TileRegion(TileType.Sand, 0.35f);
-        //data.regions[2] = new TileRegion(TileType.Ground, 1f);
-
-        for (int x = 0; x < Tiles.GetLength(0); x++)
-        {
-            for (int y = 0; y < Tiles.GetLength(1); y++)
-            {
-                Tile t = Tiles[x, y];
-                float noise = heightmap[x, y];
-
-                setUpTile(t, noise, data);
-            }
-        }
-
-        data.coastTiles = findCoastTiles(data);
-
-        return data;
-    }
-
+    /// <summary>
+    /// Updates the terrain layers of the map. Doesn't change the height map.
+    /// </summary>
+    /// <param name="Tiles">The array of tiles in the world.</param>
+    /// <param name="data">The TerrainData you wish to update.</param>
+    /// <returns>An updated TerrainData struct.</returns>
     public TerrainData UpdateTerrain(Tile[,] Tiles, TerrainData data)
     {
         for (int x = 0; x < Tiles.GetLength(0); x++)
@@ -189,32 +167,9 @@ public class TerrainGenerator
             tile.Type = TileType.Ground;
             data.grassTiles.Add(tile);
         }
-
-        //this is code for when tile regions are implemented
-
-        //foreach (TileRegion region in data.regions)
-        //{
-        //    if (noise <= region.height)
-        //    {
-        //        tile.Type = region.type;
-        //        if (region.type == TileType.Water)
-        //        {
-        //            data.waterTiles.Add(tile);
-        //        }
-        //        else if (region.type == TileType.Water)
-        //        {
-        //            data.sandTiles.Add(tile);
-        //        }
-        //        else if (region.type == TileType.Water)
-        //        {
-        //            data.grassTiles.Add(tile);
-        //        }
-        //        break;
-        //    }
-        //}
     }
 
-    //used to find the water adjacent tiles. Currently inefficent but an easy implemntaion
+    //used to find the water adjacent sand tiles.
     public List<Tile> findCoastTiles(TerrainData data)
     {
         List<Tile> coastTiles = new List<Tile>();

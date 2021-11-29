@@ -62,9 +62,31 @@ public class World
         return (Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
-    public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
+    public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterHeight, float sandHeight, float grassHeight)
     {
-        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset);
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
+        tileGraph = null;
+    }
+
+    /// <summary>
+    /// custom generate function for usage in the main menu.
+    /// </summary>
+    /// <param name="seed"> seed of the terrain</param>
+    /// <param name="waterHeight"> Sea level of the terrain, from 0 to 1 </param>
+    /// <param name="aridity"> How arid the land is, from 0 to 1</param>
+    public void GenerateTerrain(int seed, float waterHeight, float aridity)
+    {
+        float sandHeight = waterHeight + 0.05f;
+        if (sandHeight > 1) { sandHeight = 1; }
+
+        if (aridity != 0)
+        {
+            aridity = Mathf.Pow(aridity, 3); // changes the linear interpolation to exponential interpolation, high values beware!
+        }
+
+        aridity = Mathf.Lerp(sandHeight, 1, aridity);
+
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, 44, 5, 0.229f, 3, new Vector2(0, 0), waterHeight, aridity, 1);
         tileGraph = null;
     }
 
