@@ -249,7 +249,7 @@ public abstract class Animal
             // TODO: Get next tile from path finding
             //       If no more then we have truly reached our dest
 
-            if (LastTile.Type == TileType.Water)
+            if (CurrentTile.Type == TileType.Water)
             {
                 swimDistance++;
             }
