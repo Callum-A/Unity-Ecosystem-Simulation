@@ -38,7 +38,8 @@ public enum AnimalState
     ReadyToBreed,
     SearchingForMate,
     MovingToMate,
-    Breeding
+    Breeding,
+    FollowingParent
 }
 
 public abstract class Animal
@@ -49,6 +50,7 @@ public abstract class Animal
     public Tile CurrentTile { get; protected set; }
     public Tile DestinationTile { get; protected set; }
     public Tile NextTile { get; protected set; }
+    public Tile LastTile { get; protected set; }
     public AnimalManager AnimalManager { get; protected set; }
     public AnimalState CurrentState { get; protected set; }
     public bool readyToBreed { get; protected set; }
@@ -69,21 +71,25 @@ public abstract class Animal
     
     public float Speed { get; protected set; }
     public int SightRange { get; protected set; }
+    public Animal Mother { get; protected set; }
     private float movePercentage;
+    private int swimDistance; // used to keep track far animal has swam
 
     private Queue<Tile> path;
 
     protected Action<Animal> OnAnimalChangedCallback;
 
-    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id, Gender gender)
+    public Animal(Tile tile, float speed, int sightRange, AnimalType animalType, AnimalManager animalManager, int id, Gender gender, Animal mother)
     {
         CurrentTile = tile;
         NextTile = tile;
         DestinationTile = tile;
+        LastTile = tile;
         Hunger = 1f;
         Thirst = 1f;
         Speed = speed;
         movePercentage = 0f;
+        swimDistance = 0;
         SightRange = sightRange;
         AnimalType = animalType;
         AnimalManager = animalManager;
@@ -92,6 +98,7 @@ public abstract class Animal
         lifeStage = LifeStage.Child;
         AnimalSex = gender;
         timeSinceLastBreeded = 0;
+        Mother = mother;
     }
 
     /// <summary>
@@ -167,32 +174,70 @@ public abstract class Animal
     /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoMovement(float deltaTime)
     {
-        if (CurrentTile == DestinationTile)
+        if (CurrentTile.Type == TileType.Water && CurrentTile.GetWalkableNeighboursIncludingDiagonal().Count == 0)
         {
-            path = null;
-            return;
-        }
-
-        if (NextTile == null || NextTile == CurrentTile)
-        {
-            // Get next tile from path finder
-            if (path == null || path.Count == 0)
+            if (LastTile == CurrentTile) // if this happens, they are stuck in water.
             {
-                // Generate path
-                path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
-
-                if (path.Count == 0)
-                {
-                    Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
-                    path = null;
-                    return;
-                }
-
-                NextTile = path.Dequeue(); // skip first as it is our curr tile
+               Debug.Log("Tried to swim " + swimDistance + " tiles and drowned.");
+               Drown();
             }
 
-            // Grab next tile from path
-            NextTile = path.Dequeue();
+            if (swimDistance > 4)
+            {
+                int randomNum = UnityEngine.Random.Range(0, 10);
+                int drownChance = swimDistance - 4;
+
+                if (randomNum < (drownChance))
+                {
+                    Drown();
+                    Debug.Log("Tried to swim " + swimDistance + " tiles and drowned.");
+                    return;
+                }
+            }
+        }
+        else
+        {
+            swimDistance = 0;
+        }
+
+        if (CurrentState != AnimalState.Wandering)
+        {
+            if (CurrentTile == DestinationTile)
+            {
+                path = null;
+                return;
+            }
+
+            if (NextTile == null || NextTile == CurrentTile)
+            {
+                
+                    //Get next tile from path finder
+                    if (path == null || path.Count == 0)
+                    {
+                        // Generate path
+                        path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
+
+                        if (path.Count == 0)
+                        {
+                            Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
+                            path = null;
+                            return;
+                        }
+
+                        NextTile = path.Dequeue(); // skip first as it is our current tile
+                    }
+
+                    // Grab next tile from path
+                    NextTile = path.Dequeue();
+            }
+        }
+        else
+        {
+
+            if (NextTile == null || NextTile == CurrentTile)
+            {
+                NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile);
+            }
         }
 
         float distToTravel = Mathf.Sqrt(Mathf.Pow(CurrentTile.X - NextTile.X, 2) + Mathf.Pow(CurrentTile.Y - NextTile.Y, 2));
@@ -201,9 +246,18 @@ public abstract class Animal
         movePercentage += percThisFrame;
         if (movePercentage >= 1)
         {
+            if (CurrentTile != null && LastTile != CurrentTile) { CurrentTile.HeatCounter += 1.0f; }  // update current tile for heatmap
+
             // We have reached our dest
             // TODO: Get next tile from path finding
             //       If no more then we have truly reached our dest
+
+            if (CurrentTile.Type == TileType.Water)
+            {
+                swimDistance++;
+            }
+
+            LastTile = CurrentTile;
             CurrentTile = NextTile;
             movePercentage = 0;
             // Retain overshot movement?
@@ -313,6 +367,11 @@ public abstract class Animal
             CurrentState = AnimalState.SearchingForMate;
         }
 
+        else // if in water, move out
+        {
+            CurrentState = AnimalState.Wandering;
+        }
+
     }
 
     public void UpdateDoSeachingForMate(float deltaTime)
@@ -389,6 +448,44 @@ public abstract class Animal
         //clearing partners
         getPartner().clearPartner();
         clearPartner();
+    }
+
+    /// <summary>
+    /// State for children, they will simply follow there mother and if she dies they die
+    /// </summary>
+    /// <param name="deltaTime">Time between frame</param>
+    public void UpdateDoFollowingParent(float deltaTime)
+    {
+        // Can we now fend for ourselves
+        if (lifeStage == LifeStage.Adult)
+        {
+            CurrentState = AnimalState.Idle;
+            return;
+        }
+
+        // Is our mother dead
+        if (Mother.ShouldDie())
+        {
+            // Death wander
+            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
+            return;
+        }
+
+        // Set out hunger and thirst
+        if (Mother.CurrentState == AnimalState.Eating)
+        {
+            Hunger = 1f;
+        }
+        else if (Mother.CurrentState == AnimalState.Drinking)
+        {
+            Thirst = 1f;
+        }
+
+        // Move with mother
+        if (Mother.DestinationTile != DestinationTile)
+        {
+            DestinationTile = Mother.DestinationTile.GetRandomNonWaterTileInRadius(1);
+        }
     }
 
     public abstract void AgeUp();

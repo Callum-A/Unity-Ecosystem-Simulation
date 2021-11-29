@@ -43,6 +43,15 @@ public class World
         AnimalManager.Update(deltaTime);
     }
 
+    // function to force all tiles to update visually.
+    public void ForceTileUpdate()
+    {
+        foreach(Tile tile in tiles)
+        {
+            WorldController.Instance.TileSpriteController.OnTileTypeChanged(tile);
+        }
+    }
+
     public static int ManhattanDistance(int x1, int y1, int x2, int y2)
     {
         return Mathf.Abs(x1 - x2) + Mathf.Abs(y1 - y2);
@@ -56,6 +65,7 @@ public class World
     public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset);
+        tileGraph = null;
     }
 
     public void UpdateTerrain()

@@ -18,6 +18,7 @@ public class Tile
     public int X { get; protected set; }
     public int Y { get; protected set; }
     public Food food { get; protected set; }
+    public float HeatCounter { get; set; }
 
     public float MovementCost
     {
@@ -62,6 +63,8 @@ public class Tile
         X = x;
         Y = y;
         World = world;
+
+        HeatCounter = 0;
     }
 
     public Tile North()
@@ -134,6 +137,36 @@ public class Tile
 
 
         return ns;
+    }
+
+    // returns neighbours that aren't null or water.
+    public List<Tile> GetWalkableNeighbours()
+    {
+        Tile[] ns = GetNeighbours();
+        List<Tile> wns = new List<Tile>();
+        foreach (Tile n in ns)
+        {
+            if (n != null && n.Type != TileType.Water)
+            {
+                wns.Add(n);
+            }
+        }
+        return wns;
+    }
+
+    // returns neighbours that aren't null or water.
+    public List<Tile> GetWalkableNeighboursIncludingDiagonal()
+    {
+        Tile[] ns = GetNeighboursIncludingDiagonal();
+        List<Tile> wns = new List<Tile>();
+        foreach (Tile n in ns)
+        {
+            if (n != null && n.Type != TileType.Water)
+            {
+                wns.Add(n);
+            }
+        }
+        return wns;
     }
 
     //TODO: can be optimised further (currently a neighbourhood search n^2), also could use Euclidean distance over Manhattan for a 'smoother' radius.
@@ -273,6 +306,20 @@ public class Tile
     }
 
     public Tile GetRandomNonWaterTileInRadius(int r)
+    {
+        List<Tile> tiles = this.GetRadius(r);
+        tiles = tiles.FindAll(t => t.Type != TileType.Water);
+
+        if (tiles.Count == 0)
+        {
+            //Debug.LogError("No water tiles in radius found, from Tile -" + this.X + "," + this.Y);
+            return null;
+        }
+
+        return tiles[UnityEngine.Random.Range(0, tiles.Count)];
+    }
+
+    public Tile GetRandomNonWaterTileInRadius(float r)
     {
         List<Tile> tiles = this.GetRadius(r);
         tiles = tiles.FindAll(t => t.Type != TileType.Water);
