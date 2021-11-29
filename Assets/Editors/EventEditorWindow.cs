@@ -37,6 +37,26 @@ public class EventEditorWindow : EditorWindow
                 {
                     world.EventManager.OnNewDay(world, new DroughtEvent());
                 }
+
+                if (GUILayout.Button("Famine Event"))
+                {
+                    world.EventManager.OnNewDay(world, new FamineEvent());
+                }
+
+                if (GUILayout.Button("Sprout Event"))
+                {
+                    world.EventManager.OnNewDay(world, new SproutEvent());
+                }
+
+                if (GUILayout.Button("Disease Event"))
+                {
+                    world.EventManager.OnNewDay(world, new DiseaseEvent());
+                }
+
+                if (GUILayout.Button("Migration Event"))
+                {
+                    world.EventManager.OnNewDay(world, new MigrationEvent());
+                }
             }
         }
     }

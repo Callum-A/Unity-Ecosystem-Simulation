@@ -127,6 +127,16 @@ public class FoodManager
         return false;
     }
 
+    public void AddFoodToTile(Tile tile)
+    {
+        Food newFood = new Food(tile);
+        newFood.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
+        newFood.RegisterOnFoodChangedCallback(OnFoodChangedCallback);
+        tile.addFood(newFood);
+        OnFoodSproutedCallback(tile.food);
+        newFoodTiles.Add(tile);
+    }
+
     /// <summary>
     /// Spreads food from tiles adjacent to the initial tile.
     /// </summary>

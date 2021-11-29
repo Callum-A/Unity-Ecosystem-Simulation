@@ -28,6 +28,7 @@ public class EventManager
     private void AddEvents()
     {
         RegisterEvent(new TestEvent());
+        //RegisterEvent(new FamineEvent());
         //RegisterEvent(new DesertificationEvent());
         //RegisterEvent(new FloodEvent());
         //RegisterEvent(new DroughtEvent());
