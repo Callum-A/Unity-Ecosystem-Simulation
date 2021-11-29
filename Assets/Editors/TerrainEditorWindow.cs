@@ -57,76 +57,77 @@ public class TerrainEditorWindow : EditorWindow
 
     void OnGUI()
     {
-
-        GUILayout.Label("Noise Settings", EditorStyles.boldLabel);
-        GUILayout.Space(5f);
-
-        seed = EditorGUILayout.IntField("Seed", seed);
-
-        isIsland = EditorGUILayout.Toggle("Island Generation", isIsland);
-
-        advNoiseEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advNoiseEnabled);
-
-        scale = EditorGUILayout.FloatField("Scale", scale);
-        octaves = EditorGUILayout.IntField("Octaves", octaves);
-        persistence = EditorGUILayout.Slider("Persistance", persistence, 0, 1);
-        lacunarity = EditorGUILayout.FloatField("Lacunarity", lacunarity);
-
-        EditorGUILayout.EndToggleGroup();
-
-        if (GUILayout.Button("Update Noise"))
+        if (WorldController.Instance != null)
         {
-            UpdateNoise();
+            GUILayout.Label("Noise Settings", EditorStyles.boldLabel);
+            GUILayout.Space(5f);
+
+            seed = EditorGUILayout.IntField("Seed", seed);
+
+            isIsland = EditorGUILayout.Toggle("Island Generation", isIsland);
+
+            advNoiseEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advNoiseEnabled);
+
+            scale = EditorGUILayout.FloatField("Scale", scale);
+            octaves = EditorGUILayout.IntField("Octaves", octaves);
+            persistence = EditorGUILayout.Slider("Persistance", persistence, 0, 1);
+            lacunarity = EditorGUILayout.FloatField("Lacunarity", lacunarity);
+
+            EditorGUILayout.EndToggleGroup();
+
+            if (GUILayout.Button("Update Noise"))
+            {
+                UpdateNoise();
+            }
+
+            if (GUILayout.Button("Reset Noise"))
+            {
+                ResetNoise();
+            }
+
+            GUILayout.Space(10f);
+            GUILayout.Label("Tile Levels", EditorStyles.boldLabel);
+            GUILayout.Space(5f);
+
+            if (GUILayout.Button("Increment Water Level"))
+            {
+                WorldController.Instance.World.ChangeWaterLevel(0.05f);
+                waterHeight = WorldController.Instance.World.Data.WaterHeight;
+                sandHeight = WorldController.Instance.World.Data.SandHeight;
+                grassHeight = WorldController.Instance.World.Data.GrassHeight;
+                UpdateLayers();
+            }
+
+            if (GUILayout.Button("Decrement Water Level"))
+            {
+                WorldController.Instance.World.ChangeWaterLevel(-0.05f);
+                waterHeight = WorldController.Instance.World.Data.WaterHeight;
+                sandHeight = WorldController.Instance.World.Data.SandHeight;
+                grassHeight = WorldController.Instance.World.Data.GrassHeight;
+                UpdateLayers();
+            }
+
+
+            advLayersEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advLayersEnabled);
+
+            waterHeight = EditorGUILayout.Slider("Water Height", waterHeight, 0, 1);
+            sandHeight = EditorGUILayout.Slider("Sand Height", sandHeight, 0, 1);
+            grassHeight = EditorGUILayout.Slider("Grass Height", grassHeight, 0, 1);
+
+
+            EditorGUILayout.EndToggleGroup();
+
+            if (GUILayout.Button("Update Layers"))
+            {
+                UpdateLayers();
+            }
+
+            if (GUILayout.Button("Reset Layers"))
+            {
+                ResetLayers();
+            }
+
         }
-
-        if (GUILayout.Button("Reset Noise"))
-        {
-            ResetNoise();
-        }
-
-        GUILayout.Space(10f);
-        GUILayout.Label("Tile Levels", EditorStyles.boldLabel);
-        GUILayout.Space(5f);
-
-        if (GUILayout.Button("Increment Water Level"))
-        {
-            WorldController.Instance.World.ChangeWaterLevel(0.05f);
-            waterHeight = WorldController.Instance.World.Data.WaterHeight;
-            sandHeight = WorldController.Instance.World.Data.SandHeight;
-            grassHeight = WorldController.Instance.World.Data.GrassHeight;
-            UpdateLayers();
-        }
-
-        if (GUILayout.Button("Decrement Water Level"))
-        {
-            WorldController.Instance.World.ChangeWaterLevel(-0.05f);
-            waterHeight = WorldController.Instance.World.Data.WaterHeight;
-            sandHeight = WorldController.Instance.World.Data.SandHeight;
-            grassHeight = WorldController.Instance.World.Data.GrassHeight;
-            UpdateLayers();
-        }
-
-
-        advLayersEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advLayersEnabled);
-
-        waterHeight = EditorGUILayout.Slider("Water Height", waterHeight, 0, 1);
-        sandHeight = EditorGUILayout.Slider("Sand Height", sandHeight, 0, 1);
-        grassHeight = EditorGUILayout.Slider("Grass Height", grassHeight, 0, 1);
-
-
-        EditorGUILayout.EndToggleGroup();
-
-        if (GUILayout.Button("Update Layers"))
-        {
-            UpdateLayers();
-        }
-
-        if (GUILayout.Button("Reset Layers"))
-        {
-            ResetLayers();
-        }
-
-
     }
 
     public void Update()
@@ -136,7 +137,10 @@ public class TerrainEditorWindow : EditorWindow
 
     public void Awake()
     {
-        Initalise();
+        if (WorldController.Instance != null)
+        {
+            Initalise();
+        }
     }
 
     private void UpdateNoise()

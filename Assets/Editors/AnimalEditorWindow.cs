@@ -21,39 +21,41 @@ public class AnimalEditorWindow : EditorWindow
     {
         // GUILayout.Label("Test", EditorStyles.boldLabel);
         GUILayout.Space(5f);
-        
-        if (GUILayout.Button("Spawn Prey"))
+        if (WorldController.Instance != null)
         {
-            world.AnimalManager.SpawnPrey(world.GetTileAt(50, 50), null);
-        }
-        
-        if (GUILayout.Button("Spawn Predator"))
-        {
-            world.AnimalManager.SpawnPredator(world.GetTileAt(50, 50), null);
-        }
-        
-        if (GUILayout.Button("Set Currently Selected To Hungry"))
-        {
-            if (auc.currentlySelected != null)
+            if (GUILayout.Button("Spawn Prey"))
             {
-                auc.currentlySelected.Hunger = 0.31f;
+                world.AnimalManager.SpawnPrey(world.GetTileAt(50, 50), null);
             }
-        }
-        
-        if (GUILayout.Button("Set Currently Selected To Thirsty"))
-        {
-            if (auc.currentlySelected != null)
+
+            if (GUILayout.Button("Spawn Predator"))
             {
-                auc.currentlySelected.Thirst = 0.31f;
+                world.AnimalManager.SpawnPredator(world.GetTileAt(50, 50), null);
             }
-        }
-        
-        if (GUILayout.Button("Make Currently Selected Needs Met"))
-        {
-            if (auc.currentlySelected != null)
+
+            if (GUILayout.Button("Set Currently Selected To Hungry"))
             {
-                auc.currentlySelected.Hunger = 1f;
-                auc.currentlySelected.Thirst = 1f;
+                if (auc.currentlySelected != null)
+                {
+                    auc.currentlySelected.Hunger = 0.31f;
+                }
+            }
+
+            if (GUILayout.Button("Set Currently Selected To Thirsty"))
+            {
+                if (auc.currentlySelected != null)
+                {
+                    auc.currentlySelected.Thirst = 0.31f;
+                }
+            }
+
+            if (GUILayout.Button("Make Currently Selected Needs Met"))
+            {
+                if (auc.currentlySelected != null)
+                {
+                    auc.currentlySelected.Hunger = 1f;
+                    auc.currentlySelected.Thirst = 1f;
+                }
             }
         }
     }

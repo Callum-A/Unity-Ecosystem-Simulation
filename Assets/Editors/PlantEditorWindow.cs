@@ -19,16 +19,18 @@ public class PlantEditorWindow : EditorWindow
     {
         // GUILayout.Label("Test", EditorStyles.boldLabel);
         GUILayout.Space(5f);
-        
-        if (GUILayout.Button("Kill All Plants"))
+        if (WorldController.Instance != null)
         {
-            int index = 0;
-            while (index < fm.FoodTiles.Count)
+            if (GUILayout.Button("Kill All Plants"))
             {
-                Tile tile = fm.FoodTiles[index];
-                tile.DrownTile();
+                int index = 0;
+                while (index < fm.FoodTiles.Count)
+                {
+                    Tile tile = fm.FoodTiles[index];
+                    tile.DrownTile();
+                }
+                // world.AnimalManager.SpawnPrey(world.GetTileAt(50, 50));
             }
-            // world.AnimalManager.SpawnPrey(world.GetTileAt(50, 50));
         }
     }
 }
