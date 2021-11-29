@@ -240,14 +240,14 @@ public abstract class Animal
             }
         }
 
-        if (NextTile != null) { NextTile.HeatCounter += 1.0f; }  // update current tile for heatmap
-
         float distToTravel = Mathf.Sqrt(Mathf.Pow(CurrentTile.X - NextTile.X, 2) + Mathf.Pow(CurrentTile.Y - NextTile.Y, 2));
         float distThisFrame = deltaTime * Speed;
         float percThisFrame = distThisFrame / distToTravel;
         movePercentage += percThisFrame;
         if (movePercentage >= 1)
         {
+            if (CurrentTile != null) { NextTile.HeatCounter += 1.0f; }  // update current tile for heatmap
+
             // We have reached our dest
             // TODO: Get next tile from path finding
             //       If no more then we have truly reached our dest
