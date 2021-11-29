@@ -73,6 +73,7 @@ public abstract class Animal
     public int SightRange { get; protected set; }
     public Animal Mother { get; protected set; }
     private float movePercentage;
+    private int swimDistance; // used to keep track far animal has swam
 
     private Queue<Tile> path;
 
@@ -88,6 +89,7 @@ public abstract class Animal
         Thirst = 1f;
         Speed = speed;
         movePercentage = 0f;
+        swimDistance = 0;
         SightRange = sightRange;
         AnimalType = animalType;
         AnimalManager = animalManager;
@@ -172,41 +174,70 @@ public abstract class Animal
     /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoMovement(float deltaTime)
     {
-        if (CurrentTile == DestinationTile)
+        if (CurrentTile.Type == TileType.Water && CurrentTile.GetWalkableNeighboursIncludingDiagonal().Count == 0)
         {
-            path = null;
-            return;
+            if (LastTile == CurrentTile) // if this happens, they are stuck in water.
+            {
+               Debug.Log("Tried to swim " + swimDistance + " tiles and drowned.");
+               Drown();
+            }
+
+            if (swimDistance > 4)
+            {
+                int randomNum = UnityEngine.Random.Range(0, 10);
+                int drownChance = swimDistance - 4;
+
+                if (randomNum < (drownChance))
+                {
+                    Drown();
+                    Debug.Log("Tried to swim " + swimDistance + " tiles and drowned.");
+                    return;
+                }
+            }
+        }
+        else
+        {
+            swimDistance = 0;
         }
 
-        if (NextTile == null || NextTile == CurrentTile)
+        if (CurrentState != AnimalState.Wandering)
         {
-           // if (CurrentState != AnimalState.Wandering)
-            //{
-                //Get next tile from path finder
-                if (path == null || path.Count == 0)
-                {
-                    // Generate path
-                    path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
+            if (CurrentTile == DestinationTile)
+            {
+                path = null;
+                return;
+            }
 
-                    if (path.Count == 0)
+            if (NextTile == null || NextTile == CurrentTile)
+            {
+                
+                    //Get next tile from path finder
+                    if (path == null || path.Count == 0)
                     {
-                        Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
-                        path = null;
-                        return;
+                        // Generate path
+                        path = AnimalManager.PathManager.SolvePath(CurrentTile.World, CurrentTile, DestinationTile);
+
+                        if (path.Count == 0)
+                        {
+                            Debug.LogError("Could not find path to destination tile " + DestinationTile.X + ", " + DestinationTile.Y);
+                            path = null;
+                            return;
+                        }
+
+                        NextTile = path.Dequeue(); // skip first as it is our current tile
                     }
 
-                    NextTile = path.Dequeue(); // skip first as it is our curr tile
-                }
+                    // Grab next tile from path
+                    NextTile = path.Dequeue();
+            }
+        }
+        else
+        {
 
-                // Grab next tile from path
-                NextTile = path.Dequeue();
-           // }
-           // else
-           // {
-            //    NextTile = DestinationTile;
-            //}
-
-            NextTile.HeatCounter += 1.0f;
+            if (NextTile == null || NextTile == CurrentTile)
+            {
+                NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile);
+            }
         }
 
         float distToTravel = Mathf.Sqrt(Mathf.Pow(CurrentTile.X - NextTile.X, 2) + Mathf.Pow(CurrentTile.Y - NextTile.Y, 2));
@@ -215,9 +246,17 @@ public abstract class Animal
         movePercentage += percThisFrame;
         if (movePercentage >= 1)
         {
+            if (CurrentTile != null && LastTile != CurrentTile) { CurrentTile.HeatCounter += 1.0f; }  // update current tile for heatmap
+
             // We have reached our dest
             // TODO: Get next tile from path finding
             //       If no more then we have truly reached our dest
+
+            if (CurrentTile.Type == TileType.Water)
+            {
+                swimDistance++;
+            }
+
             LastTile = CurrentTile;
             CurrentTile = NextTile;
             movePercentage = 0;
@@ -326,6 +365,11 @@ public abstract class Animal
         else if (AnimalSex == Gender.Male)
         {
             CurrentState = AnimalState.SearchingForMate;
+        }
+
+        else // if in water, move out
+        {
+            CurrentState = AnimalState.Wandering;
         }
 
     }
