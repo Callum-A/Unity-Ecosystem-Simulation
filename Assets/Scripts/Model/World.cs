@@ -62,9 +62,9 @@ public class World
         return (Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)));
     }
 
-    public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterHeight, float sandHeight, float grassHeight)
+    public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterHeight, float sandHeight, float grassHeight, int generationMode)
     {
-        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight, generationMode);
         tileGraph = null;
     }
 
@@ -72,9 +72,10 @@ public class World
     /// custom generate function for usage in the main menu.
     /// </summary>
     /// <param name="seed"> seed of the terrain</param>
-    /// <param name="waterHeight"> Sea level of the terrain, from 0 to 1 </param>
-    /// <param name="aridity"> How arid the land is, from 0 to 1</param>
-    public void GenerateTerrain(int seed, float waterHeight, float aridity)
+    /// <param name="waterHeight"> Sea level of the terrain, from 0 to 1.</param>
+    /// <param name="aridity"> How arid the land is, from 0 to 1./param>
+    /// <param name="generationType"> The enum value of the type of generation you want. 0 = normal, 1 = archipelago, 2 = island </param>
+    public void GenerateTerrain(int seed, float waterHeight, float aridity, int generationType)
     {
         float sandHeight = waterHeight + 0.05f;
         if (sandHeight > 1) { sandHeight = 1; }
@@ -86,7 +87,7 @@ public class World
 
         aridity = Mathf.Lerp(sandHeight, 1, aridity);
 
-        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, 44, 5, 0.229f, 3, new Vector2(0, 0), waterHeight, aridity, 1);
+        Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, 44, 5, 0.229f, 3, new Vector2(0, 0), waterHeight, aridity, 1, generationType);
         tileGraph = null;
     }
 

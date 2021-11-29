@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class TerrainGenerator
 {
-    private bool isIsland = false;
-    public bool IsIsland { get { return isIsland;} set { isIsland = value; } }
+    public enum TerrainType 
+    {
+        Default,
+        Archipelago, // first version of island code, still gives some nice results at times.
+        Island       // final version of island code, gave the results we actually wanted.
+    }
 
     /// <summary>
     /// Generates and updates terrain with the given parameters. Also creates TerrainData which is stored within world and used to keep track of relevant info.
@@ -23,9 +27,11 @@ public class TerrainGenerator
     /// <param name="sandHeight">Height of where sand stops. value of 0 to 1.</param>
     /// <param name="grassHeight">Height of where grass stops. value of 0 to 1.></param>
     /// <returns>A TerrainData struct.</returns>
-    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterHeight, float sandHeight, float grassHeight)
+    public TerrainData GenerateTerrain(Tile[,] Tiles, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, float waterHeight, float sandHeight, float grassHeight, int generationMode)
     {
-        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, persistence, lacunarity, offset);
+        TerrainType type = (TerrainType)generationMode;
+
+        float[,] heightmap = GenerateNoiseMap(Tiles.GetLength(0), Tiles.GetLength(1), seed, scale, octaves, persistence, lacunarity, offset, type);
 
         TerrainData data = new TerrainData(Tiles.Length, heightmap, seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight);
 
@@ -45,7 +51,7 @@ public class TerrainGenerator
     /// <param name="persistence">A multiplier for how quickly the amplitude of each successive octave decreases. Higher values lead to rougher noise.</param>
     /// <param name="lacunarity">A multiplier for how quickly the frequency of each successive octave increases. Higher values lead to smoother noise.</param>
     /// <param name="offset">Addtional sample point offset. Shifts each sample by the given cordinates.</param>
-    private float[,] GenerateNoiseMap(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
+    private float[,] GenerateNoiseMap(int width, int height, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset, TerrainType type)
     {
         float[,] noisemap = new float[width, height];
 
@@ -83,18 +89,28 @@ public class TerrainGenerator
                     float sampleX = (x - halfWidth) / scale * frequency + octaveOffset[i].x;
                     float sampleY = (y - halfHeight) / scale * frequency + octaveOffset[i].y;
 
-                    float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
+                    float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1; // range -1 to 1
                     noiseHeight += perlinValue * amplitude;
 
                     amplitude *= persistence;
                     frequency *= lacunarity;
                 }
 
-                if (isIsland == true)
+                switch (type)
                 {
-                    noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
+                    case TerrainType.Archipelago:
+
+                        noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
+                        break;
+
+                    case TerrainType.Island:
+
+                        noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 50;
+                        break;
                 }
 
+
+                // update min and max noise values;
                 if (noiseHeight > maxNoiseHeight)
                 {
                     maxNoiseHeight = noiseHeight;
