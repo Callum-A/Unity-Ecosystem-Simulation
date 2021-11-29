@@ -4,8 +4,8 @@ using UnityEngine;
 
 public abstract class SpriteController<T> : MonoBehaviour
 {
-    private Dictionary<string, Sprite> spriteMap;
-    private Dictionary<T, GameObject> gameObjectMap;
+    protected Dictionary<string, Sprite> spriteMap;
+    protected Dictionary<T, GameObject> gameObjectMap;
 
     /// <summary>
     /// Constructor setting up the sprite map and game object map
@@ -86,5 +86,10 @@ public abstract class SpriteController<T> : MonoBehaviour
     protected void AddGameObject(T instance, GameObject go)
     {
         gameObjectMap.Add(instance, go);
+    }
+
+    protected void RemoveGameObject(T instance)
+    {
+        gameObjectMap.Remove(instance);
     }
 }

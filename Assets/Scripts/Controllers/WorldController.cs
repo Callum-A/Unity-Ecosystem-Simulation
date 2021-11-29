@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class WorldController : MonoBehaviour
@@ -11,6 +14,7 @@ public class WorldController : MonoBehaviour
     public FoodSpriteController FoodSpriteController;
     public AnimalSpriteController AnimalSpriteController;
     public EventLogController EventLogController;
+    private Process graphWindow;
 
     /// <summary>
     /// Helper variables for initial food simulation will be removed later on after prey is fully implemented.
@@ -21,7 +25,6 @@ public class WorldController : MonoBehaviour
     public float nutritionNeeded = 40f;
     //---------------------------------------//
 
-
     public static WorldController Instance { get; protected set; }
     public World World { get; protected set; }
 
@@ -29,7 +32,7 @@ public class WorldController : MonoBehaviour
     {
         if (Instance != null)
         {
-            Debug.LogError("This shouldnt be reachable");
+            UnityEngine.Debug.LogError("This shouldnt be reachable");
         }
         Instance = this;
 
@@ -65,7 +68,7 @@ public class WorldController : MonoBehaviour
 
         World.GenerateTerrain(207, 44, 5, 0.229f, 3, new Vector2(0,0));
         World.SproutInitialFood();
-        World.SpawnAnimals(4, 0);
+        World.SpawnAnimals(16, 2);
     }
 
     /// <summary>
@@ -78,6 +81,32 @@ public class WorldController : MonoBehaviour
         EventLogController.AddLog("Current Nutrition: " + World.getTotalNutritionOnMap());
         EventLogController.AddLog("Current Prey: " + World.getPrey().Count);
     }
+
+    public void ToggleGraph()
+    {
+        if (graphWindow == null || graphWindow.HasExited)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && File.Exists(@"Assets\StreamingAssets\EcologyCompanion.exe"))
+            {
+                graphWindow = Process.Start(@"Assets\StreamingAssets\EcologyCompanion.exe");
+            }
+        }
+
+        else 
+        {
+            if (graphWindow.HasExited)
+            {
+                graphWindow = null;
+            }
+
+            else 
+            {
+                graphWindow.Kill();
+                graphWindow = null;
+            }  
+        }
+    }
+
 
     private void Start()
     {
