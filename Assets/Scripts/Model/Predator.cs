@@ -215,7 +215,6 @@ public class Predator : Animal
         else
         {
             CurrentState = AnimalState.Wandering;
-            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(5);
         }
     }
 

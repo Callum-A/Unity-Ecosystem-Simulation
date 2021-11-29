@@ -65,6 +65,7 @@ public class World
     public void GenerateTerrain(int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, scale, octaves, persistence, lacunarity, offset);
+        tileGraph = null;
     }
 
     public void UpdateTerrain()
