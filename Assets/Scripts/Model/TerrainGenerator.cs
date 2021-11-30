@@ -96,6 +96,17 @@ public class TerrainGenerator
                     frequency *= lacunarity;
                 }
 
+
+                // update min and max noise values;
+                if (noiseHeight > maxNoiseHeight)
+                {
+                    maxNoiseHeight = noiseHeight;
+                }
+                else if (noiseHeight < minNoiseHeight)
+                {
+                    minNoiseHeight = noiseHeight;
+                }
+
                 switch (type)
                 {
                     case TerrainType.Archipelago:
@@ -109,16 +120,6 @@ public class TerrainGenerator
                         break;
                 }
 
-
-                // update min and max noise values;
-                if (noiseHeight > maxNoiseHeight)
-                {
-                    maxNoiseHeight = noiseHeight;
-                }
-                else if (noiseHeight < minNoiseHeight)
-                {
-                    minNoiseHeight = noiseHeight;
-                }
 
                 noisemap[x, y] = noiseHeight;
             }

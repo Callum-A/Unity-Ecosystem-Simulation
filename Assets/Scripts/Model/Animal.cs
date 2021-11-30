@@ -174,18 +174,21 @@ public abstract class Animal
     /// <param name="deltaTime">Time between last frame.</param>
     public void UpdateDoMovement(float deltaTime)
     {
+        // check if swimming or not
         if (CurrentTile.Type == TileType.Water && CurrentTile.GetWalkableNeighboursIncludingDiagonal().Count == 0)
         {
-            if (LastTile == CurrentTile) // if this happens, they are stuck in water.
+            if (LastTile == CurrentTile) // if this happens, they are stuck in water. Drown them.
             {
                Debug.Log("Tried to swim " + swimDistance + " tiles and drowned.");
                Drown();
             }
 
-            if (swimDistance > 4)
+            int drownStart = AnimalType == AnimalType.Prey ? 4 : 10; //foxes swim better than rabbits.
+
+            if (swimDistance > drownStart)
             {
                 int randomNum = UnityEngine.Random.Range(0, 10);
-                int drownChance = swimDistance - 4;
+                int drownChance = swimDistance - drownStart;
 
                 if (randomNum < (drownChance))
                 {
@@ -200,7 +203,7 @@ public abstract class Animal
             swimDistance = 0;
         }
 
-        if (CurrentState != AnimalState.Wandering)
+        if (CurrentState != AnimalState.Wandering && CurrentState != AnimalState.FollowingParent)
         {
             if (CurrentTile == DestinationTile)
             {
@@ -236,7 +239,14 @@ public abstract class Animal
 
             if (NextTile == null || NextTile == CurrentTile)
             {
-                NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile);
+                if (lifeStage == LifeStage.Child && !Mother.ShouldDie())
+                {
+                    NextTile = AnimalManager.PathManager.GetFollowMotherTile(Mother.CurrentTile, CurrentTile); // child wandering (if not an orphan)
+                }
+                else
+                {
+                    NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile); //regular wandering
+                }
             }
         }
 
@@ -463,14 +473,6 @@ public abstract class Animal
             return;
         }
 
-        // Is our mother dead
-        if (Mother.ShouldDie())
-        {
-            // Death wander
-            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
-            return;
-        }
-
         // Set out hunger and thirst
         if (Mother.CurrentState == AnimalState.Eating)
         {
@@ -479,12 +481,6 @@ public abstract class Animal
         else if (Mother.CurrentState == AnimalState.Drinking)
         {
             Thirst = 1f;
-        }
-
-        // Move with mother
-        if (Mother.DestinationTile != DestinationTile)
-        {
-            DestinationTile = Mother.DestinationTile.GetRandomNonWaterTileInRadius(1);
         }
     }
 
