@@ -13,11 +13,13 @@ public class TileSpriteController : SpriteController<Tile>
    // private World world = WorldController.Instance.World;
 
     public DrawMode mode = DrawMode.Default;
+    private DrawMode lastFrame = DrawMode.Default;
     public Color[] HeatColours = new Color[] { Color.blue, Color.green, Color.yellow, Color.red };
 
     FoodSpriteController FoodController;
 
     float t1;
+
 
     public enum DrawMode
     {
@@ -114,7 +116,7 @@ public class TileSpriteController : SpriteController<Tile>
     public void Update()
     {
 
-        if (mode == TileSpriteController.DrawMode.HeatMap)
+        if (mode == DrawMode.HeatMap)
         {
             if (Time.realtimeSinceStartup - t1 > 2f)
             {
@@ -126,8 +128,13 @@ public class TileSpriteController : SpriteController<Tile>
 
         else 
         {
-            WorldController.Instance.World.ForceTileUpdate();
+            if (lastFrame != mode)
+            {
+                WorldController.Instance.World.ForceTileUpdate();
+            }
         }
+
+        lastFrame = mode;
     }
 
 }

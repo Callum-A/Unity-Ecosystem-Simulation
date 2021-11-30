@@ -30,9 +30,11 @@ public class TerrainEditorWindow : EditorWindow
     float lacunarityInitial = 0;
     Vector2 offsetInitial = new Vector2(0, 0);
 
-    public TileRegion[] regions = new TileRegion[0];
+    // public TileRegion[] regions = new TileRegion[0];
 
-    bool isIsland = false;
+    int generationMode = 0;
+
+
 
     #endregion
 
@@ -63,7 +65,11 @@ public class TerrainEditorWindow : EditorWindow
 
         seed = EditorGUILayout.IntField("Seed", seed);
 
-        isIsland = EditorGUILayout.Toggle("Island Generation", isIsland);
+        string[] options = new string[]
+        {
+            "Normal", "Archipelago", "Island",
+        };
+        generationMode = EditorGUILayout.Popup("Label", generationMode, options);
 
         advNoiseEnabled = EditorGUILayout.BeginToggleGroup("Advanced Settings", advNoiseEnabled);
 
@@ -141,9 +147,7 @@ public class TerrainEditorWindow : EditorWindow
 
     private void UpdateNoise()
     {
-        WorldController.Instance.World.TerrainGenerator.IsIsland = isIsland;
-
-        WorldController.Instance.World.GenerateTerrain(seed, scale, octaves, persistence, lacunarity, offset);
+        WorldController.Instance.World.GenerateTerrain(seed, scale, octaves, persistence, lacunarity, offset, waterHeight, sandHeight, grassHeight, generationMode);
     }
 
     private void ResetNoise()
@@ -187,7 +191,6 @@ public class TerrainEditorWindow : EditorWindow
         lacunarity = WorldController.Instance.World.Data.Lacunarity;
         offset = WorldController.Instance.World.Data.Offset;
 
-        isIsland = WorldController.Instance.World.TerrainGenerator.IsIsland;
 
         seedInitial = WorldController.Instance.World.Data.Seed;
         scaleInitial = WorldController.Instance.World.Data.Scale;
@@ -196,12 +199,12 @@ public class TerrainEditorWindow : EditorWindow
         lacunarityInitial = WorldController.Instance.World.Data.Lacunarity;
         offsetInitial = WorldController.Instance.World.Data.Offset;
 
-        waterHeight = WorldController.Instance.World.TerrainGenerator.WaterHeight;
-        sandHeight = WorldController.Instance.World.TerrainGenerator.SandHeight;
-        grassHeight = WorldController.Instance.World.TerrainGenerator.GrassHeight;
+        waterHeight = WorldController.Instance.World.Data.WaterHeight;
+        sandHeight = WorldController.Instance.World.Data.SandHeight;
+        grassHeight = WorldController.Instance.World.Data.GrassHeight;
 
-        waterHeightInitial = WorldController.Instance.World.TerrainGenerator.WaterHeight;
-        sandHeightInitial = WorldController.Instance.World.TerrainGenerator.SandHeight;
-        grassHeightInitial = WorldController.Instance.World.TerrainGenerator.GrassHeight;
+        waterHeightInitial = WorldController.Instance.World.Data.WaterHeightInitial;
+        sandHeightInitial = WorldController.Instance.World.Data.SandHeightInitial;
+        grassHeightInitial = WorldController.Instance.World.Data.GrassHeightInitial;
     }
 }
