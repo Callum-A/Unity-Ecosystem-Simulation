@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -8,7 +9,8 @@ public class MainMenu : MonoBehaviour
 {
     public Text PreyCount;
     public Text PredatorCount;
-    
+
+    public Dropdown WorldTypeDropdown;
     public InputField InputSeed;
     public Slider WaterSlider;
     public Slider AriditySlider;
@@ -51,7 +53,7 @@ public class MainMenu : MonoBehaviour
     public void OnSpreadRateChange(float value) 
     {
         SpreadRate.text = SpreadSlider.value.ToString() + "%";
-        WorldController.SpreadRate = (SpreadSlider.value == 0) ? -1 : 100 - SpreadSlider.value;
+        WorldController.SpreadRate = SpreadSlider.value;
     }
 
     public void OnAridityLevelChange(float value)
@@ -60,8 +62,22 @@ public class MainMenu : MonoBehaviour
         WorldController.AridityLevel = AriditySlider.value/100;
     }
 
-    private void getRandomSeed() 
+    public void OnIslandTypeChanged() 
     {
-        int length = UnityEngine.Random.Range(4,12);
+        WorldController.WorldType = WorldTypeDropdown.value;
+    }
+
+    public void getRandomSeed() 
+    {
+        int length = Random.Range(4,12);
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < length; i++)
+        {
+            sb.Append(Random.Range(0, 9));
+        }
+
+        InputSeed.text = sb.ToString();
+        OnValueSeedChanged();
     }
 }

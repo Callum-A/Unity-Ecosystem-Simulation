@@ -27,6 +27,7 @@ public class WorldController : MonoBehaviour
     //-------Creation Variables-------------//
     public static int PreyCount;
     public static int PredatorCount;
+    public static int WorldType;
     public static int WorldSeed = 207;
     public static float WaterLevel;
     public static float AridityLevel;

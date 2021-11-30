@@ -38,11 +38,6 @@ public class Food
     public static int InitialSproutRate { get; protected set; } = 100;
 
     /// <summary>
-    /// This is used to determine the Initial sprout rate of the food, 1 in x where x is the spread rate.
-    /// </summary>
-    public static int SpreadRate { get; protected set; } = 25;
-
-    /// <summary>
     /// Action to perform to deal with sprites when the food is exhasted.
     /// </summary>
     private Action<Food> OnFoodExhausted;
