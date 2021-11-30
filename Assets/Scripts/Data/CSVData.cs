@@ -5,6 +5,7 @@ using System.Globalization;
 using UnityEngine;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 public static class CSVData
 {
@@ -25,11 +26,16 @@ public static class CSVData
         NutritionTotal.Add(world.getTotalNutritionOnMap());
         NumFoodTiles.Add(world.getFoodTiles().Count);
         NumWaterTiles.Add(world.getWaterTiles().Count);
-        WriteCSV();
+        //WriteCSV();
+        
+        await AsyncWriteCSV();
+        
     }
 
-    private async static void WriteCSV()
+    private static async Task AsyncWriteCSV()
     {
+        
+  
         string path = Application.streamingAssetsPath + "/" + fileName;
         if (!hasWritten)
         {
@@ -50,5 +56,7 @@ public static class CSVData
                 $"{NumFoodTiles[daysProcessed]},{NumWaterTiles[daysProcessed]}");
         }
         daysProcessed++;
+
+        return;
     }
 }

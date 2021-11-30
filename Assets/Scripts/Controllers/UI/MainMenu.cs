@@ -48,6 +48,7 @@ public class MainMenu : MonoBehaviour
     {
         WaterLevel.text = WaterSlider.value.ToString() + "%";
         WorldController.WaterLevel = WaterSlider.value/100;
+        
     }
 
     public void OnSpreadRateChange(float value) 
