@@ -200,7 +200,7 @@ public abstract class Animal
             swimDistance = 0;
         }
 
-        if (CurrentState != AnimalState.Wandering)
+        if (CurrentState != AnimalState.Wandering && CurrentState != AnimalState.FollowingParent)
         {
             if (CurrentTile == DestinationTile)
             {
@@ -236,7 +236,21 @@ public abstract class Animal
 
             if (NextTile == null || NextTile == CurrentTile)
             {
-                NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile);
+                if (lifeStage != LifeStage.Child)
+                {
+                    NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile);
+                }
+                else
+                {
+                    if (Mother.ShouldDie())
+                    {
+                        NextTile = AnimalManager.PathManager.GetWanderTile(CurrentTile, LastTile);
+                    }
+                    else 
+                    {
+                        NextTile = AnimalManager.PathManager.GetFollowMotherTile(Mother.CurrentTile, CurrentTile);
+                    }
+                }
             }
         }
 
@@ -463,13 +477,13 @@ public abstract class Animal
             return;
         }
 
-        // Is our mother dead
-        if (Mother.ShouldDie())
-        {
-            // Death wander
-            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
-            return;
-        }
+        //// Is our mother dead
+        //if (Mother.ShouldDie())
+        //{
+        //    // Death wander
+        //    DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
+        //    return;
+        //}
 
         // Set out hunger and thirst
         if (Mother.CurrentState == AnimalState.Eating)
@@ -481,11 +495,11 @@ public abstract class Animal
             Thirst = 1f;
         }
 
-        // Move with mother
-        if (Mother.DestinationTile != DestinationTile)
-        {
-            DestinationTile = Mother.DestinationTile.GetRandomNonWaterTileInRadius(1);
-        }
+        //// Move with mother
+        //if (Mother.CurrentTile != CurrentTile)
+        //{
+        //    NextTile = AnimalManager.PathManager.GetFollowMotherTile(CurrentTile, Mother.CurrentTile);
+        //}
     }
 
     public abstract void AgeUp();
