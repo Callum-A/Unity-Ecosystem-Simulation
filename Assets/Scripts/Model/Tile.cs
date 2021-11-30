@@ -26,7 +26,11 @@ public class Tile
         {
             if (_type == TileType.Water)
             {
-                return 5f;
+                return 20f;
+            }
+            else if (_type == TileType.Sand)
+            {
+                return 0.8f;
             }
             else
             {

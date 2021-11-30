@@ -71,4 +71,45 @@ public class PathFindingManager
             return CurrentTile; //we are surrounded by water.
         }
     }
+
+
+    public Tile GetFollowMotherTile(Tile CurrentTile, Tile MotherTile)
+    {
+        Vector2 forwardOffset = new Vector2(CurrentTile.X - MotherTile.X, CurrentTile.Y - MotherTile.Y);
+
+        var neighbours = CurrentTile.GetWalkableNeighboursIncludingDiagonal();
+
+        if (neighbours.Count != 0)
+        {
+            if (neighbours.Count == 1)
+            {
+                return neighbours[0];
+            }
+            else
+            {
+                Vector2 direction = new Vector2(forwardOffset.x, forwardOffset.y).normalized;
+
+                float bestScore = float.MinValue;
+                Tile bestNeighbour = CurrentTile;
+
+                for (int i = 0; i < 8; i++)
+                {
+                    Tile neighbour = neighbours[Random.Range(0, neighbours.Count)];
+                    Vector2 offset = new Vector2(neighbour.X - CurrentTile.X, neighbour.Y - CurrentTile.Y);
+                    float score = Vector2.Dot(offset.normalized, direction); // returns value between 1 and -1
+                    if (score > bestScore)
+                    {
+                        bestNeighbour = neighbour;
+                        bestScore = score;
+                    }
+                }
+
+                return bestNeighbour;
+            }
+        }
+        else
+        {
+            return CurrentTile; // we are surrounded by water.
+        }
+    }
 }

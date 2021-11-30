@@ -92,7 +92,7 @@ public class PathAStar
                 }
                 cameFrom[edge.node] = current;
                 gScore[edge.node] = tentativeGScore;
-                fScore[edge.node] = gScore[edge.node] + HueristicCostEstimate(edge.node, goal);
+                fScore[edge.node] = gScore[edge.node] + 5f * HueristicCostEstimate(edge.node, goal);
                 if (!openSet.Contains(edge.node))
                 {
                     openSet.Enqueue(edge.node, fScore[edge.node]);
