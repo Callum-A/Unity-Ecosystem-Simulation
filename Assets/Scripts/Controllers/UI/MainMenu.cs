@@ -69,7 +69,7 @@ public class MainMenu : MonoBehaviour
 
     public void getRandomSeed() 
     {
-        int length = Random.Range(4,12);
+        int length = Random.Range(4,10);
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < length; i++)

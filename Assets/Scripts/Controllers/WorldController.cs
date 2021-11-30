@@ -76,7 +76,7 @@ public class WorldController : MonoBehaviour
         }
 
         //207
-        World.GenerateTerrain(WorldSeed, 44, 5, 0.229f, 3, new Vector2(0,0));
+        World.GenerateTerrain(WorldSeed,WaterLevel, AridityLevel, WorldType);
         World.SproutInitialFood();
         World.SpawnAnimals(PreyCount, PredatorCount);
     }

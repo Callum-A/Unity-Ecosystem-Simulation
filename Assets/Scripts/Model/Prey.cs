@@ -274,9 +274,6 @@ public class Prey : Animal
         else
         {
             CurrentState = AnimalState.Wandering;
-            DestinationTile = CurrentTile.GetRandomNonWaterTileInRadius(SightRange);
-
-            if (DestinationTile == null) { Drown(); }
         }
     }
 
