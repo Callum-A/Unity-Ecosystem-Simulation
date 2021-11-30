@@ -74,7 +74,7 @@ namespace Assets.Scripts.Controllers
         {
             if (tile.Type == TileType.Ground && !tile.HasFood())
             {
-                if (UnityEngine.Random.Range(0, Food.SpreadRate) == 0)
+                if (UnityEngine.Random.Range(0, 99) < (WorldController.SpreadRate/4))
                 {
                     Food newFood = new Food(tile);
                     newFood.RegisterOnFoodExhaustedCallback(OnFoodExhaustedCallback);
