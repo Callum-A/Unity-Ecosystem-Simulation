@@ -23,6 +23,14 @@ public class WorldController : MonoBehaviour
     public float Days = 0;
     public float breedingRate = 1.1f;
     public float nutritionNeeded = 40f;
+
+    //-------Creation Variables-------------//
+    public static int PreyCount;
+    public static int PredatorCount;
+    public static int WorldSeed = 207;
+    public static float WaterLevel;
+    public static float AridityLevel;
+    public static float SpreadRate;
     //---------------------------------------//
 
     public static WorldController Instance { get; protected set; }
@@ -66,9 +74,10 @@ public class WorldController : MonoBehaviour
             }
         }
 
-        World.GenerateTerrain(207, 44, 5, 0.229f, 3, new Vector2(0,0));
+        //207
+        World.GenerateTerrain(WorldSeed, 44, 5, 0.229f, 3, new Vector2(0,0));
         World.SproutInitialFood();
-        World.SpawnAnimals(16, 2);
+        World.SpawnAnimals(PreyCount, PredatorCount);
     }
 
     /// <summary>
@@ -106,7 +115,6 @@ public class WorldController : MonoBehaviour
             }  
         }
     }
-
 
     private void Start()
     {
