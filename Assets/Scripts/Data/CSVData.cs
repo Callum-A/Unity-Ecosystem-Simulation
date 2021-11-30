@@ -14,6 +14,7 @@ public static class CSVData
     public static List<int> NutritionTotal = new List<int>();
     public static List<int> NumFoodTiles = new List<int>();
     public static List<int> NumWaterTiles = new List<int>();
+    public static List<int> NumGrassTiles = new List<int>();
 
     private static int daysProcessed = 0;
     private static readonly string fileName = "data.csv";
@@ -26,6 +27,8 @@ public static class CSVData
         NutritionTotal.Add(world.getTotalNutritionOnMap());
         NumFoodTiles.Add(world.getFoodTiles().Count);
         NumWaterTiles.Add(world.getWaterTiles().Count);
+        NumGrassTiles.Add(world.getGrassTiles().Count);
+        world.getGrassTiles();
         //WriteCSV();
         
         await AsyncWriteCSV();
@@ -43,7 +46,7 @@ public static class CSVData
             using (StreamWriter sw = File.CreateText(path))
             {
                 // Write the header
-                sw.WriteLine("Day,PreyPop,PredatorPop,TotalPop,Nutrition,NumFoodTiles,NumWaterTiles");
+                sw.WriteLine("Prey Population,Predator Population,Total Population,Nutrition,Total Food,Water Tiles, Grass Tiles");
             }
             hasWritten = true;
         }
@@ -51,9 +54,9 @@ public static class CSVData
         // We assume all the lists are the same length
         using (StreamWriter sw = File.AppendText(path))
         {
-            sw.WriteLine($"{daysProcessed},{PreyPopulation[daysProcessed]},{PredatorPopulation[daysProcessed]}," +
+            sw.WriteLine($"{PreyPopulation[daysProcessed]},{PredatorPopulation[daysProcessed]}," +
                 $"{PreyPopulation[daysProcessed] + PredatorPopulation[daysProcessed]},{NutritionTotal[daysProcessed]}," +
-                $"{NumFoodTiles[daysProcessed]},{NumWaterTiles[daysProcessed]}");
+                $"{NumFoodTiles[daysProcessed]},{NumWaterTiles[daysProcessed]}, {NumGrassTiles[daysProcessed]}");
         }
         daysProcessed++;
 
