@@ -111,3 +111,176 @@ public class DroughtEvent : Event
         return "Drought Event";
     }
 }
+
+public class FamineEvent : Event
+{
+    private int foodToRemovePerDay;
+    public override void OnEventStart(World world, float severity, int durationInDays)
+    {
+        int totalFoodToRemove = Mathf.FloorToInt(0.5f * world.FoodManager.FoodTiles.Count * severity); // Max half of food can be killed by famine
+        // Can be 0 due to low food amount e.g. called at start of sim or after loads eaten or low sev
+        if (totalFoodToRemove == 0)
+        {
+            // One per day
+            foodToRemovePerDay = 1;
+        } else
+        {
+            foodToRemovePerDay = totalFoodToRemove / durationInDays;
+        }
+        
+        Debug.Log("Killing food per day: " + foodToRemovePerDay);
+    }
+
+    public override void OnEventDay(World world, float severity, int durationLeftInDays)
+    {
+        int i = 0;
+        while (i < foodToRemovePerDay)
+        {
+            Tile foodTile = world.FoodManager.FoodTiles[UnityEngine.Random.Range(0, world.FoodManager.FoodTiles.Count)];
+            foodTile.DrownTile();
+            i++;
+        }
+    }
+
+    public override void OnEventEnd(World world, float severity, int durationInDays) {}
+
+    override public string ToString()
+    {
+        return "Famine Event";
+    }
+}
+
+public class SproutEvent : Event
+{
+    private int foodToAddPerDay;
+    public override void OnEventStart(World world, float severity, int durationInDays)
+    {
+        int totalFoodToAdd = Mathf.FloorToInt(0.5f * world.FoodManager.FoodTiles.Count * severity); // Max 50% more food can be aded
+        // Can be 0 due to low food amount e.g. called at start of sim or after loads eaten or low sev
+        if (totalFoodToAdd == 0)
+        {
+            // One per day
+            foodToAddPerDay = 1;
+        }
+        else
+        {
+            foodToAddPerDay = totalFoodToAdd / durationInDays;
+        }
+
+        Debug.Log("Adding food per day: " + foodToAddPerDay);
+    }
+
+    public override void OnEventDay(World world, float severity, int durationLeftInDays)
+    {
+        int i = 0;
+        while (i < foodToAddPerDay)
+        {
+            Tile tile = world.Data.GrassTiles[UnityEngine.Random.Range(0, world.Data.GrassTiles.Count)];
+            world.FoodManager.AddFoodToTile(tile);
+            i++;
+        }
+    }
+
+    public override void OnEventEnd(World world, float severity, int durationInDays) { }
+
+    override public string ToString()
+    {
+        return "Sprout Event";
+    }
+}
+
+public class MigrationEvent : Event
+{
+    private readonly int maxPreds = 4;
+    private readonly int maxPrey = 12;
+
+    public override void OnEventStart(World world, float severity, int durationInDays)
+    {
+        Tile spawnTile = world.GetTileAt(50, 50); // TODO: determine safe spawn tile on edge of map
+        if (UnityEngine.Random.Range(0, 2) == 0)
+        {
+            // Predator migration
+            int amount = UnityEngine.Random.Range(1, Mathf.CeilToInt(severity * (maxPreds + 1))); // max 4 preds
+            while (amount > 0)
+            {
+                Predator newPrey = world.AnimalManager.SpawnPredator(spawnTile, null);
+                int ageRand = UnityEngine.Random.Range(0, 4);
+                if (ageRand == 0)
+                {
+                    newPrey.setElder();
+                }
+                else
+                {
+                    newPrey.setAdult();
+                }
+                amount--;
+            }
+        }
+        else
+        {
+            // Prey migration
+            int amount = UnityEngine.Random.Range(1, Mathf.CeilToInt(severity * (maxPrey + 1))); // max 12 rabbits
+            while (amount > 0)
+            {
+                Prey newPrey = world.AnimalManager.SpawnPrey(spawnTile, null);
+                int ageRand = UnityEngine.Random.Range(0, 4);
+                if (ageRand == 0)
+                {
+                    newPrey.setElder();
+                }
+                else
+                {
+                    newPrey.setAdult();
+                }
+                amount--;
+            }
+        }
+    }
+
+    public override void OnEventDay(World world, float severity, int durationLeftInDays) { }
+
+    public override void OnEventEnd(World world, float severity, int durationInDays) { }
+
+    override public string ToString()
+    {
+        return "Migration Event";
+    }
+}
+
+public class DiseaseEvent : Event
+{
+    private int animalsToKillADay;
+    public override void OnEventStart(World world, float severity, int durationInDays)
+    {
+        int totalAnimalsToKill = Mathf.FloorToInt(0.5f * world.AnimalManager.AllAnimals.Count * severity);
+
+        if (totalAnimalsToKill == 0)
+        {
+            animalsToKillADay = 1;
+        }
+        else
+        {
+            animalsToKillADay = totalAnimalsToKill / durationInDays;
+        }
+
+        Debug.Log("Killing animals per day " + animalsToKillADay);
+    }
+
+    public override void OnEventDay(World world, float severity, int durationLeftInDays)
+    {
+        int i = 0;
+        while (i < animalsToKillADay)
+        {
+            Animal toKill = world.AnimalManager.AllAnimals[UnityEngine.Random.Range(0, world.AnimalManager.AllAnimals.Count)];
+            toKill.Die();
+            i++;
+        }
+    }
+
+    public override void OnEventEnd(World world, float severity, int durationInDays) {}
+
+    override public string ToString()
+    {
+        return "Disease Event";
+    }
+}
