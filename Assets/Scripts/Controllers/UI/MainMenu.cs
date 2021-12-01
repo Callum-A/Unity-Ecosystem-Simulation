@@ -37,12 +37,12 @@ public class MainMenu : MonoBehaviour
         PreyCount.text = value.ToString();
     }
 
-    public void OnPreyBreedingValuechange() 
+    public void OnPreyBreedingValuechange()
     {
         PreyBreedingRate.text = PreyBreedingRateSlider.value.ToString("0.00") + "x";
         WorldController.PreyBreedingRate = 2 - PreyBreedingRateSlider.value;
     }
-
+       
     public void OnPredatorBreedingValuechange()
     {
         PredatorBreedingRate.text = PredatorBreedingRateSlider.value.ToString("0.00") + "x";
@@ -68,7 +68,6 @@ public class MainMenu : MonoBehaviour
         WaterLevel.text = WaterSlider.value.ToString() + "%";
         WorldController.WaterLevel = WaterSlider.value/100; 
     }
-
     public void OnSpreadRateChange(float value) 
     {
         SpreadRate.text = SpreadSlider.value.ToString() + "%";
