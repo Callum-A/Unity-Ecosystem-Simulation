@@ -140,6 +140,8 @@ public class World
         {
             a.setAdult();
         }
+
+        Camera.main.transform.position = new Vector3(higestpoint[0], higestpoint[1], Camera.main.transform.position.z);
     }
 
     public void SproutInitialFood()
