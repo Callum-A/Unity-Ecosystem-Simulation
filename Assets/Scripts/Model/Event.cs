@@ -196,7 +196,8 @@ public class MigrationEvent : Event
 
     public override void OnEventStart(World world, float severity, int durationInDays)
     {
-        Tile spawnTile = world.GetTileAt(50, 50); // TODO: determine safe spawn tile on edge of map
+        int[] spawnCoords = world.TerrainGenerator.GetHighestPoint(world.Data.TerrainData); // TODO: determine safe spawn tile on edge of map
+        Tile spawnTile = world.GetTileAt(spawnCoords[0], spawnCoords[1]);
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
             // Predator migration
