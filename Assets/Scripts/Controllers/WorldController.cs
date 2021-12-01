@@ -21,7 +21,7 @@ public class WorldController : MonoBehaviour
     /// </summary>
     public float time = 5;
     public float Days = 0;
-    
+
     public float nutritionNeeded = 40f;
 
     //-------Creation Variables-------------//

@@ -126,4 +126,12 @@ public class MainMenu : MonoBehaviour
         SpreadSlider.value = 12;
         WorldTypeDropdown.value = 0;
     }
+
+    
+
+    public void Awake()
+    {
+        Clear();
+        Reset();
+    }
 }

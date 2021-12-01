@@ -37,17 +37,17 @@ public class AnimalManager
     /// </summary>
     /// <param name="preyAmount">Number of prey.</param>
     /// <param name="predatorAmount">Number of predators.</param>
-    public void SpawnAnimals(int preyAmount, int predatorAmount)
+    public void SpawnAnimals(int preyAmount, int predatorAmount, int spawnPointX, int spawnPointY)
     {
         // TODO: choose spawn locations
         for (int i = 0; i < preyAmount; i++)
         {
-            SpawnPrey(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female, null);
+            SpawnPrey(world.GetTileAt(spawnPointX, spawnPointY), i % 2 == 0 ? Gender.Male : Gender.Female, null);
         }
 
         for (int i = 0; i < predatorAmount; i++)
         {
-            SpawnPredator(world.GetTileAt(50, 50), i % 2 == 0 ? Gender.Male : Gender.Female, null);
+            SpawnPredator(world.GetTileAt(spawnPointX, spawnPointY), i % 2 == 0 ? Gender.Male : Gender.Female, null);
         }
     }
 

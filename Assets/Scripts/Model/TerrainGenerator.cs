@@ -209,4 +209,25 @@ public class TerrainGenerator
         return coastTiles;
     }
 
+    public int[] GetHighestPoint(TerrainData data) 
+    {
+        float[,] noisemap = data.noisemap;
+        int[] highestPoint = { 0, 0 };
+
+        for (int x = 0; x < noisemap.GetLength(0); x++)
+        {
+            for (int y = 0; y < noisemap.GetLength(1); y++)
+            {
+                float heightOfPoint = noisemap[x, y];
+
+                if (heightOfPoint > noisemap[highestPoint[0], highestPoint[1]])
+                {
+                    highestPoint[0] = x;
+                    highestPoint[1] = y;
+                }
+            }
+        }
+
+        return highestPoint;
+    }
 }
