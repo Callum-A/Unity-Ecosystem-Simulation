@@ -92,7 +92,6 @@ public class World
         tileGraph = null;
     }
 
-    //TODO: clamp increases to prevent float wackiness
     public void ChangeWaterLevel(float change)
     {
         if (Data.WaterHeight + change > 1)
@@ -106,20 +105,39 @@ public class World
 
         if (change > 0)
         {
-            Data.WaterHeight += change;
-            Data.SandHeight += change;
-            
+            if (Data.WaterHeight + change < 1)
+            {
+
+                Mathf.Min(Data.WaterHeight += change, 1);
+                if (Data.WaterHeightInitial < Data.WaterHeight)
+                {
+                    if (Data.SandHeightInitial <= Data.WaterHeight + change)
+                    {
+                        Mathf.Min(Data.SandHeight = Data.SandHeight + change, 1);
+                    }
+                }
+                else
+                {
+                    Data.SandHeight = Data.SandHeightInitial;
+                }
+            }
         }
         else if (change < 0)
         {
-            Data.WaterHeight += change;
-            if (Data.SandHeightInitial <= Data.SandHeight + change)
+            if (Data.WaterHeight + change > 0)
             {
-                Data.SandHeight = Data.SandHeightInitial;
-            }
-            else
-            {
-                Data.SandHeight += change;
+                Data.WaterHeight += change;
+                if (Data.WaterHeightInitial > Data.WaterHeight)
+                {
+                    Data.SandHeight = Data.SandHeightInitial;
+                }
+                else
+                {
+                    if (Data.SandHeight > Data.SandHeightInitial)
+                    {
+                        Mathf.Max(Data.SandHeight = Data.SandHeight + change, 1);
+                    }
+                }
             }
         }
         UpdateTerrain();
