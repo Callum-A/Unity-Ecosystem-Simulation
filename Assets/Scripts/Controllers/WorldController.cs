@@ -29,7 +29,7 @@ public class WorldController : MonoBehaviour
     public static int PredatorCount = 2;
     public static int WorldType = 0;
     public static int WorldSeed = 207;
-    public static float WaterLevel = 32;
+    public static float WaterLevel = 0.32f;
     public static float AridityLevel = 0;
     public static float PredatorBreedingRate = 1.0f;
     public static float PreyBreedingRate = 1.0f;
