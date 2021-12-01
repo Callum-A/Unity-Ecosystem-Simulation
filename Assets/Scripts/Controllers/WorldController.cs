@@ -21,7 +21,7 @@ public class WorldController : MonoBehaviour
     /// </summary>
     public float time = 5;
     public float Days = 0;
-    public float breedingRate = 1.1f;
+    
     public float nutritionNeeded = 40f;
 
     //-------Creation Variables-------------//
@@ -31,6 +31,8 @@ public class WorldController : MonoBehaviour
     public static int WorldSeed = 207;
     public static float WaterLevel;
     public static float AridityLevel;
+    public static float PredatorBreedingRate = 1.0f;
+    public static float PreyBreedingRate = 1.0f;
     public static float SpreadRate;
     //---------------------------------------//
 
@@ -125,4 +127,11 @@ public class WorldController : MonoBehaviour
         TimeController.Instance.RegisterOnNewDayCallback(World.EventManager.OnNewDay);
     }
 
+    private void OnApplicationQuit()
+    {
+        if (graphWindow != null)
+        {
+            graphWindow.Kill();
+        }
+    }
 }
