@@ -18,6 +18,8 @@ public class MainMenu : MonoBehaviour
     public Slider WaterSlider;
     public Slider AriditySlider;
     public Slider SpreadSlider;
+    public Slider PreyCountSlider;
+    public Slider PredatorCountSlider;
     public Slider PreyBreedingRateSlider;
     public Slider PredatorBreedingRateSlider;
     public Text WaterLevel;
@@ -96,5 +98,33 @@ public class MainMenu : MonoBehaviour
 
         InputSeed.text = sb.ToString();
         OnValueSeedChanged();
+    }
+
+    public void Clear() 
+    {
+        PreyCountSlider.value = 0;
+        PredatorCountSlider.value = 0;
+        PreyBreedingRateSlider.value = 0;
+        PredatorBreedingRateSlider.value = 0;
+
+        InputSeed.text = "0";
+        WaterSlider.value = 0;
+        AriditySlider.value = 0;
+        SpreadSlider.value = 0;
+        WorldTypeDropdown.value = 0;
+    }
+
+    public void Reset()
+    {
+        PreyCountSlider.value = 20;
+        PredatorCountSlider.value = 2;
+        PreyBreedingRateSlider.value = 1;
+        PredatorBreedingRateSlider.value = 1;
+        
+        InputSeed.text = "207";
+        WaterSlider.value = 32;
+        AriditySlider.value = 0;
+        SpreadSlider.value = 12;
+        WorldTypeDropdown.value = 0;
     }
 }
