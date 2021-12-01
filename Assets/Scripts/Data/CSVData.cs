@@ -62,4 +62,16 @@ public static class CSVData
 
         return;
     }
+
+    public static void ClearData() 
+    {
+        string path = Application.streamingAssetsPath + "/" + fileName;
+
+        if (File.Exists(path)) 
+        {
+            File.Delete(path);
+        }
+
+        hasWritten = false;
+    }
 }

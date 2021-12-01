@@ -47,6 +47,9 @@ public class WorldController : MonoBehaviour
         }
         Instance = this;
 
+        UnityEngine.Debug.Log("test");
+
+        CSVData.ClearData();
         InitialiseTiles();
     }
 
@@ -128,6 +131,14 @@ public class WorldController : MonoBehaviour
     }
 
     private void OnApplicationQuit()
+    {
+        if (graphWindow != null)
+        {
+            graphWindow.Kill();
+        }
+    }
+
+    private void OnDisable()
     {
         if (graphWindow != null)
         {
