@@ -2051,7 +2051,7 @@ MonoBehaviour:
     m_Options:
     - m_Text: Flat  Land
       m_Image: {fileID: 0}
-    - m_Text: Archipelago
+    - m_Text: Central Lake
       m_Image: {fileID: 0}
     - m_Text: Island
       m_Image: {fileID: 0}
