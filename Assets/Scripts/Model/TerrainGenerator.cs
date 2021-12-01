@@ -7,7 +7,7 @@ public class TerrainGenerator
     public enum TerrainType 
     {
         Default,
-        Archipelago, // first version of island code, still gives some nice results at times.
+        Lake,
         Island       // final version of island code, gave the results we actually wanted.
     }
 
@@ -96,6 +96,19 @@ public class TerrainGenerator
                     frequency *= lacunarity;
                 }
 
+                switch (type)
+                {
+                    case TerrainType.Lake:
+
+                        noiseHeight = noiseHeight + (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 50;
+                        break;
+
+                    case TerrainType.Island:
+
+                        noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 25;
+                        break;
+                }
+
 
                 // update min and max noise values;
                 if (noiseHeight > maxNoiseHeight)
@@ -106,20 +119,6 @@ public class TerrainGenerator
                 {
                     minNoiseHeight = noiseHeight;
                 }
-
-                switch (type)
-                {
-                    case TerrainType.Archipelago:
-
-                        noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
-                        break;
-
-                    case TerrainType.Island:
-
-                        noiseHeight = noiseHeight - (float)Math.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 50;
-                        break;
-                }
-
 
                 noisemap[x, y] = noiseHeight;
             }

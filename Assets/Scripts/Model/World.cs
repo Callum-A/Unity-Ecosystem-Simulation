@@ -80,11 +80,6 @@ public class World
         float sandHeight = waterHeight + 0.05f;
         if (sandHeight > 1) { sandHeight = 1; }
 
-        if (aridity != 0)
-        {
-            aridity = Mathf.Pow(aridity, 3); // changes the linear interpolation to exponential interpolation, high values beware!
-        }
-
         aridity = Mathf.Lerp(sandHeight, 1, aridity);
 
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, 44, 5, 0.229f, 3, new Vector2(0, 0), waterHeight, aridity, 1, generationType);

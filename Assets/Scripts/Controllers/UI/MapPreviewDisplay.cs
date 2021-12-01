@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MapPreviewDisplay : MonoBehaviour
 {
-    private float t1 = 0;
+    public RawImage MapDisplay;
 
     // Hardcoded Variables for menu. Don't sue //
     //-----------------------------------------//
@@ -15,15 +15,12 @@ public class MapPreviewDisplay : MonoBehaviour
     private int octaves = 5;
     private float persistence = 0.229f;
     private float lacunarity = 3;
-    public RawImage MapDisplay;
     private Vector2 offset = new Vector2(0,0);
     //-----------------------------------------//
 
     // Call this to draw!
     public void DrawMap(float[,] noiseMap)
     {
-        int width = 100;
-        int height = 100;
 
         Color[] colourMap = new Color[width*height];
 
@@ -112,6 +109,19 @@ public class MapPreviewDisplay : MonoBehaviour
                     frequency *= lacunarity;
                 }
 
+                switch (WorldController.WorldType)
+                {
+                    case 1:
+
+                        noiseHeight = noiseHeight + (float)Mathf.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 50;
+                        break;
+
+                    case 2:
+
+                        noiseHeight = noiseHeight - (float)Mathf.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 25;
+                        break;
+                }
+
 
                 // update min and max noise values;
                 if (noiseHeight > maxNoiseHeight)
@@ -122,20 +132,6 @@ public class MapPreviewDisplay : MonoBehaviour
                 {
                     minNoiseHeight = noiseHeight;
                 }
-
-                switch (WorldController.WorldType)
-                {
-                    case 1:
-
-                        noiseHeight = noiseHeight - (float)Mathf.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 100;
-                        break;
-
-                    case 2:
-
-                        noiseHeight = noiseHeight - (float)Mathf.Sqrt((halfWidth - x) * (halfWidth - x) + (halfHeight - y) * (halfHeight - y)) / 50;
-                        break;
-                }
-
 
                 noisemap[x, y] = noiseHeight;
             }
