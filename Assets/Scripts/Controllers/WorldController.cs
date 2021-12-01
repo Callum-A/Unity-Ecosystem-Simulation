@@ -25,15 +25,15 @@ public class WorldController : MonoBehaviour
     public float nutritionNeeded = 40f;
 
     //-------Creation Variables-------------//
-    public static int PreyCount;
-    public static int PredatorCount;
-    public static int WorldType;
+    public static int PreyCount = 20;
+    public static int PredatorCount = 2;
+    public static int WorldType = 0;
     public static int WorldSeed = 207;
-    public static float WaterLevel;
-    public static float AridityLevel;
+    public static float WaterLevel = 32;
+    public static float AridityLevel = 0;
     public static float PredatorBreedingRate = 1.0f;
     public static float PreyBreedingRate = 1.0f;
-    public static float SpreadRate;
+    public static float SpreadRate = 12;
     //---------------------------------------//
 
     public static WorldController Instance { get; protected set; }
