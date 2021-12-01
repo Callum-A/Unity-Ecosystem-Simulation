@@ -8,7 +8,10 @@ public class Predator : Animal
 
     public Prey CurrentTarget { get; protected set; }
 
-    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender, Predator mother) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender, mother) {}
+    public Predator(Tile tile, AnimalManager animalManager, int id, Gender gender, Predator mother) : base(tile, 3f, 5, AnimalType.Predator, animalManager, id, gender, mother) 
+    {
+        breedingCooldown = (4 * TimeController.Instance.SECONDS_IN_A_DAY) * WorldController.PredatorBreedingRate;
+    }
 
     /// <summary>
     /// Returns true if the predator should die.

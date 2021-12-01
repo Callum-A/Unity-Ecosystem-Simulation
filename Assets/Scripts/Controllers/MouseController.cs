@@ -10,12 +10,6 @@ public class MouseController : MonoBehaviour
     private Animal lockedAnimal;
     private World world => WorldController.Instance.World;
 
-    private void Start()
-    {
-        // Center camera on start to center of map
-        Camera.main.transform.position = new Vector3(world.Width / 2, world.Height / 2, Camera.main.transform.position.z);
-    }
-
     /// <summary>
     /// Gets the current mouse position as a unity vector3.
     /// </summary>

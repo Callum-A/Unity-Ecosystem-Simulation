@@ -35,6 +35,6 @@ public class EventLogController : MonoBehaviour
     public void AddLog(string log)
     {
         // cant use it as a default arg as it isnt a compile time constant
-        AddLog(log, Color.black);
+        AddLog(log, Color.white);
     }
 }

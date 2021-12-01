@@ -65,7 +65,7 @@ public abstract class Animal
     public float Hunger;
     public float Thirst;
     protected float timeSinceLastBreeded;
-    protected float breedingCooldown = 3 * TimeController.Instance.SECONDS_IN_A_DAY; // can breed every 3 days
+    protected float breedingCooldown; // can breed every 3 days
     public AnimalType AnimalType { get; protected set; }
     public Gender AnimalSex { get; protected set;}
     

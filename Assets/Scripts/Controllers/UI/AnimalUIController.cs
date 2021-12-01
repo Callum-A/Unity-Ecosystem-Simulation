@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class AnimalUIController : MonoBehaviour
 {
@@ -88,5 +89,10 @@ public class AnimalUIController : MonoBehaviour
         {
             mouseController.LockToAnimal(currentlySelected);
         }
+    }
+
+    public void QuitToMainMenu() 
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

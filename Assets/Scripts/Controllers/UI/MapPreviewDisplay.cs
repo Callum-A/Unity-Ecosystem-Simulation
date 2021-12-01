@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapPreviewDisplay : MonoBehaviour
 {
-    public Renderer textureRender;
     private float t1 = 0;
 
     // Hardcoded Variables for menu. Don't sue //
@@ -15,12 +15,16 @@ public class MapPreviewDisplay : MonoBehaviour
     private int octaves = 5;
     private float persistence = 0.229f;
     private float lacunarity = 3;
+    public RawImage MapDisplay;
     private Vector2 offset = new Vector2(0,0);
     //-----------------------------------------//
 
     // Call this to draw!
     public void DrawMap(float[,] noiseMap)
     {
+        int width = 100;
+        int height = 100;
+
         Color[] colourMap = new Color[width*height];
 
         for (int y = 0; y < height; y++)
@@ -49,16 +53,18 @@ public class MapPreviewDisplay : MonoBehaviour
         texture.SetPixels(colourMap);
         texture.Apply();
 
-        textureRender.sharedMaterial.mainTexture = texture;
+        MapDisplay.texture = texture;
     }
 
-    public void Update()
+
+    public void UpdateMap() 
     {
-        if (Time.realtimeSinceStartup - t1 > 0.5f)
-        {
-            DrawMap(GenerateNoiseMap());
-            t1 = Time.realtimeSinceStartup;
-        }
+        DrawMap(GenerateNoiseMap());
+    }
+
+    public void Start()
+    {
+        UpdateMap();
     }
 
     public float[,] GenerateNoiseMap()
@@ -146,4 +152,5 @@ public class MapPreviewDisplay : MonoBehaviour
         return noisemap;
 
     }
+
 }
