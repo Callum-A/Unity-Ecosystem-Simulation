@@ -33,23 +33,26 @@ public class TimeController : MonoBehaviour
 
     public void SetTimeMultiplier(int multiplier)
     {
-        if (multiplier < 0)
+        if (multiplier != TimeMultiplier)
         {
-            TimeMultiplier = 1;
-            return;
-        }
+            if (multiplier < 0)
+            {
+                TimeMultiplier = 1;
+                return;
+            }
 
-        if (multiplier == 32)
-        {
-            asc.TurnOffGameObjects();
-        }
-        else
-        {
-            asc.TurnOnGameObjects();
-        }
+            if (multiplier == 32)
+            {
+                asc.TurnOffGameObjects();
+            }
+            else
+            {
+                asc.TurnOnGameObjects();
+            }
 
-        TimeMultiplier = multiplier;
-        WorldController.Instance.EventLogController.AddLog($"Setting time multiplier to {multiplier}x");
+            TimeMultiplier = multiplier;
+            WorldController.Instance.EventLogController.AddLog($"Setting time multiplier to {multiplier}x");
+        }
     }
 
     public float GetTimesADayMultiplier(float times)
