@@ -5,7 +5,7 @@ using System;
 
 public class EventManager
 {
-    public static readonly float EVENT_CHANCE_PER_DAY = 0.02f; // 2% chance
+    public static readonly float EVENT_CHANCE_PER_DAY = 0.2f; // 2% chance
     private List<Event> events;
     private Event currentActiveEvent;
     private int currentDurationLeft;
@@ -27,11 +27,11 @@ public class EventManager
 
     private void AddEvents()
     {
-        RegisterEvent(new TestEvent());
+        //RegisterEvent(new TestEvent());
         //RegisterEvent(new FamineEvent());
         //RegisterEvent(new DesertificationEvent());
-        //RegisterEvent(new FloodEvent());
-        //RegisterEvent(new DroughtEvent());
+        RegisterEvent(new FloodEvent());
+        RegisterEvent(new DroughtEvent());
     }
 
     public Event ChooseEvent()
@@ -65,8 +65,8 @@ public class EventManager
             {
                 // Do event
                 currentActiveEvent = e;
-                currentDurationLeft = UnityEngine.Random.Range(1, 6);
-                currentSeverity = UnityEngine.Random.Range(0f, 1f);
+                currentDurationLeft = UnityEngine.Random.Range(3, 6);
+                currentSeverity = UnityEngine.Random.Range(0.1f, 1f);
                 currentActiveEvent.OnEventStart(world, currentSeverity, currentDurationLeft);
                 WorldController.Instance.EventLogController.AddLog($"Choosing event: {e.ToString()} with severity: {currentSeverity}", Color.red);
             }

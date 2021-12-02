@@ -80,11 +80,6 @@ public class World
         float sandHeight = waterHeight + 0.05f;
         if (sandHeight > 1) { sandHeight = 1; }
 
-        if (aridity != 0)
-        {
-            aridity = Mathf.Pow(aridity, 3); // changes the linear interpolation to exponential interpolation, high values beware!
-        }
-
         aridity = Mathf.Lerp(sandHeight, 1, aridity);
 
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, 44, 5, 0.229f, 3, new Vector2(0, 0), waterHeight, aridity, 1, generationType);
@@ -97,7 +92,6 @@ public class World
         tileGraph = null;
     }
 
-    //TODO: clamp increases to prevent float wackiness
     public void ChangeWaterLevel(float change)
     {
         if (Data.WaterHeight + change > 1)
@@ -111,20 +105,39 @@ public class World
 
         if (change > 0)
         {
-            Data.WaterHeight += change;
-            Data.SandHeight += change;
-            
+            if (Data.WaterHeight + change < 1)
+            {
+
+                Mathf.Min(Data.WaterHeight += change, 1);
+                if (Data.WaterHeightInitial < Data.WaterHeight)
+                {
+                    if (Data.SandHeightInitial <= Data.WaterHeight + change)
+                    {
+                        Mathf.Min(Data.SandHeight = Data.SandHeight + change, 1);
+                    }
+                }
+                else
+                {
+                    Data.SandHeight = Data.SandHeightInitial;
+                }
+            }
         }
         else if (change < 0)
         {
-            Data.WaterHeight += change;
-            if (Data.SandHeightInitial <= Data.SandHeight + change)
+            if (Data.WaterHeight + change > 0)
             {
-                Data.SandHeight = Data.SandHeightInitial;
-            }
-            else
-            {
-                Data.SandHeight += change;
+                Data.WaterHeight += change;
+                if (Data.WaterHeightInitial > Data.WaterHeight)
+                {
+                    Data.SandHeight = Data.SandHeightInitial;
+                }
+                else
+                {
+                    if (Data.SandHeight > Data.SandHeightInitial)
+                    {
+                        Mathf.Max(Data.SandHeight = Data.SandHeight + change, 1);
+                    }
+                }
             }
         }
         UpdateTerrain();
