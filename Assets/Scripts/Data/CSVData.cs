@@ -30,15 +30,15 @@ public static class CSVData
         NumGrassTiles.Add(world.getGrassTiles().Count);
         world.getGrassTiles();
         //WriteCSV();
-        
+
         await AsyncWriteCSV();
-        
+
     }
 
     private static async Task AsyncWriteCSV()
     {
-        
-  
+
+
         string path = Application.streamingAssetsPath + "/" + fileName;
         if (!hasWritten)
         {
@@ -50,7 +50,7 @@ public static class CSVData
             }
             hasWritten = true;
         }
-        
+
         // We assume all the lists are the same length
         using (StreamWriter sw = File.AppendText(path))
         {
@@ -61,5 +61,25 @@ public static class CSVData
         daysProcessed++;
 
         return;
+    }
+
+    public static void ClearData()
+    {
+        string path = Application.streamingAssetsPath + "/" + fileName;
+
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+
+        PreyPopulation.Clear();
+        PredatorPopulation.Clear();
+        NutritionTotal.Clear();
+        NumFoodTiles.Clear();
+        NumWaterTiles.Clear();
+        NumGrassTiles.Clear();
+        daysProcessed = 0;
+
+        hasWritten = false;
     }
 }
