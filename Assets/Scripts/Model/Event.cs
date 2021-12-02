@@ -59,22 +59,15 @@ public class FloodEvent : Event
 {
     public override void OnEventStart(World world, float severity, int durationInDays)
     {
-        world.Data.WaterHeight += (float)(severity * 0.2);
-        if (world.Data.SandHeight < world.Data.WaterHeight)
-        {
-            if (world.Data.SandHeight + (severity * 0.2) > world.Data.SandHeightInitial)
-            {
-                world.Data.SandHeight = world.Data.SandHeightInitial;
-            }
-            else
-            {
-                world.Data.SandHeight += (float)(severity * 0.2);
-            }
-        }
+        world.ChangeWaterLevel((severity * 0.01f));
         world.UpdateTerrain();
     }
 
-    public override void OnEventDay(World world, float severity, int durationLeftInDays) {}
+    public override void OnEventDay(World world, float severity, int durationLeftInDays) 
+    {
+        world.ChangeWaterLevel(-((world.Data.WaterHeight - world.Data.WaterHeightInitial )/ durationLeftInDays));
+        world.UpdateTerrain();
+    }
 
     public override void OnEventEnd(World world, float severity, int durationInDays)
     {
@@ -94,15 +87,20 @@ public class DroughtEvent : Event
 {
     public override void OnEventStart(World world, float severity, int durationInDays)
     {
-        world.Data.WaterHeight -= (float)(severity * 0.2);
+        world.ChangeWaterLevel(-(severity * 0.1f));
         world.UpdateTerrain();
     }
 
-    public override void OnEventDay(World world, float severity, int durationLeftInDays) {}
+    public override void OnEventDay(World world, float severity, int durationLeftInDays) 
+    {
+        world.ChangeWaterLevel(((world.Data.WaterHeightInitial - world.Data.WaterHeight) / durationLeftInDays));
+        world.UpdateTerrain();
+    }
 
     public override void OnEventEnd(World world, float severity, int durationInDays)
     {
         world.Data.WaterHeight = world.Data.WaterHeightInitial;
+        world.Data.SandHeight = world.Data.SandHeightInitial;
         world.UpdateTerrain();
     }
 
@@ -196,7 +194,8 @@ public class MigrationEvent : Event
 
     public override void OnEventStart(World world, float severity, int durationInDays)
     {
-        Tile spawnTile = world.GetTileAt(50, 50); // TODO: determine safe spawn tile on edge of map
+        int[] spawnCoords = world.TerrainGenerator.GetHighestPoint(world.Data.TerrainData); // TODO: determine safe spawn tile on edge of map
+        Tile spawnTile = world.GetTileAt(spawnCoords[0], spawnCoords[1]);
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
             // Predator migration
