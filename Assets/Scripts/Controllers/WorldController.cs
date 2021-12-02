@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -134,7 +135,11 @@ public class WorldController : MonoBehaviour
     {
         if (graphWindow != null)
         {
-            graphWindow.Kill();
+            if (!graphWindow.HasExited)
+            {
+                graphWindow.Kill();
+            }
+            graphWindow = null;
         }
     }
 
@@ -142,7 +147,11 @@ public class WorldController : MonoBehaviour
     {
         if (graphWindow != null)
         {
-            graphWindow.Kill();
+            if (!graphWindow.HasExited)
+            {
+                graphWindow.Kill();
+            }
+            graphWindow = null;
         }
     }
 }
