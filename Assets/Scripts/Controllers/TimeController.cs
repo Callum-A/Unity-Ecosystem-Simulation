@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
     public static TimeController Instance { get; protected set; }
     public float SECONDS_IN_A_DAY;
+    public Text CurrentDay;
     private float currentSeconds;
     public int NumberOfDays { get; protected set; }
     public static int TimeMultiplier { get; protected set; } = 1;
@@ -89,6 +91,8 @@ public class TimeController : MonoBehaviour
             {
                 OnNewDayCallback(WorldController.Instance.World);
             }
+
+            CurrentDay.text = "Current  Day:  " + NumberOfDays;
         }
     }
 }
