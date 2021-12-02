@@ -78,6 +78,7 @@ public static class CSVData
         NumFoodTiles.Clear();
         NumWaterTiles.Clear();
         NumGrassTiles.Clear();
+        daysProcessed = 0;
 
         hasWritten = false;
     }
