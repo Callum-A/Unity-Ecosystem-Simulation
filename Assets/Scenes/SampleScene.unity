@@ -974,7 +974,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &120872956
 MonoBehaviour:
@@ -2105,7 +2117,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 32
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &713292724
 MonoBehaviour:
@@ -2570,7 +2594,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 8
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &813342455
 MonoBehaviour:
@@ -2774,7 +2810,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &896014492
 MonoBehaviour:
@@ -3105,7 +3153,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!114 &1027808651
 MonoBehaviour:
@@ -3399,7 +3459,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 16
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &1095277630
 MonoBehaviour:
@@ -4006,7 +4078,19 @@ MonoBehaviour:
   m_Group: {fileID: 9427621}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 928312157}
+        m_TargetAssemblyTypeName: TimeController, Assembly-CSharp
+        m_MethodName: SetTimeMultiplier
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 0
 --- !u!114 &1528928006
 MonoBehaviour:
