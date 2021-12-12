@@ -55,7 +55,7 @@ public class WorldController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         World.Update(TimeController.TimeMultiplier * Time.deltaTime);
     }

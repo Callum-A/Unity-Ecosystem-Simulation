@@ -69,6 +69,14 @@ public class WorldData
     public float GrassPercent { get { return ((float)terrainData.grassTiles.Count / (float)terrainData.numTiles) * 100; } protected set { } }
 
     public List<Tile> CoastTiles { get { return terrainData.coastTiles; } protected set { } }
+    public void ClearTileData()
+    {
+        WaterTiles.Clear();
+        SandTiles.Clear();
+        GrassTiles.Clear();
+        CoastTiles.Clear();
+    }
+
 
     #endregion
 
