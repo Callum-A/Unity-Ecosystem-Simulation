@@ -83,13 +83,12 @@ public class World
         aridity = Mathf.Lerp(sandHeight, 1, aridity);
 
         Data.TerrainData = TerrainGenerator.GenerateTerrain(tiles, seed, 44, 5, 0.229f, 3, new Vector2(0, 0), waterHeight, aridity, 1, generationType);
-        tileGraph = null;
     }
 
     public void UpdateTerrain()
     {
+        Data.ClearTileData();
         Data.TerrainData = TerrainGenerator.UpdateTerrain(tiles, Data.TerrainData);
-        tileGraph = null;
     }
 
     public void ChangeWaterLevel(float change)
@@ -152,6 +151,8 @@ public class World
         foreach (Animal a in AnimalManager.AllAnimals) 
         {
             a.setAdult();
+            a.Hunger = UnityEngine.Random.Range(0.8f, 1f);
+            a.Thirst = UnityEngine.Random.Range(0.8f, 1f);
         }
 
         Camera.main.transform.position = new Vector3(higestpoint[0], higestpoint[1], Camera.main.transform.position.z);

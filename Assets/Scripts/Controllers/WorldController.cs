@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -54,7 +55,7 @@ public class WorldController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         World.Update(TimeController.TimeMultiplier * Time.deltaTime);
     }
@@ -134,7 +135,11 @@ public class WorldController : MonoBehaviour
     {
         if (graphWindow != null)
         {
-            graphWindow.Kill();
+            if (!graphWindow.HasExited)
+            {
+                graphWindow.Kill();
+            }
+            graphWindow = null;
         }
     }
 
@@ -142,7 +147,11 @@ public class WorldController : MonoBehaviour
     {
         if (graphWindow != null)
         {
-            graphWindow.Kill();
+            if (!graphWindow.HasExited)
+            {
+                graphWindow.Kill();
+            }
+            graphWindow = null;
         }
     }
 }

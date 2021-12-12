@@ -5,7 +5,7 @@ using System;
 
 public class EventManager
 {
-    public static readonly float EVENT_CHANCE_PER_DAY = 0.2f; // 2% chance
+    public static readonly float EVENT_CHANCE_PER_DAY = 0.02f; // 2% chance
     private List<Event> events;
     private Event currentActiveEvent;
     private int currentDurationLeft;
@@ -27,9 +27,10 @@ public class EventManager
 
     private void AddEvents()
     {
-        //RegisterEvent(new TestEvent());
-        //RegisterEvent(new FamineEvent());
-        //RegisterEvent(new DesertificationEvent());
+        RegisterEvent(new DiseaseEvent());
+        RegisterEvent(new MigrationEvent());
+        RegisterEvent(new SproutEvent());
+        RegisterEvent(new FamineEvent());
         RegisterEvent(new FloodEvent());
         RegisterEvent(new DroughtEvent());
     }
