@@ -145,18 +145,16 @@ public class World
 
     public void SpawnAnimals(int preyAmount, int predatorAmount)
     {
-        int[] highestpoint = TerrainGenerator.GetHighestPoint(Data.TerrainData);
+        int[] higestpoint = TerrainGenerator.GetHighestPoint(Data.TerrainData);
 
-        AnimalManager.SpawnAnimals(preyAmount, predatorAmount, highestpoint[0], highestpoint[1]);
+        AnimalManager.SpawnAnimals(preyAmount, predatorAmount, higestpoint[0], higestpoint[1]);
 
         foreach (Animal a in AnimalManager.AllAnimals) 
         {
             a.setAdult();
-            a.Hunger = UnityEngine.Random.Range(0.8f, 1f);
-            a.Thirst = UnityEngine.Random.Range(0.8f, 1f);
         }
 
-        Camera.main.transform.position = new Vector3(highestpoint[0], highestpoint[1], Camera.main.transform.position.z);
+        Camera.main.transform.position = new Vector3(higestpoint[0], higestpoint[1], Camera.main.transform.position.z);
     }
 
     public void SproutInitialFood()
