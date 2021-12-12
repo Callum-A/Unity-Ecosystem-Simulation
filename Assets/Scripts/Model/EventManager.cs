@@ -55,7 +55,7 @@ public class EventManager
     /// </summary>
     /// <param name="world">The world</param>
     /// <param name="overide">Force an event from debug menu, usually null when called in OnNewDay</param>
-    public void OnNewDay(World world, Event overide)
+    public async void OnNewDay(World world, Event overide)
     {
         if (currentActiveEvent == null)
         {
@@ -69,6 +69,7 @@ public class EventManager
                 currentSeverity = UnityEngine.Random.Range(0.1f, 1f);
                 currentActiveEvent.OnEventStart(world, currentSeverity, currentDurationLeft);
                 WorldController.Instance.EventLogController.AddLog($"Choosing event: {e.ToString()} with severity: {currentSeverity}", Color.red);
+                await CSVData.WriteEventData(e.ToString() + " event for " + currentDurationLeft + " days.");
             }
             else
             {
