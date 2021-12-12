@@ -163,7 +163,10 @@ public class FoodManager
         foreach (Tile tile in FoodTiles)
         {
             Food food = tile.food;
-            totalNutrition += food.nutrition;
+            if (food != null)
+            {
+                totalNutrition += food.nutrition;
+            }
         }
 
         return totalNutrition;

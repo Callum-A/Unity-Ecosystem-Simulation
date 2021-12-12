@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,6 +48,9 @@ public class WorldController : MonoBehaviour
         }
         Instance = this;
 
+        UnityEngine.Debug.Log("test");
+
+        CSVData.ClearData();
         InitialiseTiles();
     }
 
@@ -131,7 +135,23 @@ public class WorldController : MonoBehaviour
     {
         if (graphWindow != null)
         {
-            graphWindow.Kill();
+            if (!graphWindow.HasExited)
+            {
+                graphWindow.Kill();
+            }
+            graphWindow = null;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (graphWindow != null)
+        {
+            if (!graphWindow.HasExited)
+            {
+                graphWindow.Kill();
+            }
+            graphWindow = null;
         }
     }
 }

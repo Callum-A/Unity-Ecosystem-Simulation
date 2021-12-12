@@ -59,7 +59,7 @@ public class FloodEvent : Event
 {
     public override void OnEventStart(World world, float severity, int durationInDays)
     {
-        world.ChangeWaterLevel((severity * 0.01f));
+        world.ChangeWaterLevel((severity * 0.1f));
         world.UpdateTerrain();
     }
 

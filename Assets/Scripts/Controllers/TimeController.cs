@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class TimeController : MonoBehaviour
 {
     public static TimeController Instance { get; protected set; }
     public float SECONDS_IN_A_DAY;
+    public Text CurrentDay;
     private float currentSeconds;
     public int NumberOfDays { get; protected set; }
     public static int TimeMultiplier { get; protected set; } = 1;
@@ -33,23 +35,26 @@ public class TimeController : MonoBehaviour
 
     public void SetTimeMultiplier(int multiplier)
     {
-        if (multiplier < 0)
+        if (multiplier != TimeMultiplier)
         {
-            TimeMultiplier = 1;
-            return;
-        }
+            if (multiplier < 0)
+            {
+                TimeMultiplier = 1;
+                return;
+            }
 
-        if (multiplier == 32)
-        {
-            asc.TurnOffGameObjects();
-        }
-        else
-        {
-            asc.TurnOnGameObjects();
-        }
+            if (multiplier == 32)
+            {
+                asc.TurnOffGameObjects();
+            }
+            else
+            {
+                asc.TurnOnGameObjects();
+            }
 
-        TimeMultiplier = multiplier;
-        WorldController.Instance.EventLogController.AddLog($"Setting time multiplier to {multiplier}x");
+            TimeMultiplier = multiplier;
+            WorldController.Instance.EventLogController.AddLog($"Setting time multiplier to {multiplier}x");
+        }
     }
 
     public float GetTimesADayMultiplier(float times)
@@ -86,6 +91,8 @@ public class TimeController : MonoBehaviour
             {
                 OnNewDayCallback(WorldController.Instance.World);
             }
+
+            CurrentDay.text = "Current  Day:  " + NumberOfDays;
         }
     }
 }
