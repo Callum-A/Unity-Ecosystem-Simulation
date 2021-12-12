@@ -15,10 +15,12 @@ public static class CSVData
     public static List<int> NumFoodTiles = new List<int>();
     public static List<int> NumWaterTiles = new List<int>();
     public static List<int> NumGrassTiles = new List<int>();
+    private static List<string> EventData = new List<string>();
 
     private static int daysProcessed = 0;
     private static readonly string fileName = "data.csv";
-    private static bool hasWritten = false;
+    private static bool hasWrittenWorldData = false;
+    private static bool hasWrittenEventData = false;
 
     public async static void CollectData(World world)
     {
@@ -40,7 +42,7 @@ public static class CSVData
 
 
         string path = Application.streamingAssetsPath + "/" + fileName;
-        if (!hasWritten)
+        if (!hasWrittenWorldData)
         {
             // Uses a static boolean to create a file on each start
             using (StreamWriter sw = File.CreateText(path))
@@ -48,7 +50,7 @@ public static class CSVData
                 // Write the header
                 sw.WriteLine("Prey Population,Predator Population,Total Population,Nutrition,Total Food,Water Tiles, Grass Tiles");
             }
-            hasWritten = true;
+            hasWrittenWorldData = true;
         }
 
         // We assume all the lists are the same length
@@ -63,6 +65,25 @@ public static class CSVData
         return;
     }
 
+    public static async Task WriteEventData(string eventData) 
+    {
+        string path = Application.streamingAssetsPath + "/" + "EventData.csv";
+
+        if (!hasWrittenEventData)
+        {
+            // Uses a static boolean to create a file on each start
+            using (StreamWriter sw = File.CreateText(path))
+            {
+                hasWrittenEventData = true;
+            }
+        }
+
+        using (StreamWriter sw = File.AppendText(path))
+        {
+            sw.WriteLine("Day " + daysProcessed + ": " + eventData);
+        }
+    }
+
     public static void ClearData()
     {
         string path = Application.streamingAssetsPath + "/" + fileName;
@@ -72,6 +93,12 @@ public static class CSVData
             File.Delete(path);
         }
 
+        if (File.Exists(Application.streamingAssetsPath + "/" + "EventData.csv")) 
+        {
+            File.Delete(Application.streamingAssetsPath + "/" + "EventData.csv");
+        }
+
+
         PreyPopulation.Clear();
         PredatorPopulation.Clear();
         NutritionTotal.Clear();
@@ -79,7 +106,9 @@ public static class CSVData
         NumWaterTiles.Clear();
         NumGrassTiles.Clear();
         daysProcessed = 0;
+        EventData.Clear();
 
-        hasWritten = false;
+        hasWrittenWorldData = false;
+        hasWrittenEventData = false;
     }
 }
