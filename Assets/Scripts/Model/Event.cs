@@ -106,7 +106,7 @@ public class DroughtEvent : Event
 
     override public string ToString()
     {
-        return "Drought Event";
+        return "Drought";
     }
 }
 
@@ -144,7 +144,7 @@ public class FamineEvent : Event
 
     override public string ToString()
     {
-        return "Famine Event";
+        return "Famine";
     }
 }
 
@@ -183,7 +183,7 @@ public class SproutEvent : Event
 
     override public string ToString()
     {
-        return "Sprout Event";
+        return "Sprout";
     }
 }
 
@@ -242,7 +242,7 @@ public class MigrationEvent : Event
 
     override public string ToString()
     {
-        return "Migration Event";
+        return "Migration";
     }
 }
 
@@ -280,6 +280,6 @@ public class DiseaseEvent : Event
 
     override public string ToString()
     {
-        return "Disease Event";
+        return "Disease";
     }
 }
