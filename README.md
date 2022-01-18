@@ -1,4 +1,6 @@
-# Group 2 - Ecosystem Simulation
+# Unity Ecosystem Simulation
+## Description
+2D ecosystem simulation developed for a university group assignment.
 ## Features
 - Main menu allowing customisation of the simulation.
 - Procedurally generated terrain.
