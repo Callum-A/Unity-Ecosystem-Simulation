@@ -1,6 +1,7 @@
+![EcoBannerx4](https://user-images.githubusercontent.com/57671477/215798463-73e7884f-fde7-4f2b-8e7e-9cd459ce2d13.png)
 # Unity Ecosystem Simulation
-![EcoBannerx2](https://user-images.githubusercontent.com/57671477/215796925-42ef7c53-06c4-4eea-b197-8e3add802932.png)
 ## Description
+
 2D ecosystem simulation developed for a university group assignment.
 ## Features
 - Main menu allowing customisation of the simulation.
